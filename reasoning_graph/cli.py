@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 NOT_IMPLEMENTED_EXIT = 3
 
@@ -76,6 +77,31 @@ def _cmd_analytics(args) -> int:
     return 0
 
 
+def _cmd_loop(args) -> int:
+    from .schema import load_instance
+    from .loop import fcl, promote, mint, verify, freeze, retire
+    inst = load_instance(args.instance)
+    act = args.action
+    if act == "scan":
+        _emit({"entries": fcl.parse_log(inst)}, args.json)
+    elif act == "promote":
+        if args.entry:
+            promote.promote(inst, args.entry)
+            _emit({"promoted": args.entry}, args.json)
+        else:
+            _emit(promote.detect(inst), args.json)
+    elif act == "mint":
+        matcher = json.loads(Path(args.matcher).read_text())
+        _emit(mint.stage(inst, args.entry, matcher), args.json)
+    elif act == "verify":
+        _emit(verify.verify(inst, Path(args.staged)), args.json)
+    elif act == "freeze":
+        _emit(freeze.freeze(inst, args.staged, approve=args.approve), args.json)
+    elif act == "retire":
+        _emit(retire.retire_pass(inst, approve=args.approve, fixture=args.fixture), args.json)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="reasoning-graph",
                                 description="Declared, confidence-weighted reasoning graphs.")
@@ -125,7 +151,7 @@ def build_parser() -> argparse.ArgumentParser:
                                       "scratch instance before the pass (test/gate use)")
     sp.add_argument("--approve", action="store_true",
                     help="required for freeze/retire writes on a real instance")
-    sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 4 (loop/*)"))
+    sp.set_defaults(fn=_cmd_loop)
 
     # measure
     sp = add("measure", "frontier-rate | ab-build-tasks | ab-variants | ab-run | ab-judge | ab-report")

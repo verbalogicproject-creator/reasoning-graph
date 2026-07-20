@@ -1,37 +1,46 @@
-"""Promotion detector — the recurrence gate, mechanized. OPUS-FILLS (Phase 4).
+"""Promotion detector — the recurrence gate, mechanized. Contract (gate G4):
 
-Contract (gate G4):
-
-detect(instance) -> {"recurring": [entry_ids], "promotable": [entry_ids],
-                     "already_disposed": {entry_id: disposition}}
-  recurring  = entries whose declared occurrences >= schema.promotion_threshold
-               (occurrences from the gap-shape sidecar / inline field — DECLARED,
-               never NLP-inferred similarity; RecMem arXiv:2605.16045 validates
-               the fixed gate, its non-adaptivity is a logged ROADMAP item).
-  promotable = recurring MINUS entries already disposed (closed/resolved/minted/
-               frozen/rejected per the sidecar's disposition field).
-  Ground truth regression (G4 asserts EXACTLY this on the live instance-0 log):
-    recurring == {FCL-001, FCL-007, FCL-008, FCL-009}
-    dispositions preserved: FCL-001 minted (promoted on first sight by explicit
-      human approval — the allow_single_occurrence_promotion path, recorded);
-      FCL-007 closed(code_fix); FCL-009 closed(code_fix);
-      FCL-008 rejected(content_gap) — recurred 5x and was CORRECTLY not minted:
-      fixing the matcher couldn't produce a right answer the corpus doesn't
-      contain, and inventing corpus content would be fabrication. The detector
-      must surface FCL-008 as recurring AND respect its human disposition —
-      never re-propose it as promotable.
-    promotable == {} on the live log (everything recurring is disposed).
-
-promote(instance, entry_id) -> None
-  Advances the entry's status tag to PROMOTED (via fcl.advance_status) and
-  records the promotion in the sidecar. Refuses if not in promotable set.
+detect(instance) -> {"recurring", "promotable", "already_disposed"}
+  recurring  = entries whose DECLARED occurrences >= schema.promotion_threshold
+               (never NLP-inferred; RecMem arXiv:2605.16045 — fixed threshold,
+               non-adaptivity is a ROADMAP item).
+  promotable = recurring MINUS disposed (disposition or terminal status).
+  Live instance-0 ground truth: recurring == {FCL-001,007,008,009}; promotable
+  == {} (all disposed — incl. FCL-008's rejection, respected not re-proposed).
+promote(instance, entry_id) -> None  — advance to PROMOTED; refuse if not promotable.
 """
 from __future__ import annotations
 
+from . import fcl
+
+_DISPOSED_PREFIXES = ("minted", "closed", "resolved", "rejected", "frozen")
+
+
+def _is_disposed(entry) -> bool:
+    disp = (entry.get("disposition") or "").lower()
+    if disp.startswith(_DISPOSED_PREFIXES):
+        return True
+    # fixture path: no sidecar disposition — use the mapped status tag
+    return entry.get("status") in ("minted", "frozen", "closed", "resolved")
+
 
 def detect(instance) -> dict:
-    raise NotImplementedError("OPUS-FILLS: Phase 4 — see module docstring + SoT")
+    entries = fcl.parse_log(instance)
+    threshold = instance.schema.promotion_threshold
+    recurring, disposed = [], {}
+    for e in entries:
+        if e["occurrences"] >= threshold:
+            recurring.append(e["id"])
+            if _is_disposed(e):
+                disposed[e["id"]] = e.get("disposition") or e.get("status")
+    promotable = [eid for eid in recurring if eid not in disposed]
+    return {"recurring": recurring, "promotable": promotable, "already_disposed": disposed}
 
 
 def promote(instance, entry_id: str) -> None:
-    raise NotImplementedError("OPUS-FILLS: Phase 4 — see module docstring + SoT")
+    d = detect(instance)
+    if entry_id not in d["promotable"]:
+        raise ValueError(f"{entry_id} is not promotable "
+                         f"(recurring={entry_id in d['recurring']}, "
+                         f"disposed={entry_id in d['already_disposed']})")
+    fcl.advance_status(instance, entry_id, "PROMOTED")

@@ -119,17 +119,16 @@ def _cmd_measure(args) -> int:
         return 0
     if args.action == "ab-run":
         from .measure import ab_run
-        _emit({"raw_path": str(ab_run.run(inst, args.tasks, Path(args.out), args.model, args.arm))},
+        _emit(ab_run.run(inst, args.tasks, Path(args.out), args.model or "sonnet", args.arm),
               args.json)
         return 0
     if args.action == "ab-judge":
         from .measure import ab_judge
-        _emit({"judged_path": str(ab_judge.judge(args.tasks, args.out, Path(args.out)))}, args.json)
+        _emit({"judged_path": str(ab_judge.judge(args.tasks, Path(args.out)))}, args.json)
         return 0
     if args.action == "ab-report":
         from .measure import ab_report
-        _emit({"report_path": str(ab_report.report(args.tasks, args.out, args.out, Path(args.out)))},
-              args.json)
+        _emit({"report_path": str(ab_report.report(inst, args.tasks, Path(args.out)))}, args.json)
         return 0
     return _not_implemented(args, "measure")
 

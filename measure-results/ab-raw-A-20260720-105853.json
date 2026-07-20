@@ -1,0 +1,456 @@
+{
+  "arm": "A",
+  "model": "sonnet",
+  "rows": [
+    {
+      "task_id": "fx-01",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool searches file contents by regular-expression pattern?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"grep_content_search\", \"name\": \"Grep\", \"title\": \"Grep - Content Pattern Searching\", \"description\": \"A powerful search tool built on ripgrep. Supports full regex syntax. Filter files with glob parameter or type parameter. Output modes: 'content' shows matching lines, 'files_with_matches' shows only file paths (default), 'count' shows match counts. Use for searching file contents, not file names.\", \"category\": \"file_operations\", \"use_cases\": [\"Find function definitions\", \"Search for API usage\", \"Locate TODO/FIXME comments\", \"Find import statements\", \"Search error messages in logs\"], \"limitations\": [\"Searches file contents only (not file names - use Glob for that)\", \"Regex patterns use ripgrep syntax (not PCRE)\", \"Very large result sets may be truncated\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Grep to find \\u2192 Read specific files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}, {\"with_tool\": \"Glob\", \"pattern\": \"Glob to filter \\u2192 Grep within results\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"search\", \"score\": 1.0}, {\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit ma",
+      "response": "Grep \u2014 it's a ripgrep-based tool for searching file contents by regex pattern (distinct from Glob, which matches file names/paths).",
+      "tokens": {
+        "input": 2,
+        "output": 48,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545141.315409,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-02",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool reads the contents of a file?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"read_file\", \"name\": \"Read\", \"title\": \"Read - Display File Contents\", \"description\": \"Display the contents of files or directories. File references using @filepath syntax include full content. Directory references show file listings (not contents). Multiple files can be referenced in single queries.\", \"category\": \"file_operations\", \"use_cases\": [\"Explore codebase structure\", \"Understand existing code\", \"Review configuration files\", \"Analyze error logs\", \"Inspect test files\"], \"limitations\": [\"Binary files may not display properly\", \"Very large files (>100MB) may be truncated\", \"Directory reads show listings only, not contents\"], \"combinations\": [{\"with_tool\": \"Bash\", \"pattern\": \"Read file \\u2192 Bash to test/execute\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Write\", \"pattern\": \"Read existing \\u2192 Write new variation\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"read\", \"score\": 1.0}, {\"node_id\": \"web_fetch\", \"name\": \"WebFetch\", \"title\": \"WebFetch - Fetch and Process Web Content\", \"description\": \"Fetches content from a specified URL and processes it using an AI model. Converts HTML to markdown, processes with a prompt, and returns analyzed content. Includes self-cleaning 15-minute cache for faster responses.\", \"category\": \"web\", \"use_cases\": [\"Fetch API documentation from websites\", \"Retrieve library usage examples\", \"Access online tutorials and guides\", \"Read blog posts and articles\", \"Fetch package information from registries\"], \"limitations\": [\"Requires permission approval for each fetch\", \"URL must be fully-formed and valid\", \"Cannot modify web content (read-only)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"WebFetch docs \\u2192 Read local files\"}, {\"with_tool\": \"Write\", \"pattern\": \"WebFetch examples \\u2192 Write local adaptation\"}, {\"with_tool\": \"Grep\", \"pattern\": \"WebFetch docs \\u2192 Grep for local usage\"}], \"match_type\": \"use_case\", \"matched_use_case\": \"Read blog pos",
+      "response": "Read.",
+      "tokens": {
+        "input": 2,
+        "output": 5,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545149.3554716,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-03",
+      "arm": "A",
+      "prompt_stored": "Can Claude Code access the internet, and if so which tools?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"can\": true, \"capability\": \"access the internet\", \"how\": [], \"limitations\": [], \"workarounds\": [], \"related_tools\": [\"WebFetch\", \"WebSearch\"], \"_adapter\": \"subprocess\"}",
+      "response": "Yes \u2014 Claude Code can access the internet, through its **WebFetch** and **WebSearch** tools.",
+      "tokens": {
+        "input": 2,
+        "output": 230,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545159.5367126,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-04",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool writes a brand-new file?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"write_file\", \"name\": \"Write\", \"title\": \"Write - Create or Overwrite Files\", \"description\": \"Create new files or completely overwrite existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios.\", \"category\": \"file_operations\", \"use_cases\": [\"Create new source files\", \"Generate test files\", \"Create configuration files\", \"Generate documentation\", \"Create build scripts\"], \"limitations\": [\"Requires permission approval for each write/overwrite\", \"Cannot partially modify files (use Edit for that)\", \"Overwrites completely replace file contents\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read template \\u2192 Write new variation\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Write file \\u2192 Bash to test/execute\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Write initial \\u2192 Edit to refine\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"write\", \"score\": 1.0}, {\"node_id\": \"todo_write\", \"name\": \"TodoWrite\", \"title\": \"TodoWrite - Create and Manage Structured Task Lists\", \"description\": \"Creates and manages structured task lists for coding sessions. Maintains exactly ONE task in 'in_progress' status at any time. Mark tasks completed immediately upon finishing. Use for complex multi-step tasks (3+ steps), non-trivial operations, multiple user requests, or when user explicitly requests todo list.\", \"category\": \"planning_tracking\", \"use_cases\": [\"Track complex multi-step tasks: Break down complex tasks requiring 3 or more distinct steps into trackable items. Example: Adding authentication: 1) Create user model, 2) Add auth middleware, 3) Build login UI, 4) Write tests\", \"Organize non-trivial workflows: Track tasks that require careful planning or multiple operations across different files. Example: Refactoring API: update schema, migrate database, update endpoints, update tests, update docs\", \"Manage user-provided task lists: When user provides multiple tasks (numbered or comma-se",
+      "response": "The **Write** tool creates brand-new files (it can also completely overwrite existing ones, but it cannot partially modify a file \u2014 that's what Edit is for).",
+      "tokens": {
+        "input": 2,
+        "output": 190,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545170.1075985,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-05",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool finds files by name/glob pattern?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit matching files\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Glob to filter \\u2192 Grep within results\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"find\", \"score\": 1.0}, {\"node_id\": \"grep_content_search\", \"name\": \"Grep\", \"title\": \"Grep - Content Pattern Searching\", \"description\": \"A powerful search tool built on ripgrep. Supports full regex syntax. Filter files with glob parameter or type parameter. Output modes: 'content' shows matching lines, 'files_with_matches' shows only file paths (default), 'count' shows match counts. Use for searching file contents, not file names.\", \"category\": \"file_operations\", \"use_cases\": [\"Find function definitions\", \"Search for API usage\", \"Locate TODO/FIXME comments\", \"Find import statements\", \"Search error messages in logs\"], \"limitations\": [\"Searches file contents only (not file names - use Glob for that)\", \"Regex patterns use ripgrep syntax (not PCRE)\", \"Very large result sets may be truncated\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Grep to find \\u2192 Read specific files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Grep to find \\u2192 Ed",
+      "response": "Glob finds files by name/glob pattern.",
+      "tokens": {
+        "input": 2,
+        "output": 17,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545176.3963509,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-06",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool executes a shell command?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"bash_execute\", \"name\": \"Bash\", \"title\": \"Bash - Execute Shell Commands\", \"description\": \"Executes shell commands in a persistent shell session with optional timeout, ensuring proper handling and security measures. Used for terminal operations like git, npm, docker, etc. NOT for file operations - use specialized tools (Read, Edit, Write) instead.\", \"category\": \"execution\", \"use_cases\": [\"Run tests and build processes\", \"Execute git operations (status, commit, push)\", \"Install dependencies (npm, pip, cargo)\", \"Run development servers\", \"Execute deployment scripts\"], \"limitations\": [\"NOT for file operations (use Read, Edit, Write instead)\", \"Cannot use interactive commands (no -i flags like git rebase -i)\", \"Default timeout: 2 minutes (configurable up to 10 minutes)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read logs \\u2192 Bash to diagnose\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Write\", \"pattern\": \"Write file \\u2192 Bash to execute\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"execute\", \"score\": 1.0}, {\"node_id\": \"bash_output\", \"name\": \"BashOutput\", \"title\": \"BashOutput - Retrieve Output from Background Bash Shells\", \"description\": \"Retrieves incremental output from running or completed background bash shells. Returns only new content since last check. Supports optional regex filtering to show only lines matching a pattern.\", \"category\": \"execution\", \"use_cases\": [\"Monitor long-running builds: Check progress of background build process without blocking execution. Example: Start npm build in background, periodically check BashOutput for errors or completion\", \"Watch development server output: Monitor dev server logs for errors, warnings, or request info while continuing work. Example: Run 'npm run dev' in background, use BashOutput to check for startup errors or port conflicts\", \"Filter specific log patterns: Use regex filter to show only relevant lines (errors, warnings, specific",
+      "response": "Bash is the Claude Code tool that executes shell commands.",
+      "tokens": {
+        "input": 2,
+        "output": 22,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545183.9934204,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-07",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool makes an in-place edit to an existing file?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"edit_file\", \"name\": \"Edit\", \"title\": \"Edit - Make Targeted File Edits\", \"description\": \"Make targeted, surgical edits to existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios. Preferred over Write for partial modifications.\", \"category\": \"file_operations\", \"use_cases\": [\"Fix bugs in existing code\", \"Refactor specific functions\", \"Update configuration values\", \"Add new functions to existing files\", \"Modify imports/exports\"], \"limitations\": [\"Requires permission approval showing diff\", \"File must exist (cannot create new files)\", \"Very large changes may be better as Write operation\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"edit\", \"score\": 1.0}, {\"node_id\": \"notebook_edit\", \"name\": \"NotebookEdit\", \"title\": \"NotebookEdit - Modify Jupyter Notebook Cells\", \"description\": \"Completely replaces the contents of a specific cell in a Jupyter notebook (.ipynb file) with new source. Notebooks are interactive documents combining code, text, and visualizations for data analysis and scientific computing. Supports replace, insert, and delete operations.\", \"category\": \"specialized\", \"use_cases\": [\"Update code cells in data analysis notebooks\", \"Modify markdown cells in documentation\", \"Fix errors in notebook code\", \"Add new analysis cells to existing notebooks\", \"Update visualization code\"], \"limitations\": [\"Requires permission approval showing changes\", \"Notebook path must be absolute (not relative)\", \"Cell must be identified by ID or number (0-indexed)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read notebook \\u2192 NotebookEdit cells\"}, {\"with_tool\": \"Bash\", \"pattern\": \"NotebookEdit code \\u2192 Bash to test\"}, {\"with_tool\": \"Gr",
+      "response": "Edit \u2014 it makes targeted, surgical in-place edits to existing files.",
+      "tokens": {
+        "input": 2,
+        "output": 26,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545193.1213,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-08",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool searches the public web?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"grep_content_search\", \"name\": \"Grep\", \"title\": \"Grep - Content Pattern Searching\", \"description\": \"A powerful search tool built on ripgrep. Supports full regex syntax. Filter files with glob parameter or type parameter. Output modes: 'content' shows matching lines, 'files_with_matches' shows only file paths (default), 'count' shows match counts. Use for searching file contents, not file names.\", \"category\": \"file_operations\", \"use_cases\": [\"Find function definitions\", \"Search for API usage\", \"Locate TODO/FIXME comments\", \"Find import statements\", \"Search error messages in logs\"], \"limitations\": [\"Searches file contents only (not file names - use Glob for that)\", \"Regex patterns use ripgrep syntax (not PCRE)\", \"Very large result sets may be truncated\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Grep to find \\u2192 Read specific files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}, {\"with_tool\": \"Glob\", \"pattern\": \"Glob to filter \\u2192 Grep within results\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"search\", \"score\": 1.0}, {\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit ma",
+      "response": "Grep, Glob, Read, Edit, Bash, and Write are all local \u2014 the tool that searches the public web is **WebSearch**.",
+      "tokens": {
+        "input": 2,
+        "output": 46,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545205.0843751,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-09",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool fetches content from a specific URL?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"can\": true, \"capability\": \"fetch a web page\", \"how\": [], \"limitations\": [], \"workarounds\": [], \"related_tools\": [\"WebFetch\"], \"_adapter\": \"subprocess\"}",
+      "response": "WebFetch fetches content from a specific URL.",
+      "tokens": {
+        "input": 2,
+        "output": 18,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545217.5317461,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-10",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool edits a Jupyter notebook?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"edit_file\", \"name\": \"Edit\", \"title\": \"Edit - Make Targeted File Edits\", \"description\": \"Make targeted, surgical edits to existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios. Preferred over Write for partial modifications.\", \"category\": \"file_operations\", \"use_cases\": [\"Fix bugs in existing code\", \"Refactor specific functions\", \"Update configuration values\", \"Add new functions to existing files\", \"Modify imports/exports\"], \"limitations\": [\"Requires permission approval showing diff\", \"File must exist (cannot create new files)\", \"Very large changes may be better as Write operation\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"edit\", \"score\": 1.0}, {\"node_id\": \"notebook_edit\", \"name\": \"NotebookEdit\", \"title\": \"NotebookEdit - Modify Jupyter Notebook Cells\", \"description\": \"Completely replaces the contents of a specific cell in a Jupyter notebook (.ipynb file) with new source. Notebooks are interactive documents combining code, text, and visualizations for data analysis and scientific computing. Supports replace, insert, and delete operations.\", \"category\": \"specialized\", \"use_cases\": [\"Update code cells in data analysis notebooks\", \"Modify markdown cells in documentation\", \"Fix errors in notebook code\", \"Add new analysis cells to existing notebooks\", \"Update visualization code\"], \"limitations\": [\"Requires permission approval showing changes\", \"Notebook path must be absolute (not relative)\", \"Cell must be identified by ID or number (0-indexed)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read notebook \\u2192 NotebookEdit cells\"}, {\"with_tool\": \"Bash\", \"pattern\": \"NotebookEdit code \\u2192 Bash to test\"}, {\"with_tool\": \"Gr",
+      "response": "NotebookEdit is the Claude Code tool that edits Jupyter notebooks \u2014 per the graph, it \"completely replaces the contents of a specific cell in a Jupyter notebook (.ipynb file) with new source,\" supporting replace, insert, and delete operations.",
+      "tokens": {
+        "input": 2,
+        "output": 89,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545226.3198674,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-11",
+      "arm": "A",
+      "prompt_stored": "To refactor Python files, which tools compose (in sequence)?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"goal\": \"refactor python files\", \"decomposition\": [\"find\", \"read\", \"edit\"], \"tools\": [{\"sub_goal\": \"find\", \"tool\": \"Glob\", \"score\": 1.0}, {\"sub_goal\": \"read\", \"tool\": \"Read\", \"score\": 1.0}, {\"sub_goal\": \"edit\", \"tool\": \"Edit\", \"score\": 1.0}], \"workflow\": \"1. Glob: find\\n2. Read: read\\n3. Edit: edit\", \"compatible\": true, \"compatibility_notes\": [\"Glob + Read: documented combination\", \"Read + Edit: documented combination\"], \"_adapter\": \"subprocess\"}",
+      "response": "The tools compose sequentially: **Glob \u2192 Read \u2192 Edit** \u2014 first locate the target `.py` files, then read each file's contents, then apply the code changes.",
+      "tokens": {
+        "input": 2,
+        "output": 52,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545235.6319053,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "fx-12",
+      "arm": "A",
+      "prompt_stored": "Which Claude Code tool asks the user a clarifying question?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"ask_user_question\", \"name\": \"AskUserQuestion\", \"title\": \"AskUserQuestion - Gather User Preferences with Structured Questions\", \"description\": \"Gathers user preferences with structured multiple-choice options. Automatically includes 'Other' for custom input. Supports single or multiple selections. Use during execution to clarify ambiguous instructions, gather user preferences, get decisions on implementation choices, or offer choices about direction to take.\", \"category\": \"user_interaction\", \"use_cases\": [\"Clarify ambiguous requirements: When user request has multiple valid interpretations, ask for clarification rather than guessing. Example: User says 'add authentication' - ask whether they want OAuth, JWT, or session-based auth\", \"Gather implementation preferences: Get user decisions on architectural choices, library selection, or approach. Example: Ask which library to use for date formatting (date-fns, dayjs, luxon, moment)\", \"Offer strategic options: Present 2-4 strategic approaches with trade-offs for user to select. Example: Offer options: fast implementation vs comprehensive solution vs minimal dependencies\", \"Collect feature priorities: Use multiSelect to let user choose which features to implement from a list. Example: Ask which features to enable: dark mode, i18n, analytics, offline support (multiSelect: true)\", \"Validate assumptions before proceeding: Confirm critical assumptions that could significantly affect implementation. Example: Ask about target browsers before choosing build tool (modern only vs legacy support)\"], \"limitations\": [\"Maximum 1-4 questions per call\", \"Each question must have 2-4 options\", \"Header limited to 12 characters\"], \"combinations\": [{\"with_tool\": \"Task\", \"pattern\": \"AskUserQuestion \\u2192 Task\"}, {\"with_tool\": \"TodoWrite\", \"pattern\": \"AskUserQuestion \\u2192 TodoWrite\"}, {\"with_tool\": \"Read\", \"pattern\": \"Read \\u2192 AskUserQuestion\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"ask\", \"score\": 1.0",
+      "response": "AskUserQuestion is the Claude Code tool that asks the user a clarifying question, gathering structured multiple-choice input (with an automatic \"Other\" option) to resolve ambiguous instructions, implementation preferences, or directional choices during a task.",
+      "tokens": {
+        "input": 2,
+        "output": 84,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545246.3012664,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-01",
+      "arm": "A",
+      "prompt_stored": "I need to search for a pattern across many files. Which tool?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"grep_content_search\", \"name\": \"Grep\", \"title\": \"Grep - Content Pattern Searching\", \"description\": \"A powerful search tool built on ripgrep. Supports full regex syntax. Filter files with glob parameter or type parameter. Output modes: 'content' shows matching lines, 'files_with_matches' shows only file paths (default), 'count' shows match counts. Use for searching file contents, not file names.\", \"category\": \"file_operations\", \"use_cases\": [\"Find function definitions\", \"Search for API usage\", \"Locate TODO/FIXME comments\", \"Find import statements\", \"Search error messages in logs\"], \"limitations\": [\"Searches file contents only (not file names - use Glob for that)\", \"Regex patterns use ripgrep syntax (not PCRE)\", \"Very large result sets may be truncated\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Grep to find \\u2192 Read specific files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}, {\"with_tool\": \"Glob\", \"pattern\": \"Glob to filter \\u2192 Grep within results\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"search\", \"score\": 1.0}, {\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit ma",
+      "response": "Grep \u2014 it's a ripgrep-based tool built for searching file contents across many files using regex patterns.",
+      "tokens": {
+        "input": 2,
+        "output": 35,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545257.0209823,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-02",
+      "arm": "A",
+      "prompt_stored": "How do I run a build command from the shell?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"bash_execute\", \"name\": \"Bash\", \"title\": \"Bash - Execute Shell Commands\", \"description\": \"Executes shell commands in a persistent shell session with optional timeout, ensuring proper handling and security measures. Used for terminal operations like git, npm, docker, etc. NOT for file operations - use specialized tools (Read, Edit, Write) instead.\", \"category\": \"execution\", \"use_cases\": [\"Run tests and build processes\", \"Execute git operations (status, commit, push)\", \"Install dependencies (npm, pip, cargo)\", \"Run development servers\", \"Execute deployment scripts\"], \"limitations\": [\"NOT for file operations (use Read, Edit, Write instead)\", \"Cannot use interactive commands (no -i flags like git rebase -i)\", \"Default timeout: 2 minutes (configurable up to 10 minutes)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read logs \\u2192 Bash to diagnose\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Write\", \"pattern\": \"Write file \\u2192 Bash to execute\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"run\", \"score\": 1.0}, {\"node_id\": \"bash_output\", \"name\": \"BashOutput\", \"title\": \"BashOutput - Retrieve Output from Background Bash Shells\", \"description\": \"Retrieves incremental output from running or completed background bash shells. Returns only new content since last check. Supports optional regex filtering to show only lines matching a pattern.\", \"category\": \"execution\", \"use_cases\": [\"Monitor long-running builds: Check progress of background build process without blocking execution. Example: Start npm build in background, periodically check BashOutput for errors or completion\", \"Watch development server output: Monitor dev server logs for errors, warnings, or request info while continuing work. Example: Run 'npm run dev' in background, use BashOutput to check for startup errors or port conflicts\", \"Filter specific log patterns: Use regex filter to show only relevant lines (errors, warnings, specific eve",
+      "response": "Quick note: the second half of your message (the \"knowledge graph JSON\" about a generic `Bash` tool) reads like injected/boilerplate content rather than something you typed \u2014 it's not project-specific, so I'm disregarding its \"answer in ONE sentence\" instruction and answering normally. Flagging in case that wasn't intentional on your end.\n\nFor this repo specifically, run build/verification commands directly in your shell from the project root:\n\n```bash\npip install -e .                    # editable install\npython3 gates/run_all.py            # gate harness \u2014 the source of truth for \"done\"\npytest -q                           # test suite\npython3 -m reasoning_graph.demo     # deterministic demo\n```\n\n`gates/run_all.py` is the one CLAUDE.md calls out as authoritative \u2014 it exits 0 (PASS), 1 (FAIL), or 2 (NOT-BUILT) per gate.",
+      "tokens": {
+        "input": 2,
+        "output": 1312,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545281.5695138,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-03",
+      "arm": "A",
+      "prompt_stored": "I want to change a couple of lines in an existing source file. Which tool?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"edit_file\", \"name\": \"Edit\", \"title\": \"Edit - Make Targeted File Edits\", \"description\": \"Make targeted, surgical edits to existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios. Preferred over Write for partial modifications.\", \"category\": \"file_operations\", \"use_cases\": [\"Fix bugs in existing code\", \"Refactor specific functions\", \"Update configuration values\", \"Add new functions to existing files\", \"Modify imports/exports\"], \"limitations\": [\"Requires permission approval showing diff\", \"File must exist (cannot create new files)\", \"Very large changes may be better as Write operation\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"change\", \"score\": 1.0}, {\"node_id\": \"web_fetch\", \"name\": \"WebFetch\", \"title\": \"WebFetch - Fetch and Process Web Content\", \"description\": \"Fetches content from a specified URL and processes it using an AI model. Converts HTML to markdown, processes with a prompt, and returns analyzed content. Includes self-cleaning 15-minute cache for faster responses.\", \"category\": \"web\", \"use_cases\": [\"Fetch API documentation from websites\", \"Retrieve library usage examples\", \"Access online tutorials and guides\", \"Read blog posts and articles\", \"Fetch package information from registries\"], \"limitations\": [\"Requires permission approval for each fetch\", \"URL must be fully-formed and valid\", \"Cannot modify web content (read-only)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"WebFetch docs \\u2192 Read local files\"}, {\"with_tool\": \"Write\", \"pattern\": \"WebFetch examples \\u2192 Write local adaptation\"}, {\"with_tool\": \"Grep\", \"pattern\": \"WebFetch docs \\u2192 Grep for local usage\"}], \"match_type\": \"use_case\", \"matched_use",
+      "response": "Edit \u2014 it makes targeted, surgical changes to existing files without rewriting the whole thing.",
+      "tokens": {
+        "input": 2,
+        "output": 33,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545289.3223035,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-04",
+      "arm": "A",
+      "prompt_stored": "How can I read the current contents of a config file before changing it?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"read_file\", \"name\": \"Read\", \"title\": \"Read - Display File Contents\", \"description\": \"Display the contents of files or directories. File references using @filepath syntax include full content. Directory references show file listings (not contents). Multiple files can be referenced in single queries.\", \"category\": \"file_operations\", \"use_cases\": [\"Explore codebase structure\", \"Understand existing code\", \"Review configuration files\", \"Analyze error logs\", \"Inspect test files\"], \"limitations\": [\"Binary files may not display properly\", \"Very large files (>100MB) may be truncated\", \"Directory reads show listings only, not contents\"], \"combinations\": [{\"with_tool\": \"Bash\", \"pattern\": \"Read file \\u2192 Bash to test/execute\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Write\", \"pattern\": \"Read existing \\u2192 Write new variation\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"read\", \"score\": 1.0}, {\"node_id\": \"web_fetch\", \"name\": \"WebFetch\", \"title\": \"WebFetch - Fetch and Process Web Content\", \"description\": \"Fetches content from a specified URL and processes it using an AI model. Converts HTML to markdown, processes with a prompt, and returns analyzed content. Includes self-cleaning 15-minute cache for faster responses.\", \"category\": \"web\", \"use_cases\": [\"Fetch API documentation from websites\", \"Retrieve library usage examples\", \"Access online tutorials and guides\", \"Read blog posts and articles\", \"Fetch package information from registries\"], \"limitations\": [\"Requires permission approval for each fetch\", \"URL must be fully-formed and valid\", \"Cannot modify web content (read-only)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"WebFetch docs \\u2192 Read local files\"}, {\"with_tool\": \"Write\", \"pattern\": \"WebFetch examples \\u2192 Write local adaptation\"}, {\"with_tool\": \"Grep\", \"pattern\": \"WebFetch docs \\u2192 Grep for local usage\"}], \"match_type\": \"use_case\", \"matched_use_case\": \"Read blog pos",
+      "response": "Use the Read tool (e.g. `@filepath`) to display the config file's full current contents first, then follow up with Edit to change specific sections once you've reviewed it.",
+      "tokens": {
+        "input": 2,
+        "output": 630,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545308.607972,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-05",
+      "arm": "A",
+      "prompt_stored": "I need to keep track of a multi-step task list while working. Which tool?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"todo_write\", \"name\": \"TodoWrite\", \"title\": \"TodoWrite - Create and Manage Structured Task Lists\", \"description\": \"Creates and manages structured task lists for coding sessions. Maintains exactly ONE task in 'in_progress' status at any time. Mark tasks completed immediately upon finishing. Use for complex multi-step tasks (3+ steps), non-trivial operations, multiple user requests, or when user explicitly requests todo list.\", \"category\": \"planning_tracking\", \"use_cases\": [\"Track complex multi-step tasks: Break down complex tasks requiring 3 or more distinct steps into trackable items. Example: Adding authentication: 1) Create user model, 2) Add auth middleware, 3) Build login UI, 4) Write tests\", \"Organize non-trivial workflows: Track tasks that require careful planning or multiple operations across different files. Example: Refactoring API: update schema, migrate database, update endpoints, update tests, update docs\", \"Manage user-provided task lists: When user provides multiple tasks (numbered or comma-separated), capture as todo list. Example: User: 'Add dark mode, implement search, fix pagination bug, update docs' \\u2192 4 todos\", \"Track progress during execution: Mark current task as in_progress before starting, completed immediately after finishing. Example: Before: all pending \\u2192 Start: first in_progress \\u2192 Complete: first completed, second in_progress\", \"Demonstrate thoroughness to user: Show systematic approach and help user understand overall progress. Example: User sees: 'Implementing authentication (3/5 tasks complete)' - builds confidence\"], \"limitations\": [\"Exactly ONE task must be in_progress at any time (not less, not more)\", \"Cannot mark multiple tasks in_progress simultaneously\", \"Must mark current task completed before starting next\"], \"combinations\": [{\"with_tool\": \"AskUserQuestion\", \"pattern\": \"AskUserQuestion \\u2192 TodoWrite\"}, {\"with_tool\": \"Task\", \"pattern\": \"Task \\u2192 TodoWrite\"}, {\"with_tool\": \"Read\", \"pat",
+      "response": "Use **TodoWrite** \u2014 it creates and manages structured task lists for multi-step work, keeping exactly one task \"in_progress\" at a time and requiring you to mark each completed immediately upon finishing.",
+      "tokens": {
+        "input": 2,
+        "output": 161,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545321.2082257,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-06",
+      "arm": "A",
+      "prompt_stored": "How do I locate all the test files by their filename pattern?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit matching files\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Glob to filter \\u2192 Grep within results\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"locate\", \"score\": 1.0}, {\"node_id\": \"grep_content_search\", \"name\": \"Grep\", \"title\": \"Grep - Content Pattern Searching\", \"description\": \"A powerful search tool built on ripgrep. Supports full regex syntax. Filter files with glob parameter or type parameter. Output modes: 'content' shows matching lines, 'files_with_matches' shows only file paths (default), 'count' shows match counts. Use for searching file contents, not file names.\", \"category\": \"file_operations\", \"use_cases\": [\"Find function definitions\", \"Search for API usage\", \"Locate TODO/FIXME comments\", \"Find import statements\", \"Search error messages in logs\"], \"limitations\": [\"Searches file contents only (not file names - use Glob for that)\", \"Regex patterns use ripgrep syntax (not PCRE)\", \"Very large result sets may be truncated\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Grep to find \\u2192 Read specific files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Grep to find \\u2192 ",
+      "response": "Use the **Glob** tool with a pattern like `**/*.test.ts` (or `**/*.spec.js`, etc.) \u2014 it's built for fast filename-based pattern matching (explicitly listed for \"find all test files (*.test.ts)\") and returns matching file paths, whereas Grep only searches file *contents*, not names.",
+      "tokens": {
+        "input": 2,
+        "output": 443,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545333.60825,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-07",
+      "arm": "A",
+      "prompt_stored": "To find a bug via search and then fix it, which tools do I chain?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"goal\": \"find a bug via search and then fix it\", \"decomposition\": [\"search\", \"read\", \"fix\"], \"tools\": [{\"sub_goal\": \"search\", \"tool\": \"Grep\", \"score\": 1.0}, {\"sub_goal\": \"read\", \"tool\": \"Read\", \"score\": 1.0}, {\"sub_goal\": \"fix\", \"tool\": \"Edit\", \"score\": 1.0}], \"workflow\": \"1. Grep: search\\n2. Read: read\\n3. Edit: fix\", \"compatible\": true, \"compatibility_notes\": [\"Grep + Read: documented combination\", \"Read + Edit: documented combination\"], \"_adapter\": \"subprocess\"}",
+      "response": "Grep to search, then Read to inspect the match, then Edit to apply the fix.",
+      "tokens": {
+        "input": 2,
+        "output": 29,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545340.9053218,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-08",
+      "arm": "A",
+      "prompt_stored": "Which tool looks up current documentation from a web page?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"read_file\", \"name\": \"Read\", \"title\": \"Read - Display File Contents\", \"description\": \"Display the contents of files or directories. File references using @filepath syntax include full content. Directory references show file listings (not contents). Multiple files can be referenced in single queries.\", \"category\": \"file_operations\", \"use_cases\": [\"Explore codebase structure\", \"Understand existing code\", \"Review configuration files\", \"Analyze error logs\", \"Inspect test files\"], \"limitations\": [\"Binary files may not display properly\", \"Very large files (>100MB) may be truncated\", \"Directory reads show listings only, not contents\"], \"combinations\": [{\"with_tool\": \"Bash\", \"pattern\": \"Read file \\u2192 Bash to test/execute\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Write\", \"pattern\": \"Read existing \\u2192 Write new variation\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"look\", \"score\": 1.0}, {\"node_id\": \"write_file\", \"name\": \"Write\", \"title\": \"Write - Create or Overwrite Files\", \"description\": \"Create new files or completely overwrite existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios.\", \"category\": \"file_operations\", \"use_cases\": [\"Create new source files\", \"Generate test files\", \"Create configuration files\", \"Generate documentation\", \"Create build scripts\"], \"limitations\": [\"Requires permission approval for each write/overwrite\", \"Cannot partially modify files (use Edit for that)\", \"Overwrites completely replace file contents\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read template \\u2192 Write new variation\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Write file \\u2192 Bash to test/execute\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Write initial \\u2192 Edit to refine\"}], \"match_type\": \"goal_keyword\", \"matched_keyword\": \"document\", \"score\": 1.0}, {\"node_id\": \"web_fetch\", \"name\": \"WebFetch\", \"title\": \"WebFet",
+      "response": "Based on the graph, **WebFetch** (`web_fetch`) is the tool that looks up current documentation from a web page, since it's the entry designed to fetch and read content directly from a URL.",
+      "tokens": {
+        "input": 2,
+        "output": 531,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545354.2373905,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-09",
+      "arm": "A",
+      "prompt_stored": "Which single dedicated Claude Code tool safely deletes a file?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"notebook_edit\", \"name\": \"NotebookEdit\", \"title\": \"NotebookEdit - Modify Jupyter Notebook Cells\", \"description\": \"Completely replaces the contents of a specific cell in a Jupyter notebook (.ipynb file) with new source. Notebooks are interactive documents combining code, text, and visualizations for data analysis and scientific computing. Supports replace, insert, and delete operations.\", \"category\": \"specialized\", \"use_cases\": [\"Update code cells in data analysis notebooks\", \"Modify markdown cells in documentation\", \"Fix errors in notebook code\", \"Add new analysis cells to existing notebooks\", \"Update visualization code\"], \"limitations\": [\"Requires permission approval showing changes\", \"Notebook path must be absolute (not relative)\", \"Cell must be identified by ID or number (0-indexed)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read notebook \\u2192 NotebookEdit cells\"}, {\"with_tool\": \"Bash\", \"pattern\": \"NotebookEdit code \\u2192 Bash to test\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Grep to find notebooks \\u2192 NotebookEdit to update\"}], \"match_type\": \"use_case\", \"matched_use_case\": \"Delete obsolete cells\", \"score\": 0.7}, {\"node_id\": \"edit_file\", \"name\": \"Edit\", \"title\": \"Edit - Make Targeted File Edits\", \"description\": \"Make targeted, surgical edits to existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios. Preferred over Write for partial modifications.\", \"category\": \"file_operations\", \"use_cases\": [\"Fix bugs in existing code\", \"Refactor specific functions\", \"Update configuration values\", \"Add new functions to existing files\", \"Modify imports/exports\"], \"limitations\": [\"Requires permission approval showing diff\", \"File must exist (cannot create new files)\", \"Very large changes may be better as Write operation\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Edit code \\u2192",
+      "response": "Which single dedicated Claude Code tool safely deletes a file \u2014 none of the tools shown do that; Edit and NotebookEdit only modify existing file/cell contents, so file deletion isn't something a dedicated Claude Code tool performs (it would require a shell command like `rm` via Bash instead).",
+      "tokens": {
+        "input": 2,
+        "output": 100,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545361.675009,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "or-10",
+      "arm": "A",
+      "prompt_stored": "Which single dedicated Claude Code tool compresses files into an archive?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"result\": [{\"node_id\": \"edit_file\", \"name\": \"Edit\", \"title\": \"Edit - Make Targeted File Edits\", \"description\": \"Make targeted, surgical edits to existing files. Applied incrementally for safer changes. Verified through test execution. Used after planning phase in complex scenarios. Preferred over Write for partial modifications.\", \"category\": \"file_operations\", \"use_cases\": [\"Fix bugs in existing code\", \"Refactor specific functions\", \"Update configuration values\", \"Add new functions to existing files\", \"Modify imports/exports\"], \"limitations\": [\"Requires permission approval showing diff\", \"File must exist (cannot create new files)\", \"Very large changes may be better as Write operation\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Read file \\u2192 Edit specific sections\"}, {\"with_tool\": \"Bash\", \"pattern\": \"Edit code \\u2192 Bash to test\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Grep to find \\u2192 Edit matches\"}], \"match_type\": \"use_case\", \"matched_use_case\": \"Add new functions to existing files\", \"score\": 0.7}, {\"node_id\": \"glob_pattern_search\", \"name\": \"Glob\", \"title\": \"Glob - Pattern-Based File Search\", \"description\": \"Fast file pattern matching tool that works with any codebase size. Supports glob patterns like '**/*.js' or 'src/**/*.ts'. Returns matching file paths sorted by modification time. Use when you need to find files by name patterns.\", \"category\": \"file_operations\", \"use_cases\": [\"Find all test files (*.test.ts)\", \"Locate configuration files (*.config.js)\", \"Find source files by pattern\", \"Discover files of specific type\", \"List files in subdirectories\"], \"limitations\": [\"Returns file paths only (not file contents)\", \"Sorted by modification time (not alphabetically)\", \"Cannot search file contents (use Grep for that)\"], \"combinations\": [{\"with_tool\": \"Read\", \"pattern\": \"Glob to discover \\u2192 Read matching files\"}, {\"with_tool\": \"Edit\", \"pattern\": \"Glob to find \\u2192 Edit matching files\"}, {\"with_tool\": \"Grep\", \"pattern\": \"Glob to filter \\u2192 Grep",
+      "response": "Based on the graph, there is no dedicated Claude Code tool for compressing files into an archive \u2014 the graph only shows general-purpose tools like Edit (targeted file edits) and Glob (pattern-based file search), so archiving would have to be done via the Bash tool running a command like `tar` or `zip` rather than through a dedicated compression tool.",
+      "tokens": {
+        "input": 2,
+        "output": 478,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545373.449137,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-01",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, which relic Python script is the rule about requiring error handling for tool execution extracted from?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"tool_registry_builder_py\", \"edge_type\": \"extracted_from\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}]",
+      "response": "The rule about requiring error handling for tool execution was extracted from the relic script `tool_registry_builder.py` (edge `extracted_from`, confidence 1.0, basis `declared:verbatim_extraction`).",
+      "tokens": {
+        "input": 2,
+        "output": 208,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545382.9252505,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-02",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, what numeric confidence weight backs the minted edge from the notebook-edit tool to the notebook-read tool?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"notebook_read\", \"edge_type\": \"tool_requires_tool\", \"confidence\": 0.85, \"basis\": \"declared:matcher:mint_001_tool_combo_inference\", \"synthesis_chain\": \"mint_001_tool_combo_inference / FCL-001\"}]",
+      "response": "0.85, with basis `declared:matcher:mint_001_tool_combo_inference` \u2014 a declared confidence from the tool-combo-inference minting rule, not a measured or hardcoded value.",
+      "tokens": {
+        "input": 2,
+        "output": 65,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545396.1596472,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-03",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, which mint id created the notebook tools' reasoning edges?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"read_file\", \"edge_type\": \"tool_similar_to\", \"confidence\": 0.85, \"basis\": \"declared:matcher:mint_001_tool_combo_inference\", \"synthesis_chain\": \"mint_001_tool_combo_inference / FCL-001\"}]",
+      "response": "The graph gives the answer directly: `mint_001_tool_combo_inference`.\n\nThe edge `read_file --[tool_similar_to]--> notebook tools` carries `synthesis_chain: \"mint_001_tool_combo_inference / FCL-001\"` with `confidence_basis: \"declared:matcher:mint_001_tool_combo_inference\"`, so mint id **`mint_001_tool_combo_inference`** is the one that created (froze) the notebook tools' `tool_similar_to` reasoning edges.",
+      "tokens": {
+        "input": 2,
+        "output": 174,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545405.4262218,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-04",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, what is the declared confidence of the rule node about avoiding infinite tool loops?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n{\"id\": \"anti_001_infinite_tool_loops\", \"kind\": \"synthesis_rule\", \"name\": \"Infinite Tool Loops (Don't Allow Infinite Tool Use Loops)\", \"description\": \"Agents must have explicit iteration limits to prevent infinite loops where the agent keeps calling tools without making progress.\", \"metadata\": \"{\\\"confidence\\\": 0.97, \\\"severity\\\": \\\"CRITICAL\\\", \\\"validation\\\": null, \\\"source_file\\\": \\\"TOOL-REGISTRY-SYNTHESIS-RULES.md\\\", \\\"related_rules_declared\\\": [\\\"constr_002_max_iterations_safety\\\"], \\\"external_related_rules\\\": []}\"}",
+      "response": "The rule node `anti_001_infinite_tool_loops` (\"Infinite Tool Loops\") is declared with a confidence of **0.97** (severity CRITICAL).",
+      "tokens": {
+        "input": 2,
+        "output": 59,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545416.4557643,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-05",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, which relic Python script are the tool-registry rules extracted from?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"tool_registry_builder_py\", \"edge_type\": \"extracted_from\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}]",
+      "response": "The tool-registry rules in this project's reasoning graph are extracted verbatim from `tool_registry_builder.py`.",
+      "tokens": {
+        "input": 2,
+        "output": 42,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545428.5495193,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-06",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, what edge type (relationship) connects the notebook-edit tool to the write-file tool via the mint?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"write_file\", \"edge_type\": \"tool_conflicts_with\", \"confidence\": 0.85, \"basis\": \"declared:matcher:mint_001_tool_combo_inference\", \"synthesis_chain\": \"mint_001_tool_combo_inference / FCL-001\"}]",
+      "response": "The notebook-edit tool connects to write-file via a `tool_conflicts_with` edge (confidence 0.85, basis `declared:matcher:mint_001_tool_combo_inference`), minted through synthesis chain `mint_001_tool_combo_inference / FCL-001`.",
+      "tokens": {
+        "input": 2,
+        "output": 412,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545442.844107,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-07",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, what confidence-basis label do the pre-existing inherited tool-to-tool reasoning edges carry?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"read_file\", \"edge_type\": \"tool_requires_tool\", \"confidence\": 0.9, \"basis\": \"declared:inherited_curation_default\", \"synthesis_chain\": null}, {\"target\": \"read_file\", \"edge_type\": \"tool_requires_tool\", \"confidence\": 0.9, \"basis\": \"declared:inherited_curation_default\", \"synthesis_chain\": null}]",
+      "response": "The pre-existing inherited tool-to-tool reasoning edges (e.g., the `tool_requires_tool` edges into `read_file`) carry the confidence-basis label `declared:inherited_curation_default`.",
+      "tokens": {
+        "input": 2,
+        "output": 151,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545458.4556987,
+      "retry_count": 0,
+      "ok": true
+    },
+    {
+      "task_id": "cp-08",
+      "arm": "A",
+      "prompt_stored": "In THIS project's reasoning graph, which handbook capability node does the bash-execute tool enable (its id)?\n\nYou are given the relevant slice of a knowledge graph as JSON. Answer the question in ONE sentence using that graph knowledge:\n[{\"target\": \"hbcap_classification\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_contextual_embeddings\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_summarization\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_text_to_sql\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_orchestrator_workers\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_evaluator_optimizer\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_office_doc_skills\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_batch_processing\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_building_evals\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}, {\"target\": \"hbcap_json_mode\", \"edge_type\": \"tool_enables_capability\", \"confidence\": 1.0, \"basis\": \"declared:verbatim_extraction\", \"synthesis_chain\": null}]",
+      "response": "Based on this project's own \"declared, not inferred\" discipline (per CLAUDE.md \u2014 never present something as singular when the graph declares otherwise), the graph slice doesn't point to one node: it declares `tool_enables_capability` edges (confidence 1.0, basis `declared:verbatim_extraction`) from the bash-execute tool to all ten handbook capability nodes \u2014 `hbcap_classification`, `hbcap_contextual_embeddings`, `hbcap_summarization`, `hbcap_text_to_sql`, `hbcap_orchestrator_workers`, `hbcap_evaluator_optimizer`, `hbcap_office_doc_skills`, `hbcap_batch_processing`, `hbcap_building_evals`, and `hbcap_json_mode` \u2014 so there is no single id to name from this data.",
+      "tokens": {
+        "input": 2,
+        "output": 4126,
+        "basis": "measured:api_usage"
+      },
+      "model": "sonnet",
+      "started_at": 1784545518.159014,
+      "retry_count": 0,
+      "ok": true
+    }
+  ]
+}

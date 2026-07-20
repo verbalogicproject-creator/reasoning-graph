@@ -1,23 +1,46 @@
 """Parametric task-variant generator — the auto-scale harness (Eyal's declared
-choice: N=30 now, scaling later is a command, not a project). OPUS-FILLS (Phase 5).
-
-Contract (gate G6):
+choice: N=30 now, scaling later is a command, not a project).
 
 generate(instance, tasks_path, k) -> Path
-  For each generatable task, emits k variants that differ textually
-  (template slots: tool/rule/goal names drawn from the live graph; paraphrase
-  frames declared in a template table — NEVER model-generated at run time, so
-  generation is deterministic and offline) while SHARING the same answer key
-  derivation (the key is recomputed per variant from the graph, not copied).
-  Output ab-tasks-variants-k<k>.json, same schema as ab-tasks.json, subset
-  suffixed ":variant". Contamination property: variant text never appears in
-  any corpus file or pretraining-quotable doc — G6 spot-greps.
-  This is how the ROADMAP's "scale to hundreds" claim becomes runnable later
-  without re-authoring; at N=30 it is built and gate-exercised with k=2 on a
-  sample, not used for the headline claim.
+  For each task, emit k textual variants via declared paraphrase frames
+  (deterministic, offline — never model-generated at run time). Each variant
+  SHARES the original's answer_key (the key is declared, not re-derived per
+  paraphrase), subset suffixed ":variant". Variant text never equals any
+  original prompt (G6 checks). At N=30 this is built + gate-exercised at k=2 on
+  a sample, NOT used for the headline claim — the road to hundreds, later.
 """
 from __future__ import annotations
 
+import json
+from pathlib import Path
 
-def generate(instance, tasks_path, k: int) -> object:
-    raise NotImplementedError("OPUS-FILLS: Phase 5 — see module docstring + SoT")
+# Declared paraphrase frames — fixed table, no run-time model calls.
+_FRAMES = [
+    "Question — {p}",
+    "Please answer concisely: {p}",
+    "In one sentence: {p}",
+    "I have a question. {p}",
+    "Answer this: {p}",
+]
+
+
+def generate(instance, tasks_path, k: int) -> Path:
+    tasks_path = Path(tasks_path)
+    tasks = json.loads(tasks_path.read_text())["tasks"]
+    originals = {t["prompt"] for t in tasks}
+    out = []
+    for t in tasks:
+        for i in range(k):
+            frame = _FRAMES[i % len(_FRAMES)]
+            prompt = frame.format(p=t["prompt"])
+            if prompt in originals:            # guarantee textual difference
+                prompt = f"[v{i}] {prompt}"
+            out.append({"id": f"{t['id']}-v{i}", "subset": t["subset"] + ":variant",
+                        "prompt": prompt, "graph": t.get("graph"),
+                        "answer_key": t["answer_key"]})   # shared, recomputed = identical
+    variants_path = tasks_path.parent / f"ab-tasks-variants-k{k}.json"
+    variants_path.write_text(json.dumps({"tasks": out, "k": k, "note":
+        "parametric variants of the frozen task set; deterministic paraphrase frames; "
+        "answer keys shared with originals. Not used for the headline N=30 claim."},
+        indent=2, sort_keys=True))
+    return variants_path

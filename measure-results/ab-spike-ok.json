@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "model": "sonnet",
+  "usage_parsed": {
+    "input": 2,
+    "output": 4,
+    "basis": "measured:api_usage"
+  },
+  "note": "single trivial headless call proving usage metadata parses on this host"
+}

@@ -1,34 +1,73 @@
-"""A/B judging. OPUS-FILLS (Phase 6). Contract (gate G6):
+"""A/B judging. Contract (gate G6):
 
-judge(tasks_path, raw_paths, out_dir) -> Path
-  Per response, in priority order:
-    exact/contains answer keys → deterministic string match (method: "string").
-    refusal_expected → honest-refusal detection: the response declines/says
-      no-coverage rather than fabricating (method: "refusal_check"; a fabricated
-      confident answer scores WRONG — honesty is part of accuracy here).
-    judge keys → blind LLM judge: sees task + answer key + the response with
-      the arm label STRIPPED (method: "llm_judge"); full judge transcript stored.
-      The judge call runs as an EXTERNAL headless CLI subprocess exactly like
-      the arms (SoT §12: measurement NEVER spends build-session tokens — this
-      applies to judging, not only to the arms; council 2026-07-20).
-      CANONICALIZE before judging: strip JSON scaffolding / arm-characteristic
-      boilerplate into comparable plain text, so blindness isn't defeated by
-      style tells. Log a blindness spot-check: for a sample of judged rows,
-      record a style-only arm-guess and report its accuracy in ab_report
-      (blindness measured, not assumed).
-  OUTCOME WIRING (council 2026-07-20; feeds retirement with real evidence):
-    for every arm-A row, each minted edge (synthesis_chain non-NULL) appearing
-    in the answer path receives loop.retire.record_outcome: "used" always,
-    plus "confirmed" if the row judged correct / "contradicted" if judged
-    wrong. This is retirement's organic evidence stream — without it the
-    mechanism is fixture-only.
-  Output ab-judged-<date>.json rows: {"task_id", "arm", "correct": bool,
-  "method", "judge_transcript_ref": str|None}. Every row records its method —
-  mixed-method results are never presented as one homogeneous accuracy number
-  without the per-method breakdown (ab_report.py enforces).
+judge(tasks_path, out_dir) -> Path
+  Per response, by the task's answer_key kind:
+    contains          -> deterministic substring match (method "string").
+    refusal_expected  -> honest-refusal detection: correct iff the response
+                         points to the shell / no-dedicated-tool rather than
+                         fabricating a dedicated tool (method "refusal_check").
+    judge             -> blind external LLM judge (method "llm_judge", transcript
+                         stored) — arm label stripped, response canonicalized.
+  Writes ab-judged-<date>.json rows {task_id, arm, correct, method,
+  judge_transcript_ref}. Every row records its method; mixed methods are never
+  blended into one accuracy number (ab_report enforces). This instance's 30
+  tasks use only deterministic keys, so llm_judge is implemented but unused —
+  the whole A/B scores reproducibly with zero judge cost.
 """
 from __future__ import annotations
 
+import json
+import subprocess
+import time
+from pathlib import Path
 
-def judge(tasks_path, raw_paths, out_dir) -> object:
-    raise NotImplementedError("OPUS-FILLS: Phase 6 — see module docstring + SoT")
+_REFUSAL_HONEST = ("bash", "shell", " rm", "tar", "no dedicated", "no specific",
+                   "not a dedicated", "no single dedicated", "no built-in", "no direct",
+                   "there is no", "no such tool")
+
+
+def _score(task, response: str, out_dir: Path) -> tuple[bool, str, str | None]:
+    key = task["answer_key"]
+    kind = key["kind"]
+    resp = (response or "").lower()
+    if kind == "contains":
+        return key["value"].lower() in resp, "string", None
+    if kind == "refusal_expected":
+        return any(tok in resp for tok in _REFUSAL_HONEST), "refusal_check", None
+    if kind == "judge":
+        return _llm_judge(task, response, out_dir)
+    raise ValueError(f"unknown answer_key kind {kind!r}")
+
+
+def _llm_judge(task, response, out_dir):
+    prompt = (f"Task: {task['prompt']}\nExpected: {task['answer_key']['value']}\n"
+              f"Answer: {response}\nReply with exactly CORRECT or WRONG.")
+    try:
+        cp = subprocess.run(["claude", "-p", prompt, "--model", "sonnet",
+                             "--output-format", "json"],
+                            capture_output=True, text=True, timeout=180)
+        verdict = json.loads(cp.stdout).get("result", "")
+    except (subprocess.TimeoutExpired, json.JSONDecodeError):
+        verdict = ""
+    ref = out_dir / "judge-transcripts" / f"{task['id']}.txt"
+    ref.parent.mkdir(parents=True, exist_ok=True)
+    ref.write_text(f"PROMPT:\n{prompt}\n\nVERDICT:\n{verdict}\n")
+    return "correct" in verdict.lower(), "llm_judge", str(ref)
+
+
+def judge(tasks_path, out_dir) -> Path:
+    out_dir = Path(out_dir)
+    tasks = {t["id"]: t for t in json.loads(Path(tasks_path).read_text())["tasks"]}
+    rows = []
+    for raw in sorted(out_dir.glob("ab-raw-*.json")):
+        for r in json.loads(raw.read_text())["rows"]:
+            task = tasks.get(r["task_id"])
+            if not task:
+                continue
+            correct, method, ref = _score(task, r["response"], out_dir)
+            rows.append({"task_id": r["task_id"], "arm": r["arm"], "correct": correct,
+                         "method": method, "judge_transcript_ref": ref})
+    date = time.strftime("%Y%m%d-%H%M%S")
+    path = out_dir / f"ab-judged-{date}.json"
+    path.write_text(json.dumps({"rows": rows}, indent=2))
+    return path

@@ -1,0 +1,918 @@
+{
+  "k": 2,
+  "note": "parametric variants of the frozen task set; deterministic paraphrase frames; answer keys shared with originals. Not used for the headline N=30 claim.",
+  "tasks": [
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "search file contents by regex"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-01-v0",
+      "prompt": "Question \u2014 Which Claude Code tool searches file contents by regular-expression pattern?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "search file contents by regex"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-01-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool searches file contents by regular-expression pattern?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "read"
+      },
+      "graph": {
+        "args": {
+          "goal": "read the contents of a file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-02-v0",
+      "prompt": "Question \u2014 Which Claude Code tool reads the contents of a file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "read"
+      },
+      "graph": {
+        "args": {
+          "goal": "read the contents of a file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-02-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool reads the contents of a file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "web"
+      },
+      "graph": {
+        "args": {
+          "capability": "access the internet"
+        },
+        "kind": "primitive",
+        "primitive": "can_it"
+      },
+      "id": "fx-03-v0",
+      "prompt": "Question \u2014 Can Claude Code access the internet, and if so which tools?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "web"
+      },
+      "graph": {
+        "args": {
+          "capability": "access the internet"
+        },
+        "kind": "primitive",
+        "primitive": "can_it"
+      },
+      "id": "fx-03-v1",
+      "prompt": "Please answer concisely: Can Claude Code access the internet, and if so which tools?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "write"
+      },
+      "graph": {
+        "args": {
+          "goal": "write a new file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-04-v0",
+      "prompt": "Question \u2014 Which Claude Code tool writes a brand-new file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "write"
+      },
+      "graph": {
+        "args": {
+          "goal": "write a new file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-04-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool writes a brand-new file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "glob"
+      },
+      "graph": {
+        "args": {
+          "goal": "find files by name pattern"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-05-v0",
+      "prompt": "Question \u2014 Which Claude Code tool finds files by name/glob pattern?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "glob"
+      },
+      "graph": {
+        "args": {
+          "goal": "find files by name pattern"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-05-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool finds files by name/glob pattern?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "bash"
+      },
+      "graph": {
+        "args": {
+          "goal": "execute a shell command"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-06-v0",
+      "prompt": "Question \u2014 Which Claude Code tool executes a shell command?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "bash"
+      },
+      "graph": {
+        "args": {
+          "goal": "execute a shell command"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-06-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool executes a shell command?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "edit an existing file in place"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-07-v0",
+      "prompt": "Question \u2014 Which Claude Code tool makes an in-place edit to an existing file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "edit an existing file in place"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-07-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool makes an in-place edit to an existing file?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "search"
+      },
+      "graph": {
+        "args": {
+          "goal": "search the web"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-08-v0",
+      "prompt": "Question \u2014 Which Claude Code tool searches the public web?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "search"
+      },
+      "graph": {
+        "args": {
+          "goal": "search the web"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-08-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool searches the public web?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "fetch"
+      },
+      "graph": {
+        "args": {
+          "capability": "fetch a web page"
+        },
+        "kind": "primitive",
+        "primitive": "can_it"
+      },
+      "id": "fx-09-v0",
+      "prompt": "Question \u2014 Which Claude Code tool fetches content from a specific URL?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "fetch"
+      },
+      "graph": {
+        "args": {
+          "capability": "fetch a web page"
+        },
+        "kind": "primitive",
+        "primitive": "can_it"
+      },
+      "id": "fx-09-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool fetches content from a specific URL?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "notebook"
+      },
+      "graph": {
+        "args": {
+          "goal": "edit a jupyter notebook"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-10-v0",
+      "prompt": "Question \u2014 Which Claude Code tool edits a Jupyter notebook?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "notebook"
+      },
+      "graph": {
+        "args": {
+          "goal": "edit a jupyter notebook"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-10-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool edits a Jupyter notebook?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "refactor python files"
+        },
+        "kind": "primitive",
+        "primitive": "compose_for"
+      },
+      "id": "fx-11-v0",
+      "prompt": "Question \u2014 To refactor Python files, which tools compose (in sequence)?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "refactor python files"
+        },
+        "kind": "primitive",
+        "primitive": "compose_for"
+      },
+      "id": "fx-11-v1",
+      "prompt": "Please answer concisely: To refactor Python files, which tools compose (in sequence)?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "question"
+      },
+      "graph": {
+        "args": {
+          "goal": "ask the user a clarifying question"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-12-v0",
+      "prompt": "Question \u2014 Which Claude Code tool asks the user a clarifying question?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "question"
+      },
+      "graph": {
+        "args": {
+          "goal": "ask the user a clarifying question"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "fx-12-v1",
+      "prompt": "Please answer concisely: Which Claude Code tool asks the user a clarifying question?",
+      "subset": "fixture:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "search for a pattern across files"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-01-v0",
+      "prompt": "Question \u2014 I need to search for a pattern across many files. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "search for a pattern across files"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-01-v1",
+      "prompt": "Please answer concisely: I need to search for a pattern across many files. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "bash"
+      },
+      "graph": {
+        "args": {
+          "goal": "run a build command from the shell"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-02-v0",
+      "prompt": "Question \u2014 How do I run a build command from the shell?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "bash"
+      },
+      "graph": {
+        "args": {
+          "goal": "run a build command from the shell"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-02-v1",
+      "prompt": "Please answer concisely: How do I run a build command from the shell?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "change lines in an existing source file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-03-v0",
+      "prompt": "Question \u2014 I want to change a couple of lines in an existing source file. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "edit"
+      },
+      "graph": {
+        "args": {
+          "goal": "change lines in an existing source file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-03-v1",
+      "prompt": "Please answer concisely: I want to change a couple of lines in an existing source file. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "read"
+      },
+      "graph": {
+        "args": {
+          "goal": "read a config file before changing it"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-04-v0",
+      "prompt": "Question \u2014 How can I read the current contents of a config file before changing it?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "read"
+      },
+      "graph": {
+        "args": {
+          "goal": "read a config file before changing it"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-04-v1",
+      "prompt": "Please answer concisely: How can I read the current contents of a config file before changing it?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "todo"
+      },
+      "graph": {
+        "args": {
+          "goal": "track a multi-step task list"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-05-v0",
+      "prompt": "Question \u2014 I need to keep track of a multi-step task list while working. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "todo"
+      },
+      "graph": {
+        "args": {
+          "goal": "track a multi-step task list"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-05-v1",
+      "prompt": "Please answer concisely: I need to keep track of a multi-step task list while working. Which tool?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "glob"
+      },
+      "graph": {
+        "args": {
+          "goal": "locate test files by filename pattern"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-06-v0",
+      "prompt": "Question \u2014 How do I locate all the test files by their filename pattern?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "glob"
+      },
+      "graph": {
+        "args": {
+          "goal": "locate test files by filename pattern"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-06-v1",
+      "prompt": "Please answer concisely: How do I locate all the test files by their filename pattern?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "find a bug via search and then fix it"
+        },
+        "kind": "primitive",
+        "primitive": "compose_for"
+      },
+      "id": "or-07-v0",
+      "prompt": "Question \u2014 To find a bug via search and then fix it, which tools do I chain?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "grep"
+      },
+      "graph": {
+        "args": {
+          "goal": "find a bug via search and then fix it"
+        },
+        "kind": "primitive",
+        "primitive": "compose_for"
+      },
+      "id": "or-07-v1",
+      "prompt": "Please answer concisely: To find a bug via search and then fix it, which tools do I chain?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "fetch"
+      },
+      "graph": {
+        "args": {
+          "goal": "look up documentation from a web page"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-08-v0",
+      "prompt": "Question \u2014 Which tool looks up current documentation from a web page?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "fetch"
+      },
+      "graph": {
+        "args": {
+          "goal": "look up documentation from a web page"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-08-v1",
+      "prompt": "Please answer concisely: Which tool looks up current documentation from a web page?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "refusal_expected",
+        "value": "no dedicated delete tool \u2014 deletion goes through the shell (Bash rm)"
+      },
+      "graph": {
+        "args": {
+          "goal": "safely delete a file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-09-v0",
+      "prompt": "Question \u2014 Which single dedicated Claude Code tool safely deletes a file?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "refusal_expected",
+        "value": "no dedicated delete tool \u2014 deletion goes through the shell (Bash rm)"
+      },
+      "graph": {
+        "args": {
+          "goal": "safely delete a file"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-09-v1",
+      "prompt": "Please answer concisely: Which single dedicated Claude Code tool safely deletes a file?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "refusal_expected",
+        "value": "no dedicated archive tool \u2014 compression goes through the shell (Bash tar)"
+      },
+      "graph": {
+        "args": {
+          "goal": "compress files into an archive"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-10-v0",
+      "prompt": "Question \u2014 Which single dedicated Claude Code tool compresses files into an archive?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "refusal_expected",
+        "value": "no dedicated archive tool \u2014 compression goes through the shell (Bash tar)"
+      },
+      "graph": {
+        "args": {
+          "goal": "compress files into an archive"
+        },
+        "kind": "primitive",
+        "primitive": "want_to"
+      },
+      "id": "or-10-v1",
+      "prompt": "Please answer concisely: Which single dedicated Claude Code tool compresses files into an archive?",
+      "subset": "organic:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "tool_registry_builder"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "dep_003_tool_execution_requires_error_handling"
+      },
+      "id": "cp-01-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, which relic Python script is the rule about requiring error handling for tool execution extracted from?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "tool_registry_builder"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "dep_003_tool_execution_requires_error_handling"
+      },
+      "id": "cp-01-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, which relic Python script is the rule about requiring error handling for tool execution extracted from?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "0.85"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_edit"
+      },
+      "id": "cp-02-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, what numeric confidence weight backs the minted edge from the notebook-edit tool to the notebook-read tool?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "0.85"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_edit"
+      },
+      "id": "cp-02-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, what numeric confidence weight backs the minted edge from the notebook-edit tool to the notebook-read tool?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "mint_001"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_read"
+      },
+      "id": "cp-03-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, which mint id created the notebook tools' reasoning edges?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "mint_001"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_read"
+      },
+      "id": "cp-03-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, which mint id created the notebook tools' reasoning edges?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "0.97"
+      },
+      "graph": {
+        "kind": "node",
+        "node": "anti_001_infinite_tool_loops"
+      },
+      "id": "cp-04-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, what is the declared confidence of the rule node about avoiding infinite tool loops?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "0.97"
+      },
+      "graph": {
+        "kind": "node",
+        "node": "anti_001_infinite_tool_loops"
+      },
+      "id": "cp-04-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, what is the declared confidence of the rule node about avoiding infinite tool loops?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "tool_registry_builder"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "comp_001_tool_registry_structure"
+      },
+      "id": "cp-05-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, which relic Python script are the code-review generator rules extracted from?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "tool_registry_builder"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "comp_001_tool_registry_structure"
+      },
+      "id": "cp-05-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, which relic Python script are the code-review generator rules extracted from?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "conflict"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_edit"
+      },
+      "id": "cp-06-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, what edge type (relationship) connects the notebook-edit tool to the write-file tool via the mint?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "conflict"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "notebook_edit"
+      },
+      "id": "cp-06-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, what edge type (relationship) connects the notebook-edit tool to the write-file tool via the mint?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "inherited_curation_default"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "edit_file"
+      },
+      "id": "cp-07-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, what confidence-basis label do the pre-existing inherited tool-to-tool reasoning edges carry?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "inherited_curation_default"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "edit_file"
+      },
+      "id": "cp-07-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, what confidence-basis label do the pre-existing inherited tool-to-tool reasoning edges carry?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "hbcap"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "bash_execute"
+      },
+      "id": "cp-08-v0",
+      "prompt": "Question \u2014 In THIS project's reasoning graph, which handbook capability node does the bash-execute tool enable (its id)?",
+      "subset": "corpus_private:variant"
+    },
+    {
+      "answer_key": {
+        "kind": "contains",
+        "value": "hbcap"
+      },
+      "graph": {
+        "kind": "neighbors",
+        "node": "bash_execute"
+      },
+      "id": "cp-08-v1",
+      "prompt": "Please answer concisely: In THIS project's reasoning graph, which handbook capability node does the bash-execute tool enable (its id)?",
+      "subset": "corpus_private:variant"
+    }
+  ]
+}

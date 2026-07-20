@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 .gates-state.json
 *.pyc
+measure-results/raw/

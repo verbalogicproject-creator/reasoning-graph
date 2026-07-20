@@ -1,0 +1,424 @@
+{
+  "rows": [
+    {
+      "task_id": "fx-01",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-02",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-03",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-04",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-05",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-06",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-07",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-08",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-09",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-10",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-11",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-12",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-01",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-02",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-03",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-04",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-05",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-06",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-07",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-08",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-09",
+      "arm": "A",
+      "correct": true,
+      "method": "refusal_check",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-10",
+      "arm": "A",
+      "correct": true,
+      "method": "refusal_check",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-01",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-02",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-03",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-04",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-05",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-06",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-07",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-08",
+      "arm": "A",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-01",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-02",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-03",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-04",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-05",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-06",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-07",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-08",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-09",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-10",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-11",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "fx-12",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-01",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-02",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-03",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-04",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-05",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-06",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-07",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-08",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-09",
+      "arm": "B",
+      "correct": false,
+      "method": "refusal_check",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "or-10",
+      "arm": "B",
+      "correct": true,
+      "method": "refusal_check",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-01",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-02",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-03",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-04",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-05",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-06",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-07",
+      "arm": "B",
+      "correct": true,
+      "method": "string",
+      "judge_transcript_ref": null
+    },
+    {
+      "task_id": "cp-08",
+      "arm": "B",
+      "correct": false,
+      "method": "string",
+      "judge_transcript_ref": null
+    }
+  ]
+}

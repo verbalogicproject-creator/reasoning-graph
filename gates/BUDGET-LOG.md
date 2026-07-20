@@ -12,7 +12,7 @@ Abort ladder (declared; docs bar is NON-NEGOTIABLE per Eyal 2026-07-19):
 |---|---|---|---|---|
 | Phase 0 / G0 | PASS | baseline | 30K | SoT read; G0 10/10 green |
 | Phase 1 / G1 | checks 1-3 PASS; check 4 NOT-BUILT | ~within est | 90K | store.py done + smoke-verified (reads/confidence/MissingConfidence/undeclared-raise). G1 check 4 (resolve) is Phase-3-dependent by gate design → G1 reaches full PASS at Phase 3. FLAGGED to Eyal, not a failure. |
-| Phase 2 / G2 | | | 70K | blocked until gates/eyal-approvals/edge-confidence-0.90.json exists (it does, 2026-07-20) |
+| Phase 2 / G2 | PASS | ~within est | 70K | m001 applied to instance-0 (856/856, null_remaining 0, idempotent, backup written). Dry-run counts matched hand-computed table exactly. Finding RG-1: corpus-min fallback (0.70) was prose-only in graphschema; made machine-readable via _RULE_DERIVED.value. Approval artifact honored. resolver cross-check SKIP (Phase 3). G0 re-run PASS. |
 | Phase 3 / G3 | | | 110K | on PASS: CORE-LOCK written AND git-committed |
 | Phase 4 / G4 | | | 180K | |
 | Phase 5 / G5 | | | 130K | |

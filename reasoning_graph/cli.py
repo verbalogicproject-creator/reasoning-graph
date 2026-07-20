@@ -47,6 +47,15 @@ def _cmd_schema_validate(args) -> int:
     return 0
 
 
+def _cmd_migrate(args) -> int:
+    from .migrations import m001_edge_confidence
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    report = m001_edge_confidence(inst, dry_run=args.dry_run, backup=not args.no_backup)
+    _emit(report, args.json)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="reasoning-graph",
                                 description="Declared, confidence-weighted reasoning graphs.")
@@ -68,7 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp = add("migrate", "run m001_edge_confidence (additive, idempotent)")
     sp.add_argument("--dry-run", action="store_true")
     sp.add_argument("--no-backup", action="store_true")
-    sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 2 (migrations.py)"))
+    sp.set_defaults(fn=_cmd_migrate)
 
     # resolve
     sp = add("resolve", "resolve a path (--start/--end) or a typed query (--text)")

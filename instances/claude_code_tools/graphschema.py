@@ -30,7 +30,11 @@ _INHERITED = ConfidenceRule(
     formula_note="pre-existing DB-native curated reasoning edge; 0.90 is a DECLARED default flagged for Eyal's confirmation")
 _RULE_DERIVED = ConfidenceRule(
     basis="derived:source_rule_confidence",
-    formula_note="= source synthesis_rule node metadata confidence; fallback derived:corpus_min(0.70) when the rule declares none (TASK-CLASSIFIER's 12)")
+    value=0.70,   # DECLARED corpus-min fallback (SoT lock #22): used ONLY when a source
+                  # rule declares no confidence (m001 tries source-node derivation first).
+                  # 0.70 = min confidence across this corpus's rule files (Data-Grounding
+                  # verified 2026-07-20). Machine-readable here, not buried in prose.
+    formula_note="= source rule node metadata confidence; fallback = value (0.70, observed corpus-file minimum) when the rule declares none (TASK-CLASSIFIER's 12)")
 _CONTRADICTS = ConfidenceRule(
     basis="declared:initial_guess",
     formula_note="no instances yet; any future contradicts edge carries its minter's declared value")

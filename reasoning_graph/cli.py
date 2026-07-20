@@ -56,6 +56,26 @@ def _cmd_migrate(args) -> int:
     return 0
 
 
+def _cmd_resolve(args) -> int:
+    from .resolver import resolve
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    ans = resolve(inst, start=args.start, end=args.end, text=args.text,
+                  weighted=not args.unweighted, include_dormant=args.include_dormant,
+                  hard=args.hard)
+    _emit(ans, args.json)
+    return 0   # REFUSE is a result, not an error — exit 0
+
+
+def _cmd_analytics(args) -> int:
+    from .resolver import cycles, pagerank
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    result = pagerank(inst, top=args.top) if args.action == "pagerank" else cycles(inst)
+    _emit({"action": args.action, "result": result}, args.json)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="reasoning-graph",
                                 description="Declared, confidence-weighted reasoning graphs.")
@@ -86,13 +106,14 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--text")
     sp.add_argument("--unweighted", action="store_true", help="fewest-hop instead of highest-confidence")
     sp.add_argument("--include-dormant", action="store_true")
-    sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 3 (resolver.py/refusal.py)"))
+    sp.add_argument("--hard", action="store_true", help="sub-floor results REFUSE instead of WEAK_ANSWER")
+    sp.set_defaults(fn=_cmd_resolve)
 
     # analytics
     sp = add("analytics", "pagerank | cycles")
     sp.add_argument("action", choices=["pagerank", "cycles"])
     sp.add_argument("--top", type=int, default=20)
-    sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 3 (resolver.py)"))
+    sp.set_defaults(fn=_cmd_analytics)
 
     # loop
     sp = add("loop", "scan | promote | mint | verify | freeze | retire")

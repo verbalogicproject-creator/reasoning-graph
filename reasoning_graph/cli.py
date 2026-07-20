@@ -102,6 +102,38 @@ def _cmd_loop(args) -> int:
     return 0
 
 
+def _cmd_measure(args) -> int:
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    if args.action == "frontier-rate":
+        from .measure import frontier_rate
+        _emit(frontier_rate.compute(inst), args.json)
+        return 0
+    if args.action == "ab-build-tasks":
+        from .measure import ab_tasks
+        _emit({"tasks_path": str(ab_tasks.build(inst, Path(args.out)))}, args.json)
+        return 0
+    if args.action == "ab-variants":
+        from .measure import ab_variants
+        _emit({"variants_path": str(ab_variants.generate(inst, args.tasks, args.k))}, args.json)
+        return 0
+    if args.action == "ab-run":
+        from .measure import ab_run
+        _emit({"raw_path": str(ab_run.run(inst, args.tasks, Path(args.out), args.model, args.arm))},
+              args.json)
+        return 0
+    if args.action == "ab-judge":
+        from .measure import ab_judge
+        _emit({"judged_path": str(ab_judge.judge(args.tasks, args.out, Path(args.out)))}, args.json)
+        return 0
+    if args.action == "ab-report":
+        from .measure import ab_report
+        _emit({"report_path": str(ab_report.report(args.tasks, args.out, args.out, Path(args.out)))},
+              args.json)
+        return 0
+    return _not_implemented(args, "measure")
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="reasoning-graph",
                                 description="Declared, confidence-weighted reasoning graphs.")
@@ -162,7 +194,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--model", help="model id for ab-run")
     sp.add_argument("--arm", choices=["A", "B", "both"], default="both")
     sp.add_argument("--k", type=int, default=2, help="variants per task (ab-variants)")
-    sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 5/6 (measure/*)"))
+    sp.set_defaults(fn=_cmd_measure)
 
     # demo
     sp = add("demo", "deterministic demo over the tiny fixture; ends 'Verify your build: ok'")

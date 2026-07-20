@@ -1,0 +1,12 @@
+{
+  "approval": "inherited_curation_default_confidence",
+  "value": 0.90,
+  "basis_label": "declared:inherited_curation_default",
+  "scope_edge_kinds": ["tool_requires_tool", "tool_similar_to", "tool_complements",
+                       "tool_alternative_to", "tool_conflicts_with"],
+  "condition": "synthesis_chain IS NULL (minted rows carry their matcher's confidence instead)",
+  "approved_by": "eyal_nof",
+  "date": "2026-07-20",
+  "grounds": "Declared via AskUserQuestion during the Scientifix Council review (2026-07-20), closing SoT open question 13.1 / lock #21. The council required this backfill value to be a recorded human declaration gated by an artifact G2 checks — mirroring the loop-freeze --approve pattern — rather than a default the build session enacts by fiat.",
+  "gate_contract": "gates/g2_edge_confidence.py refuses (NOT-BUILT: blocked-on-approval) if this file is absent or its value does not match the gate's own INHERITED constant."
+}

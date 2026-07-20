@@ -1,0 +1,75 @@
+{
+  "_comment": "DECLARED gap shapes + occurrence counts + dispositions for the 11 historical FCL entries (which predate the inline `- gap_shape:` field). Source: frontier-call-log.ngf.md read in full 2026-07-19; occurrences come from each entry's own recurrence notes, dispositions from its status tag + body. This file is the promotion detector's ground truth for history; new entries carry gap_shape inline and are appended here by `loop scan --refresh-history` (OPUS-FILLS). NEVER inferred by text similarity.",
+  "_counting_convention": "An 'occurrence' is one individual query-instance exhibiting the identical gap_shape, regardless of packaging: instances may be split across separate log entries (FCL-007's original + its batch-2 recurrence) or bundled inside one entry (FCL-001's two notebook tools; FCL-008's 2+3 across both batches). Stated explicitly per the council's audit (2026-07-20) so a third party can re-derive these integers from the log prose without guessing the rule. Honesty note: producing these 11 historical declarations WAS itself a judgment call over prose, performed once by the authoring session — the 'declared, never inferred' discipline is fully mechanical only for entries logged with gap_shape inline from now on.",
+  "promotion_threshold_in_force": 2,
+  "entries": {
+    "FCL-001": {
+      "gap_shape": "json_only_tool_patch_lands_with_zero_reasoning_edges",
+      "occurrences": 2,
+      "occurrence_note": "notebook_edit + notebook_read — two independent instances of the identical root-cause shape in one batch",
+      "disposition": "minted",
+      "mint_id": "mint_001_tool_combo_inference",
+      "promoted_by": "explicit_human_approval (Eyal, 2026-07-14) — dual-instance argument recorded in the entry"
+    },
+    "FCL-002": {
+      "gap_shape": "plan_gate_premise_mismatch_rule_governance",
+      "occurrences": 1,
+      "disposition": "resolved_premise_corrected",
+      "note": "gate wording fixed, 3 relic_script nodes + 17 extracted_from edges added as pure extraction; no forced tool-rule edge"
+    },
+    "FCL-003": {
+      "gap_shape": "compound_patterns_missing_key_and_goal_echo_bleed",
+      "occurrences": 1,
+      "disposition": "closed_code_fix"
+    },
+    "FCL-004": {
+      "gap_shape": "fixture_gate_outlived_declared_extraction_scope",
+      "occurrences": 1,
+      "disposition": "closed_scoped_node_extraction",
+      "note": "TASK-CLASSIFIER 12 rules + 1 anti-pattern extracted as nodes only; zero new edges — edge scope stayed inside open call #2"
+    },
+    "FCL-005": {
+      "gap_shape": "matcher_phrase_substring_only_inconsistency",
+      "occurrences": 1,
+      "disposition": "closed_code_fix"
+    },
+    "FCL-006": {
+      "gap_shape": "reasoning_node_type_registry_staleness",
+      "occurrences": 1,
+      "disposition": "closed_code_fix"
+    },
+    "FCL-007": {
+      "gap_shape": "first_match_wins_multi_category_goal_collapse",
+      "occurrences": 2,
+      "disposition": "closed_code_fix_on_recurrence",
+      "note": "the recurrence gate's first clean positive: 2nd occurrence → union-of-matches fix, fixture 20/20"
+    },
+    "FCL-008": {
+      "gap_shape": "zero_coverage_goal_generic_word_noise",
+      "occurrences": 5,
+      "disposition": "rejected_content_gap",
+      "note": "recurred 5x and was CORRECTLY not minted: a perfect matcher cannot produce an answer the corpus does not contain, and inventing use_case content would be fabrication. The detector must surface this as recurring AND respect the rejection — never re-propose it."
+    },
+    "FCL-009": {
+      "gap_shape": "no_confidence_floor_presents_noise_as_ranking",
+      "occurrences": 3,
+      "disposition": "closed_code_fix_on_recurrence",
+      "note": "floor 0.1 grounded in the observed signal(>=0.143)/noise(<=0.088) gap across 6 tools"
+    },
+    "FCL-010": {
+      "gap_shape": "duplicate_edge_same_kind_unreconciled_properties",
+      "occurrences": 1,
+      "disposition": "open_watching"
+    },
+    "FCL-011": {
+      "gap_shape": "intent_label_replaces_specific_goal",
+      "occurrences": 1,
+      "disposition": "open_watching"
+    }
+  },
+  "expected_detector_output": {
+    "_comment": "gate G4 asserts exactly this on the live log",
+    "recurring": ["FCL-001", "FCL-007", "FCL-008", "FCL-009"],
+    "promotable": []
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "claude_code_tools",
+  "db_path": "/root/reasoning-graph/kgs/reasoning-graph.db",
+  "fcl_path": "/root/reasoning-graph/frontier-call-log.ngf.md",
+  "rules_dir": "/root/reasoning-graph/synthesis-rules",
+  "staged_dir": "/root/reasoning-graph/synthesis-rules/staged",
+  "gap_shape_history": "gap-shape-history.json",
+  "graphschema": "graphschema.py",
+  "adapter": {
+    "kind": "subprocess",
+    "cwd": "/root/reasoning-graph",
+    "argv": ["python3", "query.py"],
+    "json_flag": "--json"
+  },
+  "self_approve": false,
+  "_notes": {
+    "db": "the LIVE combined store (639n/856e at 2026-07-19 baseline); written ONLY via reasoning-graph migrate / loop freeze / loop retire, all approval-gated",
+    "minted_dir": "/root/reasoning-graph/synthesis-rules/minted",
+    "frozen_upstream": "/root/reasoning-graph/kgs/claude_kg_truth/claude-code-tools-kg.db (never written)"
+  }
+}

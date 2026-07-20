@@ -1,0 +1,12 @@
+{
+  "name": "tiny_weaving",
+  "db_path": "tiny.db",
+  "fcl_path": "../fcl-fixture.ngf.md",
+  "staged_dir": "staged",
+  "graphschema": "graphschema.py",
+  "self_approve": true,
+  "_notes": {
+    "db": "built by build_tiny.py into THIS directory (tests/conftest.py and gates copy the whole tiny/ dir to a temp dir first — never run against the checked-in location)",
+    "self_approve": "fixtures may self-approve freezes; the real instance 0 may not"
+  }
+}

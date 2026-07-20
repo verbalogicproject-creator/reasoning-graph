@@ -1,0 +1,26 @@
+{
+  "_comment": "Declared minted-rule counter states for retirement tests (gate G4 + tests/test_retire.py). Applied to a scratch copy of the tiny instance (active_cap=2, min_uses=5, contradiction_ratio=0.5). Expected outcome is declared below so the test asserts against declared truth, not the implementation's own opinion.",
+  "minted_rules": {
+    "mint_f01_tension_edges": {
+      "status": "active",
+      "times_used": 10, "times_confirmed": 7, "times_contradicted": 1,
+      "_expect": "stays active — ratio 0.1 < 0.5, utility 6 (highest)"
+    },
+    "mint_f02_whorl_speed": {
+      "status": "active",
+      "times_used": 8, "times_confirmed": 1, "times_contradicted": 6,
+      "_expect": "DEMOTED by contradiction ratio — 6/8 = 0.75 >= 0.5 with uses >= 5; evidence recorded; counters preserved; NOT deleted"
+    },
+    "mint_f03_bath_order": {
+      "status": "active",
+      "times_used": 6, "times_confirmed": 2, "times_contradicted": 1,
+      "_expect": "DEMOTED by active_cap — cap is 2, and after f02's ratio-demotion 2 remain (f01 utility 6, f03 utility 1); f03 is lowest-utility over cap ONLY if a 3rd active rule exists — with f02 demoted, f01+f03 fit the cap and f03 STAYS ACTIVE. The test asserts exactly this interaction: ratio-demotions apply before cap enforcement."
+    }
+  },
+  "expected": {
+    "demoted": ["mint_f02_whorl_speed"],
+    "active_after": ["mint_f01_tension_edges", "mint_f03_bath_order"],
+    "dormant_after": ["mint_f02_whorl_speed"],
+    "deleted_after": []
+  }
+}

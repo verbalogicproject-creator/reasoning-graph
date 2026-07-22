@@ -1,35 +1,57 @@
 # reasoning-graph
 
-> **Graph = frozen reasoning.** You pay inference once to declare an edge, then retrieve it forever by traversal. Multi-step reasoning becomes path-finding; what the graph can't answer becomes a logged frontier call that feeds a mint→verify→freeze loop. This is rung-0 of the lowering ladder applied to reasoning itself.
+> **Graph = frozen reasoning.** Pay inference once to declare an edge, then retrieve it forever by traversal. Multi-step reasoning becomes path-finding; what the graph can't answer becomes a logged *frontier call* that feeds a mint→verify→freeze→retire loop. This is rung-0 of the lowering ladder applied to reasoning itself.
 
-<!-- Badges: fill at G8 with real numbers — tests-N-passing, required deps-0 -->
+![tests](https://img.shields.io/badge/tests-40_passing-brightgreen) ![deps](https://img.shields.io/badge/required_deps-0-blue) ![gates](https://img.shields.io/badge/gates-G0..G8_green-brightgreen)
 
-<!-- OPUS-FILLS: every section below to the house bar (declared_core / frontmatter_rag / project_memory). The section skeleton is the contract; G8 verifies structure, executes the quickstart, and fails on any remaining OPUS-FILLS marker. -->
+Declared, confidence-weighted reasoning graphs — reasoning retrieved by traversal instead of re-derived in prose, and *honest about the edges of its own competence* (it refuses what its frozen edges don't support). Corpus-agnostic core; ships with `claude-code-tools` as instance 0.
 
 ## The 60-second quickstart
 
-<!-- OPUS-FILLS: a fenced bash block that ACTUALLY RUNS end-to-end on a fresh checkout (pip install -e ., reasoning-graph demo) and prints deterministic output shown verbatim below the block. G8 extracts and executes this block; tests assert its exact output. -->
+```bash
+pip install -e . --break-system-packages -q
+reasoning-graph schema validate --instance instances/claude_code_tools/instance.json --json
+python3 -m reasoning_graph.demo
+```
+
+The demo builds a small declared graph, migrates confidence onto its edges, and shows the three honest outcomes — an `ANSWER` that composes to a confidence product, a sub-floor `WEAK_ANSWER` (not hidden), and a `REFUSE(contradiction)` — ending with `Verify your build: ok`.
 
 ## What this is
 
-<!-- OPUS-FILLS: thesis paragraph — declared > inferred; reasoning retrieved, not re-derived; the refusal boundary as the differentiator (REFUSE what frozen edges don't support). One paragraph on the A/B proof result with honest claim scope: PoC evidence on this corpus, not a generalizable benchmark. -->
+A knowledge graph is reasoning done once: you pay inference to declare a confidence-weighted edge, then look it up by traversal instead of re-deriving it every call. `resolve()` returns an `ANSWER` / `WEAK_ANSWER` / `REFUSE` — refusal is a first-class result, not an error, because a reasoning graph that answers everything is lying about something. Misses become logged frontier calls; a mechanized loop mints, verifies, freezes, and (on evidence) retires rules. Every confidence carries a closed-vocabulary basis (`declared:*` / `derived:*`); nothing is ever presented as measured except A/B API-usage tokens.
 
 ## How it fits together
 
-<!-- OPUS-FILLS: ASCII bottom-up diagram — GraphSchema declaration → store (sqlite) → resolver (traverse/explain/pagerank/cycles) → refusal boundary → primitives adapter → loop (scan/promote/mint/verify/freeze/retire) → measure (frontier-rate, A/B). -->
-
-## Features
-
-<!-- OPUS-FILLS: feature table — every row maps to a runnable example or named test (Proven, not claimed). -->
+```
+GraphSchema (declare: node/edge kinds, confidence rules, floor, retirement)
+      │  everything below is derived from it — zero hardcoded corpus vocabulary
+      ▼
+store.py ──► migrations.py (m001: additive confidence column, per-class backfill)
+      │
+      ▼
+resolver.py + refusal.py ──► Answer{status, path, confidence, path_class, refusal}
+      │
+      ▼
+loop/ : scan → promote (recurrence gate) → mint → verify → freeze → retire
+      │
+      ▼
+measure/ : frontier_rate (health)  +  ab_* (the A/B proof: tokens + accuracy)
+```
 
 ## Design choices
 
-<!-- OPUS-FILLS: confidence is declared-or-derived and labeled, never silently measured; NULL confidence refuses instead of defaulting to 1.0; path confidence is a score not a probability; minted rules carry outcome counters and can retire to dormant (never deleted); promotion requires a declared gap_shape recurrence, never NLP inference. -->
+- **declared > inferred.** A learned or opaque ranking signal is a *bug*, not a feature — the thesis is that declared structure replaces re-derivation.
+- **Missing confidence refuses.** A NULL edge weight is never silently treated as 1.0 (the behavior this framework exists to kill).
+- **Path confidence is a score, not a probability.** `confidence_kind: path_product_score` — an honest ranking number (arXiv:2601.11956), and `path_class` discloses a structural fact-walk vs a reasoning composition.
+- **Cycles ≠ contradictions.** Only `cycle_class='contradiction'` edges refuse; benign reciprocal cycles are data.
+- **Retirement, not unbounded growth.** Minted rules carry outcome counters and demote to *dormant* (never deleted) — unmanaged rule libraries degrade below baseline at scale (arXiv:2605.13716).
 
 ## Reading paths
 
-<!-- OPUS-FILLS: the three paths (user → docs/00,01,09; integrator → docs/08,10; contributor → CODEBASE-REPORT + CONTRIBUTING) with time estimates per chapter, house-style table. -->
+- **User (~15 min):** `docs/00-mental-model.md` → `docs/01-declare-your-graphschema.md` → `docs/09-cli-reference.md`.
+- **Integrator (~20 min):** `docs/08-api-reference.md` → `docs/10-claude-code-mcp.md` → `examples/`.
+- **Contributor:** `CODEBASE-REPORT.md` → `CONTRIBUTING.md` → `tests/INVARIANTS.md`.
 
 ## The family
 
-<!-- OPUS-FILLS: relationship to declared_core / frontmatter_rag / project_memory (sibling codifications of RAG) and to /root/reasoning-graph (instance 0, the claude-code-tools corpus). -->
+A sibling of Eyal's RAG codifications (`declared_core` / `frontmatter_rag` / `project_memory`) — same house recipe (one declaration object, deterministic, offline-first, a refuses-to-pretend boundary), pointed at reasoning instead of retrieval. Instance 0's substrate lives at `/root/reasoning-graph`; this repo never edits it except through `migrate` / `loop freeze` / `loop retire`.

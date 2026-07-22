@@ -48,8 +48,8 @@ def test_inv_structural_validation():
 
 def test_inv_tiny_profile_roundtrip(tiny_instance):
     """Declaration half of invariant 1: the tiny instance (non-default names,
-    alien domain) loads and validates. The store/resolver half is
-    OPUS-FILLS-gated in test_store/test_resolver."""
+    alien domain) loads and validates. The store/resolver half is covered in
+    test_store/test_resolver."""
     inst = load_instance(tiny_instance)
     assert inst.schema.name == "tiny_weaving"
     assert inst.schema.profile.nodes_table == "strands"

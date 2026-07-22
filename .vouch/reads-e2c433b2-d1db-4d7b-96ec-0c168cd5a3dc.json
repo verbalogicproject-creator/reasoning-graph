@@ -38,11 +38,13 @@
   "/root/projects/reasoning_graph/gates/g7_second_corpus.py",
   "/root/projects/reasoning_graph/gates/g8_codification_bar.py",
   "/root/projects/reasoning_graph/gates/run_all.py",
+  "/root/projects/reasoning_graph/instances/claude_code_tools/ab-task-seeds.json",
   "/root/projects/reasoning_graph/instances/claude_code_tools/gap-shape-history.json",
   "/root/projects/reasoning_graph/instances/claude_code_tools/graphschema.py",
   "/root/projects/reasoning_graph/instances/claude_code_tools/instance.json",
   "/root/projects/reasoning_graph/pyproject.toml",
   "/root/projects/reasoning_graph/reasoning_graph/cli.py",
+  "/root/projects/reasoning_graph/reasoning_graph/demo.py",
   "/root/projects/reasoning_graph/reasoning_graph/loop/fcl.py",
   "/root/projects/reasoning_graph/reasoning_graph/loop/freeze.py",
   "/root/projects/reasoning_graph/reasoning_graph/loop/mint.py",
@@ -79,5 +81,6 @@
   "/root/reasoning-graph/frontier-call-log.ngf.md",
   "/root/reasoning-graph/p2_fixture_runner.py",
   "/root/reasoning-graph/reasoning-graph-context-datapacket-2026-07-12.ngf.md",
-  "/root/reasoning-graph/status-report-2026-07-14.ngf.md"
+  "/root/reasoning-graph/status-report-2026-07-14.ngf.md",
+  "/root/reasoning-graph/systems/nai/kg_manager.py"
 ]

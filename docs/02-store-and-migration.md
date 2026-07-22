@@ -1,3 +1,5 @@
 # 02 — Store and migration
 
-<!-- OPUS-FILLS: sqlite substrate; profile-driven table/column mapping; m001_edge_confidence (additive, idempotent, --dry-run, .bak); the derivation table; NULL confidence refuses. -->
+`Store` (`store.py`) reads a sqlite DB entirely through `schema.profile` — zero literal table/column names in core. It validates DB reality against the declaration at `open()` (an undeclared node/edge kind raises, naming it). `edges()` raises `MissingConfidence` on a NULL/absent confidence or basis — **never a silent 1.0** (the bug this framework exists to kill). Write access is confined to a `writer()` context manager used only by migrations, freeze, and retire.
+
+`m001_edge_confidence` (`migrations.py`) is additive: it `ALTER TABLE ADD COLUMN` for the confidence column, then backfills each edge from its kind's `ConfidenceRule` — declared constants directly, `derived:source_rule_confidence` from the source node (with a declared corpus-min fallback), and any `synthesis_chain` edge from its matcher's declared confidence (precedence over the kind default). Idempotent (only NULLs), backs up first, `--dry-run` writes nothing. On instance 0 it backfilled all 856 edges with `null_remaining == 0`.

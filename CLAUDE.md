@@ -1,39 +1,42 @@
 # CLAUDE.md
 
-This file guides Claude Code sessions working in this repository.
+Guidance for Claude Code sessions in this repository.
 
 ## What this repo is
 
-The **reasoning-graph framework**: declared, confidence-weighted reasoning graphs — reasoning retrieved by traversal instead of re-derived in prose, with a mechanized mint→verify→freeze loop for what the graph can't yet answer. Corpus-agnostic core; the claude-code-tools corpus at `/root/reasoning-graph` is **instance 0** and is NEVER edited from here (its DB is written only through this package's `migrate` and `loop freeze` commands).
+The **reasoning-graph framework**: declared, confidence-weighted reasoning graphs — reasoning retrieved by traversal instead of re-derived in prose, with a mechanized mint→verify→freeze→retire loop. Corpus-agnostic core (`reasoning_graph/`); the claude-code-tools corpus at `/root/reasoning-graph` is **instance 0** and is never edited from here except through `migrate` / `loop freeze` / `loop retire`.
 
-**Read first, in order:** `Reasoning-Graph-source-of-truth-2026-07-19.ngf.md` (the build contract — decisions locked, phase plan, gate contract), then `gates/run_all.py --help`.
+**Read first:** `Reasoning-Graph-source-of-truth-2026-07-19.ngf.md` (the build contract), then `gates/run_all.py`.
 
 ## Commands
 
-- `pip install -e .` — editable install (zero required deps).
+- `pip install -e . --break-system-packages` — editable install (zero required deps; numpy is an optional `[analytics]` booster).
 - `reasoning-graph --help` — full subcommand tree; every subcommand supports `--json`.
-- `python3 gates/run_all.py` — the gate harness; exit codes per gate: 0 PASS, 1 FAIL, 2 NOT-BUILT. **Gates, not narration, decide "done."**
-- `pytest -q` — test suite.
-- `python3 -m reasoning_graph.demo` — deterministic demo; must end `Verify your build: ok`.
+- `python3 gates/run_all.py` — the gate harness. Exit codes: 0 PASS · 1 FAIL · 2 NOT-BUILT · 4 TAMPER · 5 INFRA-FLAKE. **Gates, not narration, decide "done."**
+- `pytest -q` — the test suite (1:1 with `tests/INVARIANTS.md`).
+- `python3 -m reasoning_graph.demo` — deterministic demo; ends `Verify your build: ok`.
 
-## Load-bearing invariants
+## Load-bearing invariants (1:1 with tests/INVARIANTS.md)
 
-<!-- OPUS-FILLS: keep this list 1:1 with tests/INVARIANTS.md; every invariant names its test. Seed list: -->
-1. No hardcoded corpus vocabulary in `reasoning_graph/` core — node/edge kinds arrive only via `GraphSchema` (G1 greps for instance tokens; the tiny fixture uses non-default table/column names).
-2. NULL/missing edge confidence → `MissingConfidence` → REFUSE. Never a silent 1.0.
-3. Every confidence value carries a `confidence_basis` from the closed vocabulary (`declared:*` / `derived:*`). Nothing is presented as measured except API-usage token counts in the A/B harness.
-4. Path confidence is `confidence_kind: path_product_score` — a ranking score, not a probability.
-5. Unminted edges are dropped, never inferred. A traversal miss drafts an FCL stub; it does not guess.
-6. Promotion to mint candidate requires `gap_shape` recurrence ≥ `promotion_threshold` (declared field, never NLP-inferred similarity).
-7. Freeze is idempotent (keyed on `synthesis_chain`); re-running inserts 0.
-8. Minted rules carry outcome counters; retirement demotes to `dormant` with evidence — never deletes.
-9. The numpy `[analytics]` booster degrades byte-identically when absent (named test).
-10. Instance-0 frozen files (`query.py`, `systems/nai/**`, fixtures) are never edited; G0's hash manifest enforces this.
+1. No corpus vocabulary hardcoded in `reasoning_graph/` core — kinds arrive only via `GraphSchema` (the tiny non-default-named fixture proves it).
+2. Missing/NULL edge confidence raises `MissingConfidence` → REFUSE; never a silent 1.0.
+3. Every confidence carries a closed-vocabulary basis (`declared:*` / `derived:*`).
+4. Path confidence is `path_product_score` — a score, not a probability.
+5. Unminted edges are never inferred; a miss REFUSEs and drafts an FCL stub.
+6. Contradiction refusal fires only through `cycle_class='contradiction'` edges.
+7. Promotion needs declared `gap_shape` recurrence ≥ threshold; disposed classes are never re-proposed.
+8. Freeze is idempotent on `synthesis_chain`.
+9. Retirement demotes to dormant with evidence — never deletes.
+10. numpy absent → pagerank output byte-identical.
+11. Unknown node/edge kind raises — never coerced.
+12. `GraphSchema.validate()` enforces the structural rules.
 
 ## What NOT to do
 
-- Do NOT rebuild P0–P2 (the graph, the nai read side, query.py) — they exist and are verified; see the SoT's "P0–P2 EXIST" section.
-- Do NOT edit `gates/**` — `MANIFEST-GATES.sha256` makes tampering visible; the human re-running `run_all.py` is the final arbiter.
-- Do NOT add a learned/opaque ranking signal — declared > inferred is the thesis this library demonstrates.
-- Do NOT resolve open questions listed in the SoT — log an FCL entry and continue.
-- Do NOT claim a feature in README that isn't proven by a runnable example or named test — put it in ROADMAP.md.
+- Do NOT rebuild or "improve" P0–P2 in instance 0 (the graph, nai read side, query.py) — G0 breakage is a failed session.
+- Do NOT edit `gates/**` (tamper-manifested + git-anchored) or the frozen instance-0 files.
+- Do NOT infer edges: unminted = dropped; a miss drafts an FCL stub.
+- Do NOT default a missing confidence to anything. Refuse.
+- Do NOT present path confidence as a probability, or any number as measured except A/B api-usage tokens.
+- Do NOT add learned/opaque ranking signals — declared > inferred is the thesis.
+- Do NOT resolve the SoT's §13 open questions — log an FCL entry and continue.

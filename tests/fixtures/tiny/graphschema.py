@@ -15,7 +15,10 @@ from reasoning_graph.schema import (
 _S = ConfidenceRule(basis="declared:structural_extraction", value=1.0)
 _V = ConfidenceRule(basis="declared:verbatim_extraction", value=1.0)
 _I = ConfidenceRule(basis="declared:inherited_curation_default", value=0.90)
-_G = ConfidenceRule(basis="declared:initial_guess")
+# declared:initial_guess must carry its guess (so m001 can backfill a bare DB);
+# weak_link and contradicts declare their own seed values.
+_WEAK = ConfidenceRule(basis="declared:initial_guess", value=0.20)
+_CONTRA = ConfidenceRule(basis="declared:initial_guess", value=0.85)
 
 SCHEMA = GraphSchema(
     name="tiny_weaving",
@@ -24,9 +27,9 @@ SCHEMA = GraphSchema(
         EdgeKind("feeds", _S),
         EdgeKind("tunes", _V),
         EdgeKind("governed_by", _S),
-        EdgeKind("weak_link", _G),
+        EdgeKind("weak_link", _WEAK),
         EdgeKind("rivals", _I, symmetric=True, cycle_class="benign_reciprocal"),
-        EdgeKind("contradicts", _G, cycle_class="contradiction"),
+        EdgeKind("contradicts", _CONTRA, cycle_class="contradiction"),
     ),
     profile=Profile(
         nodes_table="strands",

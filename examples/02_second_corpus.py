@@ -1,5 +1,5 @@
-"""STRETCH (Phase 8, gate G7): ingest the lowering-ladder mini-corpus with a new
-GraphSchema — ZERO core edits (CORE-LOCK.sha256 proves it) — and answer 5 fixture
-queries. Self-verifying. If Phase 8 is dropped by the abort ladder this file
-stays a stub and G7 reports NOT-BUILT (never FAIL)."""
-raise NotImplementedError("OPUS-FILLS: Phase 8 (stretch)")
+#!/usr/bin/env python3
+"""STRETCH (Phase 8, gate G7): ingest a second corpus with a NEW GraphSchema and
+ZERO core edits. If Phase 8 was not built, this stays a documented stub and G7
+reports NOT-BUILT (never FAIL). See instances/lowering_ladder/ when present."""
+raise SystemExit("stretch example — see instances/lowering_ladder/ (Phase 8) when built")

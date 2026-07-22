@@ -23,6 +23,11 @@ _RULE_STATUS_DDL = """CREATE TABLE IF NOT EXISTS rule_status (
     mint_id TEXT PRIMARY KEY, status TEXT, times_used INTEGER DEFAULT 0,
     times_confirmed INTEGER DEFAULT 0, times_contradicted INTEGER DEFAULT 0,
     retired_reason TEXT, retired_at TEXT, evidence TEXT)"""
+# RG-4: retire must be self-sufficient — evolution_log may not exist yet if retire
+# runs before any freeze created it (freeze also creates it IF NOT EXISTS).
+_EVOLUTION_DDL = """CREATE TABLE IF NOT EXISTS evolution_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, component TEXT, change_type TEXT,
+    description TEXT, triggered_by TEXT, insight_refs TEXT, timestamp REAL)"""
 _OUTCOME_COL = {"used": "times_used", "confirmed": "times_confirmed",
                 "contradicted": "times_contradicted"}
 
@@ -52,6 +57,7 @@ def retire_pass(instance, approve: bool = False, fixture: str | None = None) -> 
     pol = instance.schema.retirement
     with Store.open(instance).writer() as w:
         w.execute(_RULE_STATUS_DDL)
+        w.execute(_EVOLUTION_DDL)
         if fixture:
             # deterministic fixture scope: exactly the declared rules
             declared = json.loads(open(fixture).read())["minted_rules"]

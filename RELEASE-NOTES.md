@@ -2,7 +2,7 @@
 
 ## 0.1.0 — PoC
 
-Built against `Reasoning-Graph-source-of-truth-2026-07-19.ngf.md` by the Opus 4.8 session. Gates **G0–G6 green** (the declared smallest-useful slice); G8 (codification bar) green; G7 (second-corpus stretch) optional.
+Built against `Reasoning-Graph-source-of-truth-2026-07-19.ngf.md` by the Opus 4.8 session. **All gates G0–G8 pass** — the smallest-useful slice (G0–G6), the codification bar (G8), and the second-corpus generality stretch (G7).
 
 ### What shipped
 - Corpus-agnostic core: `GraphSchema` declaration → store → migration → resolver + refusal boundary → mechanized loop (mint/verify/freeze/retire) → measurement (frontier-rate + A/B).

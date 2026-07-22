@@ -1,0 +1,7 @@
+{
+  "name": "lowering_ladder",
+  "db_path": "ll.db",
+  "graphschema": "graphschema.py",
+  "self_approve": true,
+  "_note": "second corpus (G7 stretch) — proves the core is corpus-agnostic: a new domain via a new GraphSchema with zero core edits."
+}

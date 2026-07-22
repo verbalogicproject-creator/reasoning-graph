@@ -1,0 +1,9 @@
+{
+  "queries": [
+    {"id": "ll-1", "args": ["--start", "rung_3_prose", "--end", "rung_0_precomputed"], "expect_status": "ANSWER"},
+    {"id": "ll-2", "args": ["--start", "skill_deploy", "--end", "rung_2_code"], "expect_status": "ANSWER"},
+    {"id": "ll-3", "args": ["--start", "rung_3_prose", "--end", "hunch_target"], "expect_status": "WEAK_ANSWER"},
+    {"id": "ll-4", "args": ["--start", "goal_x", "--end", "claim_b"], "expect_status": "REFUSE"},
+    {"id": "ll-5", "args": ["--start", "rung_3_prose", "--end", "concept_orphan"], "expect_status": "REFUSE"}
+  ]
+}

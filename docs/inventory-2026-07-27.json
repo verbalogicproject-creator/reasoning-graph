@@ -1,0 +1,2658 @@
+{
+  "lang": "python",
+  "scanner": "PythonScanner",
+  "root": "/root/projects/reasoning_graph",
+  "nodes": [
+    {
+      "name": "01_hello_traversal.py",
+      "path": "examples/01_hello_traversal.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 43,
+      "size_bytes": 2126,
+      "auto": true,
+      "category": "",
+      "identity": "Self-verifying example: declare a 4-node reasoning graph, migrate confidence,",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [
+          "pathlib",
+          "sqlite3",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "02_second_corpus.py",
+      "path": "examples/02_second_corpus.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 6,
+      "size_bytes": 355,
+      "auto": true,
+      "category": "",
+      "identity": "STRETCH (Phase 8, gate G7): ingest a second corpus with a NEW GraphSchema and",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "mcp_server.py",
+      "path": "examples/mcp_server.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 44,
+      "size_bytes": 1509,
+      "auto": true,
+      "category": "",
+      "identity": "Stdlib-only MCP server exposing reasoning-graph over stdio (house pattern).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_call",
+          "main"
+        ],
+        "imports_stdlib": [
+          "json",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "_common.py",
+      "path": "gates/_common.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 151,
+      "size_bytes": 5741,
+      "auto": true,
+      "category": "",
+      "identity": "Shared gate helpers. Gates are SELF-CONTAINED verifiers: independent",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [
+        "g0_substrate_intact.py",
+        "g1_schema_agnosticism.py",
+        "g2_edge_confidence.py",
+        "g3_resolver_refusal.py",
+        "g4_loop_mechanized.py",
+        "g5_frontier_rate.py",
+        "g6_ab_ran.py",
+        "g7_second_corpus.py",
+        "g8_codification_bar.py",
+        "run_all.py"
+      ],
+      "_detected": {
+        "classes": [
+          "Gate"
+        ],
+        "top_level_fns": [
+          "is_infra_exit",
+          "basis_ok",
+          "sha256_file",
+          "run",
+          "cli",
+          "parse_json",
+          "load_manifest"
+        ],
+        "imports_stdlib": [
+          "hashlib",
+          "json",
+          "pathlib",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g0_substrate_intact.py",
+      "path": "gates/g0_substrate_intact.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 83,
+      "size_bytes": 3823,
+      "auto": true,
+      "category": "",
+      "identity": "G0 \u2014 substrate-intact. Pre-flight AND permanent regression gate: re-run after",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "pathlib",
+          "re",
+          "sqlite3",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g1_schema_agnosticism.py",
+      "path": "gates/g1_schema_agnosticism.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 90,
+      "size_bytes": 4499,
+      "auto": true,
+      "category": "",
+      "identity": "G1 \u2014 schema + agnosticism. The framework/instance boundary, mechanically:",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "pathlib",
+          "re",
+          "shutil",
+          "sqlite3",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g2_edge_confidence.py",
+      "path": "gates/g2_edge_confidence.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 158,
+      "size_bytes": 8152,
+      "auto": true,
+      "category": "",
+      "identity": "G2 \u2014 edge confidence. Verifies m001's result on the LIVE instance-0 DB cell",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "sqlite3",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g3_resolver_refusal.py",
+      "path": "gates/g3_resolver_refusal.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 138,
+      "size_bytes": 7346,
+      "auto": true,
+      "category": "",
+      "identity": "G3 \u2014 resolver + refusal boundary. Deterministic assertions on the tiny",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "pathlib",
+          "shutil",
+          "sqlite3",
+          "subprocess",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g4_loop_mechanized.py",
+      "path": "gates/g4_loop_mechanized.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 126,
+      "size_bytes": 6224,
+      "auto": true,
+      "category": "",
+      "identity": "G4 \u2014 the loop, mechanized (+ retirement). Two halves:",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "shutil",
+          "sqlite3",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g5_frontier_rate.py",
+      "path": "gates/g5_frontier_rate.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 64,
+      "size_bytes": 2623,
+      "auto": true,
+      "category": "",
+      "identity": "G5 \u2014 frontier-call rate. The CLI's series must match this gate's OWN",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "independent_series",
+          "main"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "re",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g6_ab_ran.py",
+      "path": "gates/g6_ab_ran.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 146,
+      "size_bytes": 7800,
+      "auto": true,
+      "category": "",
+      "identity": "G6 \u2014 the A/B proof ran, honestly. Validates the frozen-before-run task set,",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "hashlib",
+          "json",
+          "pathlib",
+          "re",
+          "sqlite3",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g7_second_corpus.py",
+      "path": "gates/g7_second_corpus.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 74,
+      "size_bytes": 3438,
+      "auto": true,
+      "category": "",
+      "identity": "G7 \u2014 second corpus (STRETCH, Phase 8). The generality proof: the",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "g8_codification_bar.py",
+      "path": "gates/g8_codification_bar.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 141,
+      "size_bytes": 7688,
+      "auto": true,
+      "category": "",
+      "identity": "G8 \u2014 the codification bar, at the house standard (declared_core /",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "main"
+        ],
+        "imports_stdlib": [
+          "os",
+          "pathlib",
+          "re",
+          "shutil",
+          "subprocess",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "run_all.py",
+      "path": "gates/run_all.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 161,
+      "size_bytes": 7009,
+      "auto": true,
+      "category": "",
+      "identity": "Gate runner. Verifies gate integrity BEFORE running anything, three ways",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_common.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "verify_integrity",
+          "main"
+        ],
+        "imports_stdlib": [
+          "argparse",
+          "json",
+          "pathlib",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "graphschema.py",
+      "path": "instances/claude_code_tools/graphschema.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 85,
+      "size_bytes": 4733,
+      "auto": true,
+      "category": "",
+      "identity": "Instance 0 \u2014 the claude-code-tools reasoning graph (kgs/reasoning-graph.db).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": [
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "build_ll.py",
+      "path": "instances/lowering_ladder/build_ll.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 44,
+      "size_bytes": 2248,
+      "auto": true,
+      "category": "",
+      "identity": "Build the second-corpus DB (lowering-ladder domain) \u2014 a genuinely different",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "build"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "sqlite3",
+          "sys"
+        ],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "graphschema.py",
+      "path": "instances/lowering_ladder/graphschema.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 23,
+      "size_bytes": 894,
+      "auto": true,
+      "category": "",
+      "identity": "Second corpus (stretch, gate G7): the lowering-ladder domain. A NEW GraphSchema,",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": [
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "__init__.py",
+      "path": "reasoning_graph/__init__.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 28,
+      "size_bytes": 1006,
+      "auto": true,
+      "category": "",
+      "identity": "reasoning-graph \u2014 declared, confidence-weighted reasoning graphs.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "schema.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "cli.py",
+      "path": "reasoning_graph/cli.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 217,
+      "size_bytes": 8805,
+      "auto": true,
+      "category": "",
+      "identity": "CLI \u2014 the full declared surface. The argparse tree IS the contract (docs/09);",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "migrations.py",
+        "resolver.py",
+        "schema.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_emit",
+          "_not_implemented",
+          "_cmd_schema_validate",
+          "_cmd_migrate",
+          "_cmd_resolve",
+          "_cmd_analytics",
+          "_cmd_loop",
+          "_cmd_measure",
+          "build_parser",
+          "main"
+        ],
+        "imports_stdlib": [
+          "argparse",
+          "json",
+          "pathlib",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "loop",
+          "measure"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "demo.py",
+      "path": "reasoning_graph/demo.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 96,
+      "size_bytes": 3891,
+      "auto": true,
+      "category": "",
+      "identity": "Deterministic demo (gate G8). Builds a small declared graph in a temp dir,",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "migrations.py",
+        "resolver.py",
+        "schema.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_build",
+          "_instance",
+          "main"
+        ],
+        "imports_stdlib": [
+          "pathlib",
+          "sqlite3",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "__init__.py",
+      "path": "reasoning_graph/loop/__init__.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 8,
+      "size_bytes": 376,
+      "auto": true,
+      "category": "",
+      "identity": "The distillation loop, mechanized: scan \u2192 promote \u2192 mint \u2192 verify \u2192 freeze \u2192 retire.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "fcl.py",
+      "path": "reasoning_graph/loop/fcl.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 120,
+      "size_bytes": 5100,
+      "auto": true,
+      "category": "",
+      "identity": "Frontier-call-log parser. Contract (gate G4):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_map_status",
+          "_load_sidecar",
+          "parse_log",
+          "append_entry",
+          "advance_status"
+        ],
+        "imports_stdlib": [
+          "json",
+          "re"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "freeze.py",
+      "path": "reasoning_graph/loop/freeze.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 147,
+      "size_bytes": 7450,
+      "auto": true,
+      "category": "",
+      "identity": "Freeze \u2014 P5: a VERIFIED matcher becomes graph content + provenance rows.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "mint.py",
+        "store.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "freeze",
+          "_self_approve",
+          "_move_to_minted"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "time"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "mint.py",
+      "path": "reasoning_graph/loop/mint.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 63,
+      "size_bytes": 2941,
+      "auto": true,
+      "category": "",
+      "identity": "Mint \u2014 stage a matcher file for a PROMOTED/promotable class. Contract (gate G4):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [
+        "freeze.py",
+        "verify.py"
+      ],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "parse_machine_block",
+          "_human_sections",
+          "stage"
+        ],
+        "imports_stdlib": [
+          "json",
+          "re"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "promote.py",
+      "path": "reasoning_graph/loop/promote.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 47,
+      "size_bytes": 2012,
+      "auto": true,
+      "category": "",
+      "identity": "Promotion detector \u2014 the recurrence gate, mechanized. Contract (gate G4):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_is_disposed",
+          "detect",
+          "promote"
+        ],
+        "imports_stdlib": [],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "retire.py",
+      "path": "reasoning_graph/loop/retire.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 113,
+      "size_bytes": 5770,
+      "auto": true,
+      "category": "",
+      "identity": "Retire \u2014 outcome-driven demotion. The SkillOps gap (arXiv:2605.13716), closed:",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "store.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "record_outcome",
+          "_self_approve",
+          "retire_pass"
+        ],
+        "imports_stdlib": [
+          "json",
+          "time"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "verify.py",
+      "path": "reasoning_graph/loop/verify.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 82,
+      "size_bytes": 3433,
+      "auto": true,
+      "category": "",
+      "identity": "Verify \u2014 P4: a staged matcher must PROVE itself before freezing. Contract (G4):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "mint.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_sql_exists",
+          "_confirm_one",
+          "verify",
+          "_composition"
+        ],
+        "imports_stdlib": [
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "__init__.py",
+      "path": "reasoning_graph/measure/__init__.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 10,
+      "size_bytes": 424,
+      "auto": true,
+      "category": "",
+      "identity": "Measurement \u2014 the two proof harnesses.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "ab_judge.py",
+      "path": "reasoning_graph/measure/ab_judge.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 74,
+      "size_bytes": 3344,
+      "auto": true,
+      "category": "",
+      "identity": "A/B judging. Contract (gate G6):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_score",
+          "_llm_judge",
+          "judge"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "subprocess",
+          "time"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "ab_report.py",
+      "path": "reasoning_graph/measure/ab_report.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 156,
+      "size_bytes": 7339,
+      "auto": true,
+      "category": "",
+      "identity": "A/B report \u2014 the deliverable table. Contract (gate G6):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_wilson",
+          "_mcnemar",
+          "report",
+          "_costs",
+          "_markdown"
+        ],
+        "imports_stdlib": [
+          "json",
+          "math",
+          "pathlib",
+          "time"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "ab_run.py",
+      "path": "reasoning_graph/measure/ab_run.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 127,
+      "size_bytes": 5741,
+      "auto": true,
+      "category": "",
+      "identity": "A/B runner \u2014 the two arms, matched protocol. Phone-hardened (council 2026-07-20).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "primitives.py",
+        "store.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_spike",
+          "_one_call",
+          "_graph_slice",
+          "_prompt_for",
+          "run"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "subprocess",
+          "time"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "ab_tasks.py",
+      "path": "reasoning_graph/measure/ab_tasks.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 45,
+      "size_bytes": 1960,
+      "auto": true,
+      "category": "",
+      "identity": "A/B task set \u2014 built and FROZEN before any arm runs.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "build"
+        ],
+        "imports_stdlib": [
+          "hashlib",
+          "json",
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "ab_variants.py",
+      "path": "reasoning_graph/measure/ab_variants.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 47,
+      "size_bytes": 2032,
+      "auto": true,
+      "category": "",
+      "identity": "Parametric task-variant generator \u2014 the auto-scale harness (Eyal's declared",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "generate"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "frontier_rate.py",
+      "path": "reasoning_graph/measure/frontier_rate.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 84,
+      "size_bytes": 3845,
+      "auto": true,
+      "category": "",
+      "identity": "Frontier-call rate. Contract (gate G5):",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "compute",
+          "_batches",
+          "_reading"
+        ],
+        "imports_stdlib": [
+          "re"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "loop"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "migrations.py",
+      "path": "reasoning_graph/migrations.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 162,
+      "size_bytes": 7612,
+      "auto": true,
+      "category": "",
+      "identity": "Migrations. One exists: m001_edge_confidence.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "schema.py"
+      ],
+      "imported_by_engine": [
+        "cli.py",
+        "demo.py"
+      ],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_load_matcher_confidences",
+          "_node_confidences",
+          "_fmt",
+          "m001_edge_confidence"
+        ],
+        "imports_stdlib": [
+          "json",
+          "re",
+          "shutil",
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "primitives.py",
+      "path": "reasoning_graph/primitives.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 130,
+      "size_bytes": 5311,
+      "auto": true,
+      "category": "",
+      "identity": "Primitive adapters \u2014 how typed NLKE-style queries reach a graph.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "resolver.py",
+        "store.py"
+      ],
+      "imported_by_engine": [
+        "ab_run.py",
+        "resolver.py"
+      ],
+      "_detected": {
+        "classes": [
+          "AdapterError",
+          "SubprocessAdapter",
+          "GenericAdapter"
+        ],
+        "top_level_fns": [
+          "adapter_for"
+        ],
+        "imports_stdlib": [
+          "json",
+          "subprocess"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "refusal.py",
+      "path": "reasoning_graph/refusal.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 82,
+      "size_bytes": 3795,
+      "auto": true,
+      "category": "",
+      "identity": "The refusal boundary \u2014 the framework's first-class differentiator.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [
+        "resolver.py"
+      ],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_next_id",
+          "draft_fcl_stub"
+        ],
+        "imports_stdlib": [
+          "re"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "resolver.py",
+      "path": "reasoning_graph/resolver.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 333,
+      "size_bytes": 13827,
+      "auto": true,
+      "category": "",
+      "identity": "Resolver \u2014 traversal, path composition, analytics. Vendor-adapt of nai's",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "primitives.py",
+        "refusal.py",
+        "store.py"
+      ],
+      "imported_by_engine": [
+        "cli.py",
+        "demo.py",
+        "primitives.py"
+      ],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "dormant_mint_ids",
+          "_edge_mint",
+          "_adjacency",
+          "_reachable",
+          "_best_path",
+          "_find_contradiction",
+          "_path_class",
+          "_answer",
+          "_refuse",
+          "resolve",
+          "_resolve_query",
+          "_graph_for_analytics",
+          "pagerank",
+          "_power_iteration",
+          "cycles",
+          "_simple_cycles"
+        ],
+        "imports_stdlib": [
+          "math",
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "heapq"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "schema.py",
+      "path": "reasoning_graph/schema.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 232,
+      "size_bytes": 10429,
+      "auto": true,
+      "category": "",
+      "identity": "The one declaration object: GraphSchema. Everything else is derived from it.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [
+        "__init__.py",
+        "cli.py",
+        "demo.py",
+        "migrations.py",
+        "store.py"
+      ],
+      "_detected": {
+        "classes": [
+          "ConfidenceRule",
+          "EdgeKind",
+          "Profile",
+          "RetirementPolicy",
+          "GraphSchema",
+          "Instance"
+        ],
+        "top_level_fns": [
+          "is_valid_basis",
+          "load_instance"
+        ],
+        "imports_stdlib": [
+          "dataclasses",
+          "json",
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "importlib"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "store.py",
+      "path": "reasoning_graph/store.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 230,
+      "size_bytes": 10493,
+      "auto": true,
+      "category": "",
+      "identity": "Store \u2014 sqlite substrate, profile-driven. Vendor-adapt of nai's KGManager",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "schema.py"
+      ],
+      "imported_by_engine": [
+        "ab_run.py",
+        "freeze.py",
+        "primitives.py",
+        "resolver.py",
+        "retire.py"
+      ],
+      "_detected": {
+        "classes": [
+          "MissingConfidence",
+          "Store"
+        ],
+        "top_level_fns": [
+          "_basis_of"
+        ],
+        "imports_stdlib": [
+          "contextlib",
+          "json",
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "_loopmatcher.py",
+      "path": "tests/_loopmatcher.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 10,
+      "size_bytes": 778,
+      "auto": true,
+      "category": "",
+      "identity": "",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [
+        "test_freeze.py",
+        "test_mint_verify.py"
+      ],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": []
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "conftest.py",
+      "path": "tests/conftest.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 35,
+      "size_bytes": 1226,
+      "auto": true,
+      "category": "",
+      "identity": "Shared fixtures. The tiny instance is ALWAYS copied to a temp dir and built",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "tiny_instance",
+          "tiny_instance_bare"
+        ],
+        "imports_stdlib": [
+          "pathlib",
+          "shutil",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "build_tiny.py",
+      "path": "tests/fixtures/tiny/build_tiny.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 103,
+      "size_bytes": 4519,
+      "auto": true,
+      "category": "",
+      "identity": "Build the tiny fixture DB \u2014 deterministic, stdlib-only, runnable today.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "build"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "sqlite3",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "graphschema.py",
+      "path": "tests/fixtures/tiny/graphschema.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 53,
+      "size_bytes": 1878,
+      "auto": true,
+      "category": "",
+      "identity": "Tiny fixture GraphSchema \u2014 the anti-hardcoding proof.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [],
+        "imports_stdlib": [],
+        "imports_third_party": [
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_cli.py",
+      "path": "tests/test_cli.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 35,
+      "size_bytes": 1452,
+      "auto": true,
+      "category": "",
+      "identity": "CLI \u2014 --json on every subcommand; exit-code contract (0 ok / 1 error).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_run",
+          "test_every_subcommand_supports_json",
+          "test_exit_codes_0_1_3_contract"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "subprocess",
+          "sys"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_fcl.py",
+      "path": "tests/test_fcl.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 34,
+      "size_bytes": 1299,
+      "auto": true,
+      "category": "",
+      "identity": "FCL parser \u2014 parses live + fixture logs; append refuses dupes; status advances.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_parses_fixture_log_6_entries",
+          "test_parses_live_log_11_entries",
+          "test_append_refuses_duplicate_id",
+          "test_advance_status_legal_transitions_only"
+        ],
+        "imports_stdlib": [
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_freeze.py",
+      "path": "tests/test_freeze.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 47,
+      "size_bytes": 1794,
+      "auto": true,
+      "category": "",
+      "identity": "Freeze invariant 8 \u2014 idempotent on synthesis_chain.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_loopmatcher.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_minted",
+          "test_inv_freeze_idempotent",
+          "test_freeze_writes_fact_loop_rows_and_counters",
+          "test_freeze_requires_approve_on_non_self_approve"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_measure.py",
+      "path": "tests/test_measure.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 44,
+      "size_bytes": 1661,
+      "auto": true,
+      "category": "",
+      "identity": "Measure \u2014 frontier-rate matches independent parse; ab_tasks/variants shapes.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_frontier_rate_matches_independent_parse",
+          "test_ab_tasks_frozen_hash_and_subsets",
+          "test_ab_variants_share_recomputed_answer_keys"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_migrations.py",
+      "path": "tests/test_migrations.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 31,
+      "size_bytes": 1141,
+      "auto": true,
+      "category": "",
+      "identity": "m001 \u2014 backfills a bare tiny copy; idempotent; dry-run writes nothing.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "_nulls",
+          "test_m001_backfills_bare_tiny",
+          "test_m001_idempotent_second_run_zero",
+          "test_m001_dry_run_writes_nothing"
+        ],
+        "imports_stdlib": [
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_mint_verify.py",
+      "path": "tests/test_mint_verify.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 31,
+      "size_bytes": 1245,
+      "auto": true,
+      "category": "",
+      "identity": "Mint + verify \u2014 staging carries the machine block; verify requires provenance.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [
+        "_loopmatcher.py"
+      ],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_stage_writes_matcher_v2_with_machine_block",
+          "test_verify_requires_provenance_fired",
+          "test_verify_rejects_on_failed_confirm"
+        ],
+        "imports_stdlib": [
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_numpy_absent_byte_identical.py",
+      "path": "tests/test_numpy_absent_byte_identical.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 23,
+      "size_bytes": 917,
+      "auto": true,
+      "category": "",
+      "identity": "Invariant 10 \u2014 pagerank output byte-identical with numpy present vs hidden.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_byte_identical"
+        ],
+        "imports_stdlib": [
+          "os",
+          "pathlib",
+          "subprocess",
+          "sys",
+          "tempfile"
+        ],
+        "imports_third_party": [
+          "__future__"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_primitives.py",
+      "path": "tests/test_primitives.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 32,
+      "size_bytes": 1357,
+      "auto": true,
+      "category": "",
+      "identity": "Primitive adapters \u2014 subprocess provenance; generic honest smaller surface.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_generic_adapter_smaller_surface_honest",
+          "test_generic_trace_uses_resolver",
+          "test_subprocess_adapter_provenance"
+        ],
+        "imports_stdlib": [
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_promote.py",
+      "path": "tests/test_promote.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 21,
+      "size_bytes": 850,
+      "auto": true,
+      "category": "",
+      "identity": "Promotion invariant 7 \u2014 recurrence gate reproduces live history + dispositions.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_recurrence_gate_and_dispositions",
+          "test_fixture_pair_promotable"
+        ],
+        "imports_stdlib": [
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_refusal.py",
+      "path": "tests/test_refusal.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 31,
+      "size_bytes": 1350,
+      "auto": true,
+      "category": "",
+      "identity": "Refusal invariants \u2014 5 (no-support drafts FCL stub) and 6 (cycle classes).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_no_support_refuses_with_stub",
+          "test_inv_cycle_classes",
+          "test_missing_confidence_refuses"
+        ],
+        "imports_stdlib": [],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_resolver.py",
+      "path": "tests/test_resolver.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 34,
+      "size_bytes": 1360,
+      "auto": true,
+      "category": "",
+      "identity": "Resolver invariant 4 \u2014 path_product_score, exact product.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_path_product_exact",
+          "test_weighted_prefers_higher_confidence_route",
+          "test_below_floor_is_weak_answer"
+        ],
+        "imports_stdlib": [
+          "math"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_retire.py",
+      "path": "tests/test_retire.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 32,
+      "size_bytes": 1373,
+      "auto": true,
+      "category": "",
+      "identity": "Retirement invariant 9 \u2014 demote not delete; ratio before cap.",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_demote_not_delete",
+          "test_ratio_demotion_before_cap_enforcement",
+          "test_dormant_rules_edges_excluded_from_resolve"
+        ],
+        "imports_stdlib": [
+          "json",
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_schema.py",
+      "path": "tests/test_schema.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 73,
+      "size_bytes": 3139,
+      "auto": true,
+      "category": "",
+      "identity": "Schema-layer tests \u2014 LIVE NOW (schema.py is implemented this session).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_closed_basis_vocabulary",
+          "test_inv_structural_validation",
+          "test_inv_tiny_profile_roundtrip",
+          "test_instance0_descriptor_loads"
+        ],
+        "imports_stdlib": [
+          "pathlib"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    },
+    {
+      "name": "test_store.py",
+      "path": "tests/test_store.py",
+      "kind": "file",
+      "lang": "python",
+      "lines": 41,
+      "size_bytes": 1682,
+      "auto": true,
+      "category": "",
+      "identity": "Store invariants \u2014 2 (missing confidence refuses) and 11 (unknown kind raises).",
+      "mechanism": "",
+      "state": {
+        "db_tables_read": [],
+        "db_tables_write": [],
+        "mqtt": "",
+        "subprocess": [],
+        "external_apis": []
+      },
+      "imports_from_engine": [],
+      "imported_by_engine": [],
+      "_detected": {
+        "classes": [],
+        "top_level_fns": [
+          "test_inv_null_confidence_refuses",
+          "test_inv_unknown_kind_raises",
+          "test_reads_are_profile_driven"
+        ],
+        "imports_stdlib": [
+          "sqlite3"
+        ],
+        "imports_third_party": [
+          "__future__",
+          "pytest",
+          "reasoning_graph"
+        ]
+      },
+      "upgrade_vector": {
+        "source": "no_documented_next_move",
+        "ref": "",
+        "text": ""
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "g0_substrate_intact.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g1_schema_agnosticism.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g2_edge_confidence.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g3_resolver_refusal.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g4_loop_mechanized.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g5_frontier_rate.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g6_ab_ran.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g7_second_corpus.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "g8_codification_bar.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "run_all.py",
+      "to": "_common.py",
+      "kind": "imports"
+    },
+    {
+      "from": "__init__.py",
+      "to": "schema.py",
+      "kind": "imports"
+    },
+    {
+      "from": "cli.py",
+      "to": "migrations.py",
+      "kind": "imports"
+    },
+    {
+      "from": "cli.py",
+      "to": "resolver.py",
+      "kind": "imports"
+    },
+    {
+      "from": "cli.py",
+      "to": "schema.py",
+      "kind": "imports"
+    },
+    {
+      "from": "demo.py",
+      "to": "migrations.py",
+      "kind": "imports"
+    },
+    {
+      "from": "demo.py",
+      "to": "resolver.py",
+      "kind": "imports"
+    },
+    {
+      "from": "demo.py",
+      "to": "schema.py",
+      "kind": "imports"
+    },
+    {
+      "from": "freeze.py",
+      "to": "mint.py",
+      "kind": "imports"
+    },
+    {
+      "from": "freeze.py",
+      "to": "store.py",
+      "kind": "imports"
+    },
+    {
+      "from": "retire.py",
+      "to": "store.py",
+      "kind": "imports"
+    },
+    {
+      "from": "verify.py",
+      "to": "mint.py",
+      "kind": "imports"
+    },
+    {
+      "from": "ab_run.py",
+      "to": "primitives.py",
+      "kind": "imports"
+    },
+    {
+      "from": "ab_run.py",
+      "to": "store.py",
+      "kind": "imports"
+    },
+    {
+      "from": "migrations.py",
+      "to": "schema.py",
+      "kind": "imports"
+    },
+    {
+      "from": "primitives.py",
+      "to": "resolver.py",
+      "kind": "imports"
+    },
+    {
+      "from": "primitives.py",
+      "to": "store.py",
+      "kind": "imports"
+    },
+    {
+      "from": "resolver.py",
+      "to": "primitives.py",
+      "kind": "imports"
+    },
+    {
+      "from": "resolver.py",
+      "to": "refusal.py",
+      "kind": "imports"
+    },
+    {
+      "from": "resolver.py",
+      "to": "store.py",
+      "kind": "imports"
+    },
+    {
+      "from": "store.py",
+      "to": "schema.py",
+      "kind": "imports"
+    },
+    {
+      "from": "test_freeze.py",
+      "to": "_loopmatcher.py",
+      "kind": "imports"
+    },
+    {
+      "from": "test_mint_verify.py",
+      "to": "_loopmatcher.py",
+      "kind": "imports"
+    }
+  ],
+  "generated_at": "2026-07-27",
+  "scanner_version": "0.1.0"
+}

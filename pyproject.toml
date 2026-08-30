@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reasoning-graph"
-version = "0.1.0"
-description = "Declared, confidence-weighted reasoning graphs: retrieve reasoning by traversal instead of re-deriving it in prose. Rung-0 lowering applied to reasoning itself."
+version = "0.2.0"
+description = "Local-first, governed reasoning memory with typed graph evidence and explicit refusal."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Eyal Nof" }]
@@ -22,10 +22,17 @@ classifiers = [
 
 [project.optional-dependencies]
 analytics = ["numpy"]          # optional booster: pagerank power-iteration speedup; MUST degrade byte-identically when absent
-dev = ["pytest", "numpy"]
+mcp = ["mcp>=2,<3"]
+workbench = ["fastapi>=0.110", "uvicorn>=0.27"]
+dev = ["pytest", "numpy", "mcp>=2,<3", "fastapi>=0.110", "uvicorn>=0.27", "httpx"]
 
 [project.scripts]
+reasoning-graph-mcp = "reasoning_graph.mcp_server:main"
 reasoning-graph = "reasoning_graph.cli:main"
+reasoning-graph-workbench = "reasoning_graph.workbench.app:main"
+
+[tool.setuptools.package-data]
+"reasoning_graph.workbench" = ["static/*.html", "static/*.css", "static/*.js"]
 
 [tool.setuptools.packages.find]
 include = ["reasoning_graph*"]

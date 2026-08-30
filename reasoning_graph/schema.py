@@ -87,18 +87,29 @@ class EdgeKind:
     confidence_rule: ConfidenceRule
     symmetric: bool = False
     cycle_class: str = "unclassified"
+    source_kinds: tuple[str, ...] | None = None
+    target_kinds: tuple[str, ...] | None = None
 
     _CYCLE_CLASSES = ("benign_reciprocal", "contradiction", "unclassified")
 
     def __post_init__(self) -> None:
         if self.cycle_class not in self._CYCLE_CLASSES:
             raise ValueError(f"cycle_class {self.cycle_class!r} not one of {self._CYCLE_CLASSES}")
+        for label, kinds in (("source_kinds", self.source_kinds),
+                             ("target_kinds", self.target_kinds)):
+            if kinds is not None and (not kinds or len(set(kinds)) != len(kinds)):
+                raise ValueError(f"{self.name}.{label} must be non-empty and unique when declared")
+
+    def permits(self, source_kind: str, target_kind: str) -> bool:
+        """Whether an edge between these endpoint kinds satisfies the contract."""
+        return ((self.source_kinds is None or source_kind in self.source_kinds)
+                and (self.target_kinds is None or target_kind in self.target_kinds))
 
 
 @dataclass(frozen=True)
 class Profile:
-    """Table/column mapping — the nai schema-profile idea, absorbed into the
-    declaration (VENDORED.json entry 1). Defaults match instance 0's
+    """Table/column mapping declared by the instance.
+
     `claude-code-tools-kg.db` schema; the tiny fixture overrides every field."""
     nodes_table: str = "nodes"
     node_id: str = "node_id"
@@ -160,6 +171,14 @@ class GraphSchema:
             raise ValueError(f"floor {self.floor} outside (0, 1)")
         if self.promotion_threshold < 2 and not self.allow_single_occurrence_promotion:
             raise ValueError("promotion_threshold < 2 requires allow_single_occurrence_promotion=True")
+        declared = set(self.node_kinds)
+        for edge in self.edge_kinds:
+            for label, kinds in (("source_kinds", edge.source_kinds),
+                                 ("target_kinds", edge.target_kinds)):
+                unknown = sorted(set(kinds or ()) - declared)
+                if unknown:
+                    raise ValueError(
+                        f"edge kind {edge.name!r} {label} contains undeclared node kind(s) {unknown}")
 
     def edge_kind(self, name: str) -> EdgeKind:
         """Lookup that REFUSES on unknown kinds (EcoCorpusKG discipline): raise,
@@ -186,13 +205,14 @@ class Instance:
     gap_shape_history: Path | None
     adapter: dict | None       # {"kind": "subprocess", "cwd": ..., "argv": [...], "json_flag": "--json"}
     schema: GraphSchema
+    observations_path: Path | None = None
 
 
 def load_instance(instance_json: str | Path) -> Instance:
     """Load an instance descriptor and its graphschema.py (module-level SCHEMA).
 
     Relative paths in instance.json resolve against the descriptor's directory;
-    db/fcl/rules paths may be absolute (instance 0 points into /root/reasoning-graph).
+    descriptor paths may be absolute, but bundled instances use relative paths.
     Raises FileNotFoundError / ValueError loudly — never a silent default."""
     path = Path(instance_json).resolve()
     if not path.is_file():
@@ -217,6 +237,15 @@ def load_instance(instance_json: str | Path) -> Instance:
     if not isinstance(schema, GraphSchema):
         raise ValueError(f"{schema_path} must define a module-level SCHEMA: GraphSchema")
     schema.validate()
+    adapter = data.get("adapter")
+    if adapter is not None:
+        adapter = dict(adapter)
+        raw_cwd = adapter.get("cwd")
+        if raw_cwd:
+            adapter_cwd = Path(raw_cwd)
+            if not adapter_cwd.is_absolute():
+                adapter_cwd = (root / adapter_cwd).resolve()
+            adapter["cwd"] = str(adapter_cwd)
 
     return Instance(
         name=data.get("name") or schema.name,
@@ -226,6 +255,7 @@ def load_instance(instance_json: str | Path) -> Instance:
         rules_dir=_p("rules_dir"),
         staged_dir=_p("staged_dir"),
         gap_shape_history=_p("gap_shape_history"),
-        adapter=data.get("adapter"),
+        observations_path=_p("observations_path") or (root / "observations.jsonl"),
+        adapter=adapter,
         schema=schema,
     )

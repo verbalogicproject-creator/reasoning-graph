@@ -4,6 +4,36 @@ __pycache__/
 .gates-state.json
 *.pyc
 measure-results/raw/
+node_modules/
 
 # Session-local agent state — never versioned
 .vouch/
+.claude/
+# User/runtime ledgers may contain private task context.
+instances/*/memory-log.jsonl
+instances/*/data/observations.jsonl
+.env
+.env.*
+
+# Local legacy research checkout and copied corpora. The supported, curated
+# Instance 0 source lives under instances/claude_code_tools/.
+systems/
+python/
+claude-code-tools/
+kgs/
+data/archive/
+data/derived/*.db
+lowering-ladder/
+indexes/
+inventory.md
+tree.txt
+T1wwerRADESb*
+*gap-report-2026-07-13.md
+P3-P5-loop-surface-probe-2026-07-13.md
+status-report-2026-07-14*
+tomorrow-plan-reasoning-graph-2026-07-13.md
+implementation-plan-reasoning-graph-v2-2026-07-13.md
+reasoning-graph-context-datapacket-2026-07-12.ngf.md
+Distillation-workflow-formalization-2026-07-14.ngf.md
+scripts/inventory_legacy_archive.py
+tests/test_inventory_legacy_archive.py

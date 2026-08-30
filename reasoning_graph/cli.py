@@ -39,6 +39,11 @@ def _not_implemented(args, phase: str) -> int:
 def _cmd_schema_validate(args) -> int:
     from .schema import load_instance
     inst = load_instance(args.instance)  # raises loudly on any structural problem
+    if args.action == "integrity":
+        from .store import inspect_integrity
+        report = inspect_integrity(inst)
+        _emit(report, args.json)
+        return 0 if report["ok"] else 1
     _emit({"ok": True, "instance": inst.name, "schema": inst.schema.name,
            "node_kinds": len(inst.schema.node_kinds),
            "edge_kinds": len(inst.schema.edge_kinds),
@@ -133,6 +138,42 @@ def _cmd_measure(args) -> int:
     return _not_implemented(args, "measure")
 
 
+def _cmd_observe(args) -> int:
+    from .observations import record_observation
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    details = json.loads(args.details) if args.details else None
+    result = record_observation(
+        inst, query=args.query, resolution_status=args.resolution_status,
+        outcome=args.outcome, event_id=args.event_id, event_time=args.event_time,
+        path_signature=args.path_signature, source_ref=args.source_ref,
+        gap_classification=args.gap_classification, details=details)
+    _emit(result, args.json)
+    return 0
+
+
+def _cmd_memory(args) -> int:
+    from . import memory
+    from .schema import load_instance
+    inst = load_instance(args.instance)
+    if args.action == "list": result = memory.snapshot(inst)
+    elif args.action == "snapshot": result = memory.orientation(inst)
+    elif args.action == "review": result = memory.review(inst)
+    elif args.action == "propose":
+        result = memory.propose(inst, kind=args.kind, content=args.content,
+            evidence=json.loads(args.evidence) if args.evidence else None,
+            validation=args.validation, agent_acknowledged=args.agent_acknowledged,
+            agreement=args.agreement, conflicts_with=args.conflicts_with or [],
+            memory_id=args.memory_id, event_id=args.event_id)
+    elif args.action == "approve":
+        if not args.approve: raise PermissionError("memory approve requires --approve")
+        result = memory.approve(inst, args.memory_id, event_id=args.event_id)
+    elif args.action == "dispute": result = memory.dispute(inst, args.memory_id, args.reason, event_id=args.event_id)
+    elif args.action == "supersede": result = memory.supersede(inst, args.memory_id, args.replacement_id, event_id=args.event_id)
+    else: result = memory.retire(inst, args.memory_id, args.reason, event_id=args.event_id)
+    _emit(result, args.json); return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="reasoning-graph",
                                 description="Declared, confidence-weighted reasoning graphs.")
@@ -147,7 +188,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     # schema
     sp = add("schema", "validate a GraphSchema declaration")
-    sp.add_argument("action", choices=["validate"])
+    sp.add_argument("action", choices=["validate", "integrity"])
     sp.set_defaults(fn=_cmd_schema_validate)
 
     # migrate
@@ -195,6 +236,37 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--k", type=int, default=2, help="variants per task (ab-variants)")
     sp.set_defaults(fn=_cmd_measure)
 
+    # append-only metacognitive observations
+    sp = add("observe", "append one bounded observation; never changes graph rules")
+    sp.add_argument("--query", required=True)
+    sp.add_argument("--resolution-status", required=True,
+                    choices=["ANSWER", "WEAK_ANSWER", "REFUSE", "ERROR"])
+    sp.add_argument("--outcome", required=True,
+                    choices=["success", "failure", "contradiction", "gap", "unknown"])
+    sp.add_argument("--event-id")
+    sp.add_argument("--event-time")
+    sp.add_argument("--path-signature")
+    sp.add_argument("--source-ref")
+    sp.add_argument("--gap-classification")
+    sp.add_argument("--details", help="JSON object with bounded integration-specific detail")
+    sp.set_defaults(fn=_cmd_observe)
+
+    sp = add("memory", "propose | list | snapshot | review | approve | dispute | supersede | retire")
+    sp.add_argument("action", choices=["propose", "list", "snapshot", "review", "approve", "dispute", "supersede", "retire"])
+    sp.add_argument("--kind", choices=["fact", "decision", "preference", "procedure", "hypothesis"])
+    sp.add_argument("--content")
+    sp.add_argument("--evidence", help="JSON object with nonblank source; required for facts")
+    sp.add_argument("--validation")
+    sp.add_argument("--agent-acknowledged", action="store_true")
+    sp.add_argument("--agreement")
+    sp.add_argument("--conflicts-with", action="append")
+    sp.add_argument("--memory-id")
+    sp.add_argument("--replacement-id")
+    sp.add_argument("--reason")
+    sp.add_argument("--event-id")
+    sp.add_argument("--approve", action="store_true", help="explicit human approval required to activate")
+    sp.set_defaults(fn=_cmd_memory)
+
     # demo
     sp = add("demo", "deterministic demo over the tiny fixture; ends 'Verify your build: ok'")
     sp.set_defaults(fn=lambda a: _not_implemented(a, "Phase 7 (demo.py)"))
@@ -207,7 +279,7 @@ def main(argv=None) -> int:
     args._cmdpath = args.cmd + (f" {getattr(args, 'action', '')}".rstrip())
     try:
         return args.fn(args)
-    except (FileNotFoundError, ValueError, KeyError) as exc:
+    except (FileNotFoundError, ValueError, KeyError, PermissionError) as exc:
         _emit({"error": type(exc).__name__, "detail": str(exc)}, getattr(args, "json", False))
         return 1
 

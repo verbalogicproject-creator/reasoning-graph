@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark"><title>Reasoning Graph Workbench</title>
+  <link rel="stylesheet" href="/static/primer.css"><link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="mast"><div><p class="eyebrow">LOCAL / GOVERNED / EVIDENCE-BOUND</p><h1>Reasoning Graph <span>Workbench</span></h1></div><p id="instance-label" class="instance">Loading instance…</p></header>
+  <main id="main">
+    <section class="status-strip" aria-label="System overview"><article><small>Nodes / edges</small><strong id="count-value">Loading</strong></article><article><small>Integrity</small><strong id="integrity-value">Loading</strong></article><article><small>Frontier entries</small><strong id="frontier-value">Loading</strong></article><article><small>Observations</small><strong id="observations-value">Loading</strong></article></section>
+    <section class="panel resolve-panel"><div class="panel-head"><div><p class="eyebrow">EVIDENCE INSPECTION</p><h2>Inspect declared support</h2></div><p>Results show graph evidence, not model reasoning.</p></div>
+      <form id="resolve-form"><label for="query">Question or graph path</label><div class="query-line"><input id="query" name="text" required placeholder="e.g. fix a bug found via search"><button type="submit">Resolve</button></div><div class="options"><label><input id="weighted" type="checkbox" checked> highest-confidence path</label><label><input id="dormant" type="checkbox"> include dormant rules</label></div></form>
+      <div id="resolve-state" class="notice" role="status" aria-live="polite">Enter a query to inspect the reusable evidence path.</div>
+      <div id="resolve-result" hidden><div class="answer-row"><strong id="answer-status"></strong><span id="answer-confidence"></span><span id="answer-kind"></span></div><p id="answer-text"></p><div class="path-layout"><div id="path-graph" class="path-graph" aria-label="Resolved graph path"></div><div><h3>Provenance</h3><ol id="provenance" class="provenance"></ol></div></div></div>
+    </section>
+    <div class="grid">
+      <section class="panel"><div class="panel-head"><div><h2>Graph condition</h2></div></div><div id="integrity-detail" class="data-list">Loading integrity data.</div></section>
+      <section class="panel"><div class="panel-head"><div><h2>Unsupported territory</h2></div></div><div id="frontier-detail" class="data-list">Loading frontier data.</div></section>
+      <section class="panel"><div class="panel-head"><div><h2>Call-log queue</h2></div></div><ol id="gap-list" class="ledger"><li>Loading gap queue.</li></ol></section>
+      <section class="panel"><div class="panel-head"><div><h2>Staged candidates</h2></div></div><div id="candidate-list" class="data-list">Loading candidates.</div></section>
+    </div>
+    <section class="panel"><div class="panel-head"><div><h2>Append bounded feedback</h2></div><p>Records never alter active rules.</p></div>
+      <form id="observation-form" class="observation-form"><label>Query<input name="query" required maxlength="10000"></label><label>Resolution<select name="resolution_status"><option>ANSWER</option><option>WEAK_ANSWER</option><option>REFUSE</option><option>ERROR</option></select></label><label>Outcome<select name="outcome"><option>success</option><option>failure</option><option>contradiction</option><option>gap</option><option>unknown</option></select></label><label>Gap class<input name="gap_classification"></label><button type="submit">Append observation</button></form><p id="observation-state" class="notice" role="status" aria-live="polite"></p><ol id="observation-list" class="ledger"></ol>
+    </section>
+    <section class="panel"><div class="panel-head"><div><h2>Memory review</h2></div><p>Typed reusable artifacts require human approval before activation.</p></div><form id="memory-form" class="observation-form"><label>Kind<select name="kind"><option>fact</option><option>decision</option><option>preference</option><option>procedure</option><option>hypothesis</option></select></label><label>Content<input name="content" required maxlength="10000"></label><label>Agreement<input name="agreement" placeholder="required except facts"></label><label>Evidence JSON<input name="evidence" placeholder="required for facts"></label><label>Validation<input name="validation" placeholder="required for facts"></label><label><input name="agent_acknowledged" type="checkbox"> Agent acknowledges the exact factual wording</label><button type="submit">Propose memory</button></form><p id="memory-state" class="notice" role="status" aria-live="polite"></p><ol id="memory-list" class="ledger"></ol></section>
+    <section class="panel approval"><div class="panel-head"><div><p class="eyebrow">HUMAN GATE</p><h2>Rule lifecycle actions</h2></div><p>These actions can change the declared instance.</p></div><p>Approval is never inferred. The API accepts only <code>approve: true</code>; freeze accepts only a direct Markdown child of the declared staging directory.</p><div class="approval-row"><label>Staged filename<input id="freeze-file" placeholder="candidate.md"></label><label>Typed confirmation<input id="freeze-confirmation" placeholder="FREEZE candidate.md"></label><button id="verify-button" type="button">Verify candidate</button><button id="freeze-button" type="button" class="danger">Freeze with explicit approval</button></div><div class="approval-row"><label>Retirement confirmation<input id="retire-confirmation" placeholder="RETIRE RULES"></label><button id="retire-button" type="button" class="danger">Run retirement with explicit approval</button></div><p id="approval-state" class="notice" role="status" aria-live="polite"></p></section>
+  </main><footer>Local workbench · evidence paths are ranking support, not calibrated probability.</footer><script src="/static/cytoscape.min.js"></script><script src="/static/app.js" defer></script>
+</body></html>

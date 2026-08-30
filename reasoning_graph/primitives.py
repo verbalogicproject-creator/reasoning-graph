@@ -1,7 +1,7 @@
 """Primitive adapters — how typed NLKE-style queries reach a graph.
 
-Instance 0's proven primitive engine is /root/reasoning-graph/query.py (P2,
-fixture 20/20). It stays FROZEN at instance level and is reached via subprocess;
+Instance 0's primitive engine is the repository-level `query.py` (P2 fixture
+20/20). It stays frozen at instance level and is reached via subprocess;
 this package never imports, copies, or edits it (G0 hash-guards it).
 
 Contract, frozen by this docstring + gate G3:

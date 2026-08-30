@@ -1,5 +1,4 @@
-"""Resolver — traversal, path composition, analytics. Vendor-adapt of nai's
-weighted-path + pure-numpy pagerank/cycles (VENDORED.json entries 2-3).
+"""Resolver — traversal, confidence composition, analytics, and refusal.
 
 Contract, frozen by this docstring + gates G3/G8:
 
@@ -13,7 +12,8 @@ resolve(instance, *, start=None, end=None, text=None, weighted=True,
   include_dormant=True (retirement contract, loop/retire.py).
 
 Answer JSON — see the module for the exact shape (status/answer/path/confidence/
-confidence_kind/path_class/refusal). confidence_kind is always
+confidence_kind/path_class/support_kind/provenance/refusal).
+confidence_kind is always
 "path_product_score" (a ranking score, not a probability — arXiv:2601.11956);
 path_class discloses structural_only vs reasoning (council 2026-07-20).
 
@@ -28,6 +28,7 @@ cycles(instance) -> {"cycles":[...], "by_class":{...}} classified per
 from __future__ import annotations
 
 import heapq
+import json
 import math
 import sqlite3
 
@@ -162,6 +163,40 @@ def _path_class(path) -> str:
     return "structural_only"
 
 
+def _edge_support_kind(edge) -> str:
+    if edge.get("synthesis_chain"):
+        return "minted"
+    if edge.get("basis") in _FIDELITY_BASES:
+        return "documented"
+    return "derived"
+
+
+def _support_kind(path) -> str | None:
+    kinds = {_edge_support_kind(edge) for edge in path}
+    for kind in ("minted", "derived", "documented"):
+        if kind in kinds:
+            return kind
+    return None
+
+
+def _provenance(path) -> list[dict]:
+    out = []
+    for edge in path:
+        try:
+            properties = json.loads(edge.get("properties") or "{}") or {}
+        except (json.JSONDecodeError, TypeError):
+            properties = {}
+        evidence = properties.get("provenance", properties.get("evidence", []))
+        if not isinstance(evidence, list):
+            evidence = [evidence]
+        out.append({"source": edge["source"], "edge_type": edge["kind"],
+                    "target": edge["target"], "confidence_basis": edge.get("basis"),
+                    "support_kind": _edge_support_kind(edge),
+                    "synthesis_chain": edge.get("synthesis_chain"),
+                    "evidence": evidence})
+    return out
+
+
 def _answer(status, answer, path, confidence, refusal=None):
     return {
         "status": status,
@@ -171,6 +206,8 @@ def _answer(status, answer, path, confidence, refusal=None):
         "confidence": confidence,
         "confidence_kind": CONFIDENCE_KIND,
         "path_class": _path_class(path) if path else None,
+        "support_kind": _support_kind(path),
+        "provenance": _provenance(path),
         "refusal": refusal,
     }
 

@@ -1,0 +1,16 @@
+[
+  {"tool_id":"ask_user_question","name":"AskUserQuestion","workflow_ids":["requirements_gathering","decision_making","preference_collection","implementation_planning"]},
+  {"tool_id":"bash_execute","name":"Bash","workflow_ids":["bug_fixing","testing","refactoring"]},
+  {"tool_id":"bash_output","name":"BashOutput","workflow_ids":["background_process_monitoring","long_running_tasks","build_watching","log_filtering"]},
+  {"tool_id":"edit_file","name":"Edit","workflow_ids":["bug_fixing","refactoring","testing"]},
+  {"tool_id":"glob_pattern_search","name":"Glob","workflow_ids":["codebase_understanding","refactoring","testing"]},
+  {"tool_id":"grep_content_search","name":"Grep","workflow_ids":["codebase_understanding","bug_fixing","refactoring"]},
+  {"tool_id":"notebook_edit","name":"NotebookEdit","workflow_ids":["documentation","testing","refactoring"]},
+  {"tool_id":"notebook_read","name":"NotebookRead","workflow_ids":["codebase_understanding","documentation","testing"]},
+  {"tool_id":"read_file","name":"Read","workflow_ids":["codebase_understanding","bug_fixing","documentation"]},
+  {"tool_id":"task_agent","name":"Task","workflow_ids":["codebase_exploration","autonomous_task_execution","parallel_processing","specialized_analysis"]},
+  {"tool_id":"todo_write","name":"TodoWrite","workflow_ids":["task_management","progress_tracking","multi_step_workflows","session_organization"]},
+  {"tool_id":"web_fetch","name":"WebFetch","workflow_ids":["documentation","codebase_understanding"]},
+  {"tool_id":"web_search","name":"WebSearch","workflow_ids":["documentation","codebase_understanding"]},
+  {"tool_id":"write_file","name":"Write","workflow_ids":["refactoring","testing","documentation"]}
+]

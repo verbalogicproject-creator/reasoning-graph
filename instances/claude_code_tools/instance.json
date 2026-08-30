@@ -1,21 +1,29 @@
 {
   "name": "claude_code_tools",
-  "db_path": "/root/reasoning-graph/kgs/reasoning-graph.db",
-  "fcl_path": "/root/reasoning-graph/frontier-call-log.ngf.md",
-  "rules_dir": "/root/reasoning-graph/synthesis-rules",
-  "staged_dir": "/root/reasoning-graph/synthesis-rules/staged",
+  "db_path": "data/reasoning-graph.clean.db",
+  "fcl_path": "../../frontier-call-log.ngf.md",
+  "rules_dir": "../../synthesis-rules",
+  "staged_dir": "../../synthesis-rules/staged",
   "gap_shape_history": "gap-shape-history.json",
+  "observations_path": "data/observations.jsonl",
   "graphschema": "graphschema.py",
   "adapter": {
     "kind": "subprocess",
-    "cwd": "/root/reasoning-graph",
-    "argv": ["python3", "query.py"],
+    "cwd": "../..",
+    "argv": [
+      "python3",
+      "query.py",
+      "--db",
+      "instances/claude_code_tools/data/reasoning-graph.clean.db"
+    ],
     "json_flag": "--json"
   },
   "self_approve": false,
   "_notes": {
-    "db": "the LIVE combined store (639n/856e at 2026-07-19 baseline); written ONLY via reasoning-graph migrate / loop freeze / loop retire, all approval-gated",
-    "minted_dir": "/root/reasoning-graph/synthesis-rules/minted",
-    "frozen_upstream": "/root/reasoning-graph/kgs/claude_kg_truth/claude-code-tools-kg.db (never written)"
+    "role": "Canonical bundled Instance 0 descriptor.",
+    "db": "Generated clean instance; do not replace with the immutable unmodified source database.",
+    "writes": "Observations append inside this instance; graph promotion remains verification- and approval-gated.",
+    "gap_history": "Legacy measurement sidecar retained by the bundled instance; it does not define graph state.",
+    "repair": "Run python3 scripts/repair_instance_db.py from the repository root to reproduce the clean database."
   }
 }

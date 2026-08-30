@@ -1,9 +1,0 @@
-[
-  "/root/projects/reasoning_graph/gates/_common.py",
-  "/root/projects/reasoning_graph/gates/g0_substrate_intact.py",
-  "/root/projects/reasoning_graph/reasoning_graph/cli.py",
-  "/root/projects/reasoning_graph/reasoning_graph/measure/ab_tasks.py",
-  "/root/projects/reasoning_graph/reasoning_graph/migrations.py",
-  "/root/projects/reasoning_graph/reasoning_graph/refusal.py",
-  "/root/projects/reasoning_graph/tests/fixtures/tiny/graphschema.py"
-]

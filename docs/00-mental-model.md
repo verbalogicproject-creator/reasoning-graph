@@ -1,6 +1,6 @@
 # 00 — Mental model
 
-**Graph = frozen reasoning.** A knowledge graph is reasoning done once: you pay inference to declare a confidence-weighted edge, then retrieve it forever by traversal. Multi-step reasoning becomes path composition.
+**Graph = declared reusable support.** A confidence-weighted edge records an inspectable relationship that can be retrieved by traversal. Multi-step support becomes path composition, subject to provenance, confidence basis, contradictions, and refusal.
 
 **The lowering ladder.** Work sits on a rung: rung 3 prose (re-derived every call), rung 2 code, rung 1 data/declared, rung 0 precomputed/graph. This framework is rung-0 applied to *reasoning itself* — don't re-derive at run time what you can settle ahead of time and look up.
 
@@ -10,4 +10,4 @@
 
 **The residue stays prose.** Irreducible judgment is *supposed* to stay un-declared; over-declaring it is brittleness. That is why the framework refuses rather than fabricates, and why a gap the corpus genuinely lacks is logged, not invented.
 
-**The metric.** As reasoning migrates model→graph, the *frontier-call rate* (new gap-shape classes per N logged misses) falls. That, plus an A/B token+accuracy comparison, is the proof.
+**The evaluation signal.** If reuse improves, the *frontier-call rate* (new gap-shape classes per N logged misses) should fall. A/B token-and-accuracy comparisons test that hypothesis; they do not prove metacognition or general performance.

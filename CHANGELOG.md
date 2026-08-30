@@ -1,12 +1,30 @@
 # Changelog
 
 All notable changes are documented here (Keep a Changelog format).
+## [0.2.0] — Unified prototype
+
+### Added
+
+- Portable, deterministic Instance 0 repair and integrity receipt.
+- Append-only, typed MemoryLog with explicit human approval.
+- Local graph and memory workbench.
+- Offline provider-native extended-thinking contracts and playbooks for OpenAI,
+  Gemini, and Anthropic.
+- Updated GitHub/arXiv research candidate ledger and claim boundary.
+
+### Changed
+
+- Replaced machine-specific acceptance gates with portable pytest, repair,
+  integrity, fixture, CLI, MCP, and workbench checks.
+- Removed obsolete local checkout paths and historical generated benchmark
+  artifacts from the release tree; they remain in Git history.
+
 
 ## [0.1.0] — PoC (Opus 4.8 build session)
 
 ### Added
 - Corpus-agnostic core: `GraphSchema` declaration, profile-driven `Store`, `m001` edge-confidence migration, `resolve`/refusal boundary, mechanized loop (`scan`/`promote`/`mint`/`verify`/`freeze`/`retire`), measurement (`frontier_rate` + the A/B harness).
-- Instance 0 (`claude-code-tools`): confidence backfilled onto all 856 edges; A/B proof executed (N=30); frontier-call rate computed off the live log.
+- Instance 0 (`claude-code-tools`): confidence backfilled onto all 856 edges; an A/B evaluation ran (N=30); frontier-call rate was computed from the live log.
 - Full test suite (1:1 with `tests/INVARIANTS.md`), deterministic `demo`, self-verifying `examples/`, and the house doc set.
 - Gates G0–G6 green (smallest useful slice) + G8 (codification bar).
 

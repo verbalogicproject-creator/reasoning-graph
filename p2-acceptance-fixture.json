@@ -1,0 +1,29 @@
+{
+  "fixture_id": "reasoning-graph-p2-acceptance",
+  "version": "1.0",
+  "date": "2026-07-14",
+  "style_ref": "systems/nai/INTENTGRAPH-BENCHMARK-100.json",
+  "purpose": "P2 acceptance fixture per implementation-plan-reasoning-graph-v2-2026-07-13.md's P2 gate. Every expected value below was empirically verified against query.py + kgs/reasoning-graph.db before being frozen here -- none are aspirational. Doubles as the seed for P5's frontier-call-rate measurement harness (re-run this fixture over time; recall trending up / misses trending down IS the metric).",
+  "queries": [
+    {"id": "p2-canon-1", "primitive": "compose_for", "canonical": true, "args": {"goal": "which tools compose to fix a bug found via search?"}, "expect": {"check": "tool_sequence", "tools": ["Grep", "Read", "Edit"]}, "status": "PASS 2026-07-14 (FCL-003 closed)", "notes": "v1's flagship query. Two bugs fixed to close FCL-003: (1) compound_patterns had no key matching 'bug'/'search' phrasing -- added a 'bug' key; (2) _decompose_goal re-embedded the full original goal into every sub-goal, so 'fix' bled into the 'search' sub-goal and resolved to Edit instead of Grep -- fixed by using bare step words. Now correctly composes Grep -> Read -> Edit."},
+    {"id": "p2-canon-2", "primitive": "want_to", "canonical": true, "args": {"goal": "is this agent architecture complete?"}, "expect": {"check": "node_in_topk", "node_id": "comp_001_tool_registry_structure", "k": 5}, "status": "PASS 2026-07-14 (FCL-002-era fix)", "notes": "Originally FAILED -- want_to() only ever searched node_type='tool', inherited from when the graph had no rule nodes. Fixed by adding a synthesis_rule description search step to query.py. comp_001 now surfaces at rank 4/score 0.65."},
+    {"id": "p2-canon-3", "primitive": "want_to", "canonical": true, "args": {"goal": "which rules warn against extended-thinking on simple tasks?"}, "expect": {"check": "node_in_topk", "node_id": "extended_thinking_003_simple_tasks_antipattern", "k": 5}, "status": "PASS 2026-07-14 (FCL-004 closed)", "notes": "TASK-CLASSIFIER's 12 rules + 1 standalone anti-pattern extracted as synthesis_rule NODES ONLY (zero rule_related_to edges -- 0/76 declared Related Rules for this file, so edge scope stays exactly within open call #2's declared 17-rule boundary; node extraction is separately valid per dot 4). extended_thinking_003_simple_tasks_antipattern ('Don't Use Extended Thinking on Simple Tasks') now surfaces at rank 4 -- an exact semantic match, not incidental keyword overlap."},
+    {"id": "p2-004", "primitive": "want_to", "args": {"goal": "read a file"}, "expect": {"check": "top_result", "node_id": "read_file"}},
+    {"id": "p2-005", "primitive": "want_to", "args": {"goal": "search code for a pattern"}, "expect": {"check": "top_result_in", "node_ids": ["grep_content_search", "glob_pattern_search", "web_search"]}},
+    {"id": "p2-006", "primitive": "want_to", "args": {"goal": "download a webpage"}, "expect": {"check": "top_result", "node_id": "web_fetch"}},
+    {"id": "p2-007", "primitive": "want_to", "args": {"goal": "track multiple tasks"}, "expect": {"check": "top_result", "node_id": "todo_write"}},
+    {"id": "p2-008", "primitive": "want_to", "args": {"goal": "edit a jupyter notebook cell"}, "expect": {"check": "node_in_topk", "node_id": "notebook_edit", "k": 3}, "notes": "Exercises the FCL-001-minted content -- notebook_edit is reachable via P2, not just raw SQL."},
+    {"id": "p2-009", "primitive": "want_to", "args": {"goal": "run a shell command"}, "expect": {"check": "top_result", "node_id": "bash_execute"}},
+    {"id": "p2-010", "primitive": "can_it", "args": {"capability": "edit a file"}, "expect": {"check": "can_true_and_tool", "tool": "Edit"}},
+    {"id": "p2-011", "primitive": "can_it", "args": {"capability": "read binary files"}, "expect": {"check": "can_true_and_tool", "tool": "Read"}},
+    {"id": "p2-012", "primitive": "can_it", "args": {"capability": "spawn a sub-agent"}, "expect": {"check": "can_true_and_tool", "tool": "Task"}},
+    {"id": "p2-013", "primitive": "trace", "args": {"from": "Read", "to": "Write"}, "expect": {"check": "found", "max_length": 1}},
+    {"id": "p2-014", "primitive": "trace", "args": {"from": "Grep", "to": "Glob"}, "expect": {"check": "found", "max_length": 1}},
+    {"id": "p2-015", "primitive": "trace", "args": {"from": "Task", "to": "read_file"}, "expect": {"check": "found", "max_length": 2}},
+    {"id": "p2-016", "primitive": "trace", "args": {"from": "dep_003_tool_execution_requires_error_handling", "to": "constr_002_max_iterations_safety"}, "expect": {"check": "found", "max_length": 2}, "notes": "Pure rule<->rule multi-hop composition (dep_003 -> anti_001 -> constr_002) -- proves P2 reaches P0.5 Lane A content, not just tool edges."},
+    {"id": "p2-017", "primitive": "why_not", "args": {"tool": "Bash", "goal": "edit a file interactively"}, "expect": {"check": "limitations_nonempty"}},
+    {"id": "p2-018", "primitive": "similar_to", "args": {"tool": "WebFetch"}, "expect": {"check": "node_in_topk_similar", "tool": "WebSearch", "k": 3}},
+    {"id": "p2-019", "primitive": "similar_to", "args": {"tool": "Grep"}, "expect": {"check": "node_in_topk_similar", "tool": "Glob", "k": 3}},
+    {"id": "p2-020", "primitive": "alternatives", "args": {"tool": "Bash"}, "expect": {"check": "results_nonempty"}}
+  ]
+}

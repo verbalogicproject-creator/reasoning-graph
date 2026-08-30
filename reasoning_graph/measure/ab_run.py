@@ -34,8 +34,8 @@ def _spike(model: str, out_dir: Path) -> dict:
     (out_dir / "ab-spike-ok.json").write_text(json.dumps(art, indent=2))
     if not ok:
         raise RuntimeError("A/B SPIKE FAILED — headless claude CLI did not return parseable "
-                           "usage metadata on this host. STOP: the headline proof is "
-                           "unbuildable as designed (SoT §7 entry condition).")
+                           "usage metadata on this host. STOP: the A/B evaluation is "
+                           "unavailable as designed.")
     return art
 
 

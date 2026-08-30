@@ -1,5 +1,4 @@
-"""Store — sqlite substrate, profile-driven. Vendor-adapt of nai's KGManager
-(VENDORED.json entry 1; source /root/reasoning-graph/systems/nai/kg_manager.py).
+"""Store — SQLite substrate with a schema-profile-driven contract.
 
 Contract, frozen by this docstring + gates G1/G2:
 
@@ -38,7 +37,7 @@ import json
 import sqlite3
 from contextlib import contextmanager
 
-from .schema import Instance
+from .schema import Instance, is_valid_basis
 
 
 class MissingConfidence(Exception):
@@ -47,9 +46,93 @@ class MissingConfidence(Exception):
 
 def _basis_of(properties_json: str | None) -> str | None:
     try:
-        return (json.loads(properties_json or "{}") or {}).get("confidence_basis")
+        basis = (json.loads(properties_json or "{}") or {}).get("confidence_basis")
+        return basis if isinstance(basis, str) else None
     except (json.JSONDecodeError, TypeError):
         return None
+
+
+def inspect_integrity(instance: Instance) -> dict:
+    """Return a complete, non-mutating integrity report for an instance.
+
+    Inspection bypasses Store.open so a damaged graph remains diagnosable.
+    Exact typed duplicates fail strict integrity until their evidence is merged;
+    distinct relationship kinds between the same nodes remain lossless.
+    """
+    p = instance.schema.profile
+    conn = sqlite3.connect(f"file:{instance.db_path}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    try:
+        node_rows = list(conn.execute(
+            f"SELECT {p.node_id} AS id, {p.node_kind} AS kind FROM {p.nodes_table}"))
+        nodes = {r["id"]: r["kind"] for r in node_rows}
+        has_conf = any(r[1] == p.edge_confidence
+                       for r in conn.execute(f"PRAGMA table_info({p.edges_table})"))
+        conf = p.edge_confidence if has_conf else "NULL"
+        edge_rows = list(conn.execute(
+            f"SELECT {p.edge_source} AS source, {p.edge_target} AS target, "
+            f"{p.edge_kind} AS kind, {conf} AS confidence, "
+            f"{p.edge_properties} AS properties FROM {p.edges_table}"))
+
+        declared_nodes = set(instance.schema.node_kinds)
+        declared_edges = {e.name for e in instance.schema.edge_kinds}
+        unknown_node_kinds = sorted({r["kind"] for r in node_rows
+                                     if r["kind"] not in declared_nodes})
+        unknown_edge_kinds = sorted({r["kind"] for r in edge_rows
+                                     if r["kind"] not in declared_edges})
+        missing_endpoints = []
+        invalid_endpoint_kinds = []
+        missing_confidence = []
+        for index, row in enumerate(edge_rows):
+            edge_id = {"row": index, "source": row["source"], "target": row["target"],
+                       "kind": row["kind"]}
+            missing = [side for side, value in (("source", row["source"]),
+                                                 ("target", row["target"])) if value not in nodes]
+            if missing:
+                missing_endpoints.append({**edge_id, "missing": missing})
+            if row["confidence"] is None:
+                missing_confidence.append({**edge_id, "problem": "confidence"})
+            else:
+                basis = _basis_of(row["properties"])
+                if basis is None or not is_valid_basis(basis):
+                    missing_confidence.append({**edge_id, "problem": "confidence_basis",
+                                               "basis": basis})
+            if row["kind"] in declared_edges and not missing:
+                edge_kind = instance.schema.edge_kind(row["kind"])
+                source_kind, target_kind = nodes[row["source"]], nodes[row["target"]]
+                if not edge_kind.permits(source_kind, target_kind):
+                    invalid_endpoint_kinds.append({
+                        **edge_id, "source_kind": source_kind, "target_kind": target_kind,
+                        "allowed_source_kinds": edge_kind.source_kinds,
+                        "allowed_target_kinds": edge_kind.target_kinds})
+
+        duplicate_typed_relationships = [dict(r) for r in conn.execute(
+            f"SELECT {p.edge_source} AS source, {p.edge_target} AS target, "
+            f"{p.edge_kind} AS kind, COUNT(*) AS count FROM {p.edges_table} "
+            f"GROUP BY {p.edge_source}, {p.edge_target}, {p.edge_kind} HAVING COUNT(*) > 1")]
+        foreign_key_violations = [
+            {"table": r[0], "rowid": r[1], "parent": r[2], "fkid": r[3]}
+            for r in conn.execute("PRAGMA foreign_key_check")
+        ]
+        report = {
+            "instance": instance.name,
+            "db_path": str(instance.db_path),
+            "counts": {"nodes": len(node_rows), "edges": len(edge_rows)},
+            "unknown_node_kinds": unknown_node_kinds,
+            "unknown_edge_kinds": unknown_edge_kinds,
+            "missing_endpoints": missing_endpoints,
+            "invalid_endpoint_kinds": invalid_endpoint_kinds,
+            "missing_confidence": missing_confidence,
+            "duplicate_typed_relationships": duplicate_typed_relationships,
+            "foreign_key_violations": foreign_key_violations,
+        }
+        report["ok"] = not any(report[k] for k in (
+            "unknown_node_kinds", "unknown_edge_kinds", "missing_endpoints",
+            "invalid_endpoint_kinds", "missing_confidence",
+            "duplicate_typed_relationships", "foreign_key_violations"))
+        return report
+    finally:
+        conn.close()
 
 
 class Store:
@@ -71,6 +154,7 @@ class Store:
             conn = sqlite3.connect(f"file:{instance.db_path}?mode=ro", uri=True)
         else:
             conn = sqlite3.connect(str(instance.db_path))
+            conn.execute("PRAGMA foreign_keys=ON")
         conn.row_factory = sqlite3.Row
         store = cls(instance, conn, read_only)
         store._validate_reality()
@@ -219,6 +303,10 @@ class Store:
         stays untouched."""
         wconn = sqlite3.connect(str(self.instance.db_path), isolation_level="DEFERRED")
         wconn.row_factory = sqlite3.Row
+        wconn.execute("PRAGMA foreign_keys=ON")
+        if not wconn.execute("PRAGMA foreign_keys").fetchone()[0]:
+            wconn.close()
+            raise sqlite3.IntegrityError("SQLite foreign-key enforcement could not be enabled")
         try:
             yield wconn
             wconn.commit()

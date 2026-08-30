@@ -4,11 +4,16 @@ Task-oriented recipes. Every block is runnable; `--json` works on every subcomma
 
 ## Declare a graph for your own corpus
 
-A corpus is an instance directory with `instance.json` (paths + adapter) and `graphschema.py` (a module-level `SCHEMA: GraphSchema`). The core reads everything through that declaration — see `instances/claude_code_tools/` and `tests/fixtures/tiny/` (an alien weaving domain with non-default table/column names, proving nothing is hardcoded).
+A corpus is an instance directory with `instance.json` (paths + adapter) and `graphschema.py` (a module-level `SCHEMA: GraphSchema`). The core reads everything through that declaration. `instances/claude_code_tools/` is the canonical bundled instance; `tests/fixtures/tiny/` is an unrelated weaving domain used to catch hard-coded corpus assumptions.
 
 ```bash
 reasoning-graph schema validate --instance instances/claude_code_tools/instance.json --json
+reasoning-graph schema integrity --instance instances/claude_code_tools/instance.json --json
 ```
+
+The descriptor resolves the generated clean database. It never falls back to
+the immutable source database. Run `scripts/repair_instance_db.py` to
+reproduce the clean database and its manifest.
 
 ## Query with the refusal boundary
 
@@ -36,7 +41,7 @@ reasoning-graph loop scan    --instance instances/claude_code_tools/instance.jso
 reasoning-graph loop promote --instance instances/claude_code_tools/instance.json --json
 ```
 
-`scan` parses the frontier-call log; `promote` lists recurring gap-shapes that are not yet disposed. `mint` → `verify` → `freeze` stage, prove, and freeze a matcher; `retire` demotes on outcome evidence.
+`scan` parses the frontier-call log; `promote` lists recurring gap-shapes that are not yet disposed. `mint` → `verify` → `freeze` stage, validate, and activate a matcher; `retire` demotes on outcome evidence.
 
 ## Measure
 
@@ -44,4 +49,4 @@ reasoning-graph loop promote --instance instances/claude_code_tools/instance.jso
 reasoning-graph measure frontier-rate --instance instances/claude_code_tools/instance.json --json
 ```
 
-The A/B proof (external, headless, spends no build-session tokens): `measure ab-build-tasks` → `ab-run` → `ab-judge` → `ab-report`.
+The historical A/B evaluation pipeline is: `measure ab-build-tasks` → `ab-run` → `ab-judge` → `ab-report`. Live runs are optional, external, credentialed, and cost-bearing.

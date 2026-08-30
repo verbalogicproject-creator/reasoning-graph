@@ -56,7 +56,7 @@ def freeze(instance, staged_path, approve: bool = False) -> dict:
 
     store = Store.open(instance)  # validates reality; raises on undeclared kinds
     try:
-        instance.schema.edge_kind(edge_kind)  # the minted kind must be declared
+        edge_decl = instance.schema.edge_kind(edge_kind)  # minted kind must be declared
         p = store.profile
         # idempotency: already-frozen edges for this mint_id?
         existing = store.conn.execute(
@@ -66,6 +66,14 @@ def freeze(instance, staged_path, approve: bool = False) -> dict:
             return {"mint_id": mint_id, "edges_inserted": 0, "rows": {},
                     "already_frozen": True}
         pairs = list(store.conn.execute(fix["pairs_sql"]))
+        for src, tgt in pairs:
+            source_kind, target_kind = store.node_kind(src), store.node_kind(tgt)
+            if source_kind is None or target_kind is None:
+                raise ValueError(f"mint {mint_id} references missing endpoint: {src}->{tgt}")
+            if not edge_decl.permits(source_kind, target_kind):
+                raise ValueError(
+                    f"mint {mint_id} violates {edge_kind} endpoint contract: "
+                    f"{src} ({source_kind}) -> {tgt} ({target_kind})")
 
         chain = f"{mint_id} / {' '.join(provenance)}"
         basis = f"declared:matcher:{mint_id}"

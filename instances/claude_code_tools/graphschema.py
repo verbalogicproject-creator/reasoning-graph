@@ -1,16 +1,10 @@
-"""Instance 0 — the claude-code-tools reasoning graph (kgs/reasoning-graph.db).
+"""Canonical declaration for the bundled Claude Code tools instance.
 
-Every kind below was enumerated from the LIVE DB on 2026-07-19 (13 node kinds,
-23 edge kinds; sqlite GROUP BY probes recorded in the SoT). The `contradicts`
-edge kind is declared with zero current rows — it is the typed contradiction
-channel future mints use; cycles are NOT contradictions (see EdgeKind.cycle_class).
-
-Confidence rules implement the SoT's edge-confidence derivation table. Precedence
-note for the migration: an edge with a non-NULL synthesis_chain takes
-declared:matcher:<mint_id> at the matcher's declared confidence REGARDLESS of its
-kind's default rule below (mint_001 = 0.85 governs the 11 notebook edges even
-though their kinds default to inherited_curation_default).
+The endpoint contracts are a direct declaration of the relationships observed
+in ``data/derived/reasoning-graph.clean.db`` after repair-instance-v1. They make
+direction errors and cross-kind corruption refusal-grade integrity failures.
 """
+
 from reasoning_graph.schema import (
     ConfidenceRule,
     EdgeKind,
@@ -19,66 +13,102 @@ from reasoning_graph.schema import (
     RetirementPolicy,
 )
 
+
 _STRUCTURAL = ConfidenceRule(
-    basis="declared:structural_extraction", value=1.0,
-    formula_note="P0 structural edge, loaded 1:1 from source JSON/DB structure")
+    basis="declared:structural_extraction",
+    value=1.0,
+    formula_note="P0 relationship loaded directly from checked-in source structure",
+)
 _VERBATIM = ConfidenceRule(
-    basis="declared:verbatim_extraction", value=1.0,
-    formula_note="extraction with a quoted/verbatim source line (Lane A headers, Lane B source_quote)")
+    basis="declared:verbatim_extraction",
+    value=1.0,
+    formula_note="quote- or source-record-traceable extraction",
+)
 _INHERITED = ConfidenceRule(
-    basis="declared:inherited_curation_default", value=0.90,
-    formula_note="pre-existing DB-native curated reasoning edge; 0.90 is a DECLARED default flagged for Eyal's confirmation")
+    basis="declared:inherited_curation_default",
+    value=0.90,
+    formula_note="pre-existing curated reasoning relationship; declared ranking weight",
+)
 _RULE_DERIVED = ConfidenceRule(
     basis="derived:source_rule_confidence",
-    value=0.70,   # DECLARED corpus-min fallback (SoT lock #22): used ONLY when a source
-                  # rule declares no confidence (m001 tries source-node derivation first).
-                  # 0.70 = min confidence across this corpus's rule files (Data-Grounding
-                  # verified 2026-07-20). Machine-readable here, not buried in prose.
-    formula_note="= source rule node metadata confidence; fallback = value (0.70, observed corpus-file minimum) when the rule declares none (TASK-CLASSIFIER's 12)")
+    value=0.70,
+    formula_note="source rule confidence, falling back to the observed corpus minimum",
+)
 _CONTRADICTS = ConfidenceRule(
     basis="declared:initial_guess",
-    formula_note="no instances yet; any future contradicts edge carries its minter's declared value")
+    formula_note="future contradiction claims must carry their minter's declared value",
+)
+
+
+def _edge(
+    name,
+    confidence_rule,
+    source,
+    target,
+    *,
+    symmetric=False,
+    cycle_class="unclassified",
+):
+    return EdgeKind(
+        name,
+        confidence_rule,
+        source_kinds=(source,),
+        target_kinds=(target,),
+        symmetric=symmetric,
+        cycle_class=cycle_class,
+    )
+
 
 SCHEMA = GraphSchema(
     name="claude_code_tools",
     node_kinds=(
-        "tool", "use_case", "limitation", "tool_combination", "example",
-        "prerequisite", "configuration_setting", "workaround", "workaround_needed",
-        "synthesis_rule", "handbook_capability", "handbook_tool_note", "relic_script",
+        "tool",
+        "use_case",
+        "limitation",
+        "tool_combination",
+        "example",
+        "prerequisite",
+        "configuration_setting",
+        "workaround",
+        "workaround_needed",
+        "synthesis_rule",
+        "handbook_capability",
+        "handbook_tool_note",
+        "relic_script",
+        "workflow",
     ),
     edge_kinds=(
-        # --- structural (P0) ---
-        EdgeKind("tool_has_use_case", _STRUCTURAL),
-        EdgeKind("tool_has_limitation", _STRUCTURAL),
-        EdgeKind("tool_has_combination", _STRUCTURAL),
-        EdgeKind("tool_has_example", _STRUCTURAL),
-        EdgeKind("tool_has_prerequisite", _STRUCTURAL),
-        EdgeKind("tool_has_configuration", _STRUCTURAL),
-        EdgeKind("workflow_includes_tool", _STRUCTURAL),
-        EdgeKind("has_workaround", _STRUCTURAL),
-        EdgeKind("limitation_needs_workaround", _STRUCTURAL),
-        EdgeKind("limitation_has_workaround", _STRUCTURAL),
-        EdgeKind("combines_with", _STRUCTURAL, cycle_class="benign_reciprocal"),
-        # --- frozen reasoning: rule layer (P0.5 Lane A) ---
-        EdgeKind("rule_related_to", _RULE_DERIVED, cycle_class="benign_reciprocal"),
-        EdgeKind("extracted_from", _VERBATIM),
-        # --- frozen reasoning: handbook layer (P0.5 Lane B, quote-traceable) ---
-        EdgeKind("same_as", _VERBATIM, symmetric=True, cycle_class="benign_reciprocal"),
-        EdgeKind("tool_enables_capability", _VERBATIM),
-        EdgeKind("tool_enhances_technique", _VERBATIM),
-        EdgeKind("tool_primary_for_capability", _VERBATIM),
-        EdgeKind("tool_supports_capability", _VERBATIM),
-        # --- inherited curated reasoning edges (DB-native; minted rows override via synthesis_chain) ---
-        EdgeKind("tool_requires_tool", _INHERITED),
-        EdgeKind("tool_similar_to", _INHERITED, symmetric=True, cycle_class="benign_reciprocal"),
-        EdgeKind("tool_complements", _INHERITED, cycle_class="benign_reciprocal"),
-        EdgeKind("tool_alternative_to", _INHERITED, symmetric=True, cycle_class="benign_reciprocal"),
-        EdgeKind("tool_conflicts_with", _INHERITED),
-        # --- typed contradiction channel (0 rows today; the refusal boundary's trigger) ---
+        _edge("tool_has_use_case", _STRUCTURAL, "tool", "use_case"),
+        _edge("tool_has_limitation", _STRUCTURAL, "tool", "limitation"),
+        _edge("tool_has_combination", _STRUCTURAL, "tool", "tool_combination"),
+        _edge("tool_has_example", _STRUCTURAL, "tool", "example"),
+        _edge("tool_has_prerequisite", _STRUCTURAL, "tool", "prerequisite"),
+        _edge("tool_has_configuration", _STRUCTURAL, "tool", "configuration_setting"),
+        _edge("workflow_includes_tool", _STRUCTURAL, "workflow", "tool"),
+        _edge("has_workaround", _STRUCTURAL, "tool", "workaround"),
+        _edge("limitation_needs_workaround", _STRUCTURAL, "limitation", "workaround_needed"),
+        _edge("limitation_has_workaround", _STRUCTURAL, "limitation", "workaround"),
+        _edge("combines_with", _STRUCTURAL, "tool_combination", "tool", cycle_class="benign_reciprocal"),
+        _edge("rule_related_to", _RULE_DERIVED, "synthesis_rule", "synthesis_rule", cycle_class="benign_reciprocal"),
+        _edge("extracted_from", _VERBATIM, "synthesis_rule", "relic_script"),
+        _edge("same_as", _VERBATIM, "tool", "handbook_tool_note", symmetric=True, cycle_class="benign_reciprocal"),
+        _edge("tool_enables_capability", _VERBATIM, "tool", "handbook_capability"),
+        _edge("tool_enhances_technique", _VERBATIM, "tool", "handbook_capability"),
+        _edge("tool_primary_for_capability", _VERBATIM, "tool", "handbook_capability"),
+        _edge("tool_supports_capability", _VERBATIM, "tool", "handbook_capability"),
+        _edge("tool_requires_tool", _INHERITED, "tool", "tool"),
+        _edge("tool_similar_to", _INHERITED, "tool", "tool", symmetric=True, cycle_class="benign_reciprocal"),
+        _edge("tool_complements", _INHERITED, "tool", "tool", cycle_class="benign_reciprocal"),
+        _edge("tool_alternative_to", _INHERITED, "tool", "tool", symmetric=True, cycle_class="benign_reciprocal"),
+        _edge("tool_conflicts_with", _INHERITED, "tool", "tool"),
         EdgeKind("contradicts", _CONTRADICTS, cycle_class="contradiction"),
     ),
-    profile=Profile(),          # defaults ARE this DB's schema (claude-code-tools-kg.db shape)
+    profile=Profile(),
     floor=0.30,
     promotion_threshold=2,
-    retirement=RetirementPolicy(active_cap=50, min_uses=5, contradiction_ratio=0.5),
+    retirement=RetirementPolicy(
+        active_cap=50,
+        min_uses=5,
+        contradiction_ratio=0.5,
+    ),
 )

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reasoning-graph-instance-zero"
+version = "0.1.0"
+description = "Instance-0 lab data and deterministic query proof for reasoning-graph"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+reasoning-graph = "query:main"
+reasoning-graph-repair-instance = "scripts.repair_instance_db:main"
+
+[tool.setuptools]
+py-modules = ["query", "p2_fixture_runner"]
+
+[tool.setuptools.packages.find]
+include = ["scripts*"]
+exclude = ["tests*", "python*", "systems*"]
+

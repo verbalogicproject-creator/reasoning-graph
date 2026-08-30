@@ -1,0 +1,740 @@
+{
+  "input": {
+    "counts": {
+      "node_kinds": 13,
+      "nodes": 639,
+      "relationships": 856
+    },
+    "path": "kgs/reasoning-graph.db",
+    "sha256_after": "08f651490c6c9e0be7523d8e8054624c1277cadcacaf91b8771d8b93f94d3edb",
+    "sha256_before": "08f651490c6c9e0be7523d8e8054624c1277cadcacaf91b8771d8b93f94d3edb"
+  },
+  "migration": "repair-instance-v1",
+  "operations": {
+    "merged_typed_relationships": [
+      {
+        "edge_type": "tool_requires_tool",
+        "evidence": [
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-25 17:11:28",
+            "original_edge_id": 703,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "reason": "Edit requires reading file first to understand context"
+            },
+            "synthesis_chain": null
+          },
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-26T10:30:30.277047",
+            "original_edge_id": 715,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "insight": "#62 - Critical Path Edge",
+              "rationale": "MUST read file before editing to understand context",
+              "severity": "CRITICAL"
+            },
+            "synthesis_chain": null
+          }
+        ],
+        "kept_edge_id": 703,
+        "removed_edge_ids": [
+          715
+        ],
+        "source_node_id": "edit_file",
+        "target_node_id": "read_file"
+      },
+      {
+        "edge_type": "tool_requires_tool",
+        "evidence": [
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-25 17:11:28",
+            "original_edge_id": 704,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "reason": "Grep often uses Glob to find files first"
+            },
+            "synthesis_chain": null
+          },
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-26T10:30:30.277394",
+            "original_edge_id": 717,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "rationale": "Usually need to find files before searching contents",
+              "severity": "HIGH"
+            },
+            "synthesis_chain": null
+          }
+        ],
+        "kept_edge_id": 704,
+        "removed_edge_ids": [
+          717
+        ],
+        "source_node_id": "grep_content_search",
+        "target_node_id": "glob_pattern_search"
+      },
+      {
+        "edge_type": "tool_requires_tool",
+        "evidence": [
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-25 17:11:28",
+            "original_edge_id": 705,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "reason": "Write benefits from reading existing file if overwriting"
+            },
+            "synthesis_chain": null
+          },
+          {
+            "confidence": 0.9,
+            "created_at": "2025-11-26T10:30:30.277482",
+            "original_edge_id": 718,
+            "properties": {
+              "confidence_basis": "declared:inherited_curation_default",
+              "rationale": "Should check if file exists before overwriting",
+              "severity": "MEDIUM"
+            },
+            "synthesis_chain": null
+          }
+        ],
+        "kept_edge_id": 705,
+        "removed_edge_ids": [
+          718
+        ],
+        "source_node_id": "write_file",
+        "target_node_id": "read_file"
+      }
+    ],
+    "recovered_workflows": [
+      {
+        "reversed_edge_ids": [
+          521
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "task_agent",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/task_tool.json",
+            "source_tool_id": "claude_code_tool_task",
+            "source_tool_name": "Task"
+          }
+        ],
+        "title": "Autonomous Task Execution",
+        "tool_ids": [
+          "task_agent"
+        ],
+        "workflow_id": "autonomous_task_execution"
+      },
+      {
+        "reversed_edge_ids": [
+          486
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_output",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/bashoutput_tool.json",
+            "source_tool_id": "claude_code_tool_bashoutput",
+            "source_tool_name": "BashOutput"
+          }
+        ],
+        "title": "Background Process Monitoring",
+        "tool_ids": [
+          "bash_output"
+        ],
+        "workflow_id": "background_process_monitoring"
+      },
+      {
+        "reversed_edge_ids": [
+          33,
+          97,
+          127,
+          199
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_execute",
+            "source_file": "claude-code-tools/bash_tool.json",
+            "source_tool_id": "bash_execute",
+            "source_tool_name": "Bash"
+          },
+          {
+            "resolved_tool_id": "edit_file",
+            "source_file": "claude-code-tools/edit_tool.json",
+            "source_tool_id": "edit_file",
+            "source_tool_name": "Edit"
+          },
+          {
+            "resolved_tool_id": "grep_content_search",
+            "source_file": "claude-code-tools/grep_tool.json",
+            "source_tool_id": "grep_content_search",
+            "source_tool_name": "Grep"
+          },
+          {
+            "resolved_tool_id": "read_file",
+            "source_file": "claude-code-tools/read_tool.json",
+            "source_tool_id": "read_file",
+            "source_tool_name": "Read"
+          }
+        ],
+        "title": "Bug Fixing",
+        "tool_ids": [
+          "bash_execute",
+          "edit_file",
+          "grep_content_search",
+          "read_file"
+        ],
+        "workflow_id": "bug_fixing"
+      },
+      {
+        "reversed_edge_ids": [
+          488
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_output",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/bashoutput_tool.json",
+            "source_tool_id": "claude_code_tool_bashoutput",
+            "source_tool_name": "BashOutput"
+          }
+        ],
+        "title": "Build Watching",
+        "tool_ids": [
+          "bash_output"
+        ],
+        "workflow_id": "build_watching"
+      },
+      {
+        "reversed_edge_ids": [
+          520
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "task_agent",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/task_tool.json",
+            "source_tool_id": "claude_code_tool_task",
+            "source_tool_name": "Task"
+          }
+        ],
+        "title": "Codebase Exploration",
+        "tool_ids": [
+          "task_agent"
+        ],
+        "workflow_id": "codebase_exploration"
+      },
+      {
+        "reversed_edge_ids": [
+          64,
+          96,
+          126,
+          362,
+          396,
+          857
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "glob_pattern_search",
+            "source_file": "claude-code-tools/glob_tool.json",
+            "source_tool_id": "glob_pattern_search",
+            "source_tool_name": "Glob"
+          },
+          {
+            "resolved_tool_id": "grep_content_search",
+            "source_file": "claude-code-tools/grep_tool.json",
+            "source_tool_id": "grep_content_search",
+            "source_tool_name": "Grep"
+          },
+          {
+            "resolved_tool_id": "notebook_read",
+            "source_file": "claude-code-tools/notebookread_tool.json",
+            "source_tool_id": "notebook_read",
+            "source_tool_name": "NotebookRead"
+          },
+          {
+            "resolved_tool_id": "read_file",
+            "source_file": "claude-code-tools/read_tool.json",
+            "source_tool_id": "read_file",
+            "source_tool_name": "Read"
+          },
+          {
+            "resolved_tool_id": "web_fetch",
+            "source_file": "claude-code-tools/webfetch_tool.json",
+            "source_tool_id": "web_fetch",
+            "source_tool_name": "WebFetch"
+          },
+          {
+            "resolved_tool_id": "web_search",
+            "source_file": "claude-code-tools/websearch_tool.json",
+            "source_tool_id": "web_search",
+            "source_tool_name": "WebSearch"
+          }
+        ],
+        "title": "Codebase Understanding",
+        "tool_ids": [
+          "glob_pattern_search",
+          "grep_content_search",
+          "notebook_read",
+          "read_file",
+          "web_fetch",
+          "web_search"
+        ],
+        "workflow_id": "codebase_understanding"
+      },
+      {
+        "reversed_edge_ids": [
+          460
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "ask_user_question",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/askuserquestion_tool.json",
+            "source_tool_id": "claude_code_tool_askuserquestion",
+            "source_tool_name": "AskUserQuestion"
+          }
+        ],
+        "title": "Decision Making",
+        "tool_ids": [
+          "ask_user_question"
+        ],
+        "workflow_id": "decision_making"
+      },
+      {
+        "reversed_edge_ids": [
+          128,
+          161,
+          361,
+          395,
+          825,
+          858
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "notebook_edit",
+            "source_file": "claude-code-tools/notebookedit_tool.json",
+            "source_tool_id": "notebook_edit",
+            "source_tool_name": "NotebookEdit"
+          },
+          {
+            "resolved_tool_id": "notebook_read",
+            "source_file": "claude-code-tools/notebookread_tool.json",
+            "source_tool_id": "notebook_read",
+            "source_tool_name": "NotebookRead"
+          },
+          {
+            "resolved_tool_id": "read_file",
+            "source_file": "claude-code-tools/read_tool.json",
+            "source_tool_id": "read_file",
+            "source_tool_name": "Read"
+          },
+          {
+            "resolved_tool_id": "web_fetch",
+            "source_file": "claude-code-tools/webfetch_tool.json",
+            "source_tool_id": "web_fetch",
+            "source_tool_name": "WebFetch"
+          },
+          {
+            "resolved_tool_id": "web_search",
+            "source_file": "claude-code-tools/websearch_tool.json",
+            "source_tool_id": "web_search",
+            "source_tool_name": "WebSearch"
+          },
+          {
+            "resolved_tool_id": "write_file",
+            "source_file": "claude-code-tools/write_tool.json",
+            "source_tool_id": "write_file",
+            "source_tool_name": "Write"
+          }
+        ],
+        "title": "Documentation",
+        "tool_ids": [
+          "notebook_edit",
+          "notebook_read",
+          "read_file",
+          "web_fetch",
+          "web_search",
+          "write_file"
+        ],
+        "workflow_id": "documentation"
+      },
+      {
+        "reversed_edge_ids": [
+          462
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "ask_user_question",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/askuserquestion_tool.json",
+            "source_tool_id": "claude_code_tool_askuserquestion",
+            "source_tool_name": "AskUserQuestion"
+          }
+        ],
+        "title": "Implementation Planning",
+        "tool_ids": [
+          "ask_user_question"
+        ],
+        "workflow_id": "implementation_planning"
+      },
+      {
+        "reversed_edge_ids": [
+          489
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_output",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/bashoutput_tool.json",
+            "source_tool_id": "claude_code_tool_bashoutput",
+            "source_tool_name": "BashOutput"
+          }
+        ],
+        "title": "Log Filtering",
+        "tool_ids": [
+          "bash_output"
+        ],
+        "workflow_id": "log_filtering"
+      },
+      {
+        "reversed_edge_ids": [
+          487
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_output",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/bashoutput_tool.json",
+            "source_tool_id": "claude_code_tool_bashoutput",
+            "source_tool_name": "BashOutput"
+          }
+        ],
+        "title": "Long Running Tasks",
+        "tool_ids": [
+          "bash_output"
+        ],
+        "workflow_id": "long_running_tasks"
+      },
+      {
+        "reversed_edge_ids": [
+          554
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "todo_write",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/todowrite_tool.json",
+            "source_tool_id": "claude_code_tool_todowrite",
+            "source_tool_name": "TodoWrite"
+          }
+        ],
+        "title": "Multi Step Workflows",
+        "tool_ids": [
+          "todo_write"
+        ],
+        "workflow_id": "multi_step_workflows"
+      },
+      {
+        "reversed_edge_ids": [
+          522
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "task_agent",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/task_tool.json",
+            "source_tool_id": "claude_code_tool_task",
+            "source_tool_name": "Task"
+          }
+        ],
+        "title": "Parallel Processing",
+        "tool_ids": [
+          "task_agent"
+        ],
+        "workflow_id": "parallel_processing"
+      },
+      {
+        "reversed_edge_ids": [
+          461
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "ask_user_question",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/askuserquestion_tool.json",
+            "source_tool_id": "claude_code_tool_askuserquestion",
+            "source_tool_name": "AskUserQuestion"
+          }
+        ],
+        "title": "Preference Collection",
+        "tool_ids": [
+          "ask_user_question"
+        ],
+        "workflow_id": "preference_collection"
+      },
+      {
+        "reversed_edge_ids": [
+          553
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "todo_write",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/todowrite_tool.json",
+            "source_tool_id": "claude_code_tool_todowrite",
+            "source_tool_name": "TodoWrite"
+          }
+        ],
+        "title": "Progress Tracking",
+        "tool_ids": [
+          "todo_write"
+        ],
+        "workflow_id": "progress_tracking"
+      },
+      {
+        "reversed_edge_ids": [
+          34,
+          65,
+          98,
+          159,
+          201,
+          827
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_execute",
+            "source_file": "claude-code-tools/bash_tool.json",
+            "source_tool_id": "bash_execute",
+            "source_tool_name": "Bash"
+          },
+          {
+            "resolved_tool_id": "edit_file",
+            "source_file": "claude-code-tools/edit_tool.json",
+            "source_tool_id": "edit_file",
+            "source_tool_name": "Edit"
+          },
+          {
+            "resolved_tool_id": "glob_pattern_search",
+            "source_file": "claude-code-tools/glob_tool.json",
+            "source_tool_id": "glob_pattern_search",
+            "source_tool_name": "Glob"
+          },
+          {
+            "resolved_tool_id": "grep_content_search",
+            "source_file": "claude-code-tools/grep_tool.json",
+            "source_tool_id": "grep_content_search",
+            "source_tool_name": "Grep"
+          },
+          {
+            "resolved_tool_id": "notebook_edit",
+            "source_file": "claude-code-tools/notebookedit_tool.json",
+            "source_tool_id": "notebook_edit",
+            "source_tool_name": "NotebookEdit"
+          },
+          {
+            "resolved_tool_id": "write_file",
+            "source_file": "claude-code-tools/write_tool.json",
+            "source_tool_id": "write_file",
+            "source_tool_name": "Write"
+          }
+        ],
+        "title": "Refactoring",
+        "tool_ids": [
+          "bash_execute",
+          "edit_file",
+          "glob_pattern_search",
+          "grep_content_search",
+          "notebook_edit",
+          "write_file"
+        ],
+        "workflow_id": "refactoring"
+      },
+      {
+        "reversed_edge_ids": [
+          459
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "ask_user_question",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/askuserquestion_tool.json",
+            "source_tool_id": "claude_code_tool_askuserquestion",
+            "source_tool_name": "AskUserQuestion"
+          }
+        ],
+        "title": "Requirements Gathering",
+        "tool_ids": [
+          "ask_user_question"
+        ],
+        "workflow_id": "requirements_gathering"
+      },
+      {
+        "reversed_edge_ids": [
+          555
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "todo_write",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/todowrite_tool.json",
+            "source_tool_id": "claude_code_tool_todowrite",
+            "source_tool_name": "TodoWrite"
+          }
+        ],
+        "title": "Session Organization",
+        "tool_ids": [
+          "todo_write"
+        ],
+        "workflow_id": "session_organization"
+      },
+      {
+        "reversed_edge_ids": [
+          523
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "task_agent",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/task_tool.json",
+            "source_tool_id": "claude_code_tool_task",
+            "source_tool_name": "Task"
+          }
+        ],
+        "title": "Specialized Analysis",
+        "tool_ids": [
+          "task_agent"
+        ],
+        "workflow_id": "specialized_analysis"
+      },
+      {
+        "reversed_edge_ids": [
+          552
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "todo_write",
+            "source_file": "kgs/claude_kg_truth/templates/claude-code-tools/todowrite_tool.json",
+            "source_tool_id": "claude_code_tool_todowrite",
+            "source_tool_name": "TodoWrite"
+          }
+        ],
+        "title": "Task Management",
+        "tool_ids": [
+          "todo_write"
+        ],
+        "workflow_id": "task_management"
+      },
+      {
+        "reversed_edge_ids": [
+          35,
+          66,
+          160,
+          200,
+          826,
+          859
+        ],
+        "source_evidence": [
+          {
+            "resolved_tool_id": "bash_execute",
+            "source_file": "claude-code-tools/bash_tool.json",
+            "source_tool_id": "bash_execute",
+            "source_tool_name": "Bash"
+          },
+          {
+            "resolved_tool_id": "edit_file",
+            "source_file": "claude-code-tools/edit_tool.json",
+            "source_tool_id": "edit_file",
+            "source_tool_name": "Edit"
+          },
+          {
+            "resolved_tool_id": "glob_pattern_search",
+            "source_file": "claude-code-tools/glob_tool.json",
+            "source_tool_id": "glob_pattern_search",
+            "source_tool_name": "Glob"
+          },
+          {
+            "resolved_tool_id": "notebook_edit",
+            "source_file": "claude-code-tools/notebookedit_tool.json",
+            "source_tool_id": "notebook_edit",
+            "source_tool_name": "NotebookEdit"
+          },
+          {
+            "resolved_tool_id": "notebook_read",
+            "source_file": "claude-code-tools/notebookread_tool.json",
+            "source_tool_id": "notebook_read",
+            "source_tool_name": "NotebookRead"
+          },
+          {
+            "resolved_tool_id": "write_file",
+            "source_file": "claude-code-tools/write_tool.json",
+            "source_tool_id": "write_file",
+            "source_tool_name": "Write"
+          }
+        ],
+        "title": "Testing",
+        "tool_ids": [
+          "bash_execute",
+          "edit_file",
+          "glob_pattern_search",
+          "notebook_edit",
+          "notebook_read",
+          "write_file"
+        ],
+        "workflow_id": "testing"
+      }
+    ],
+    "rejected_records": [],
+    "reversed_workflow_edge_ids": [
+      33,
+      34,
+      35,
+      64,
+      65,
+      66,
+      96,
+      97,
+      98,
+      126,
+      127,
+      128,
+      159,
+      160,
+      161,
+      199,
+      200,
+      201,
+      361,
+      362,
+      395,
+      396,
+      459,
+      460,
+      461,
+      462,
+      486,
+      487,
+      488,
+      489,
+      520,
+      521,
+      522,
+      523,
+      552,
+      553,
+      554,
+      555,
+      825,
+      826,
+      827,
+      857,
+      858,
+      859
+    ]
+  },
+  "output": {
+    "counts": {
+      "node_kinds": 14,
+      "nodes": 660,
+      "relationships": 853
+    },
+    "path": "data/derived/reasoning-graph.clean.db",
+    "sha256": "bed2cd14363c7afb41eb1929e406cf0ca072210d89595c8c651658e681922953"
+  },
+  "validation": {
+    "duplicate_typed_relationship_groups": 0,
+    "foreign_key_violations": [],
+    "integrity_check": "ok",
+    "wrong_direction_workflow_relationships": 0
+  }
+}

@@ -1,0 +1,58 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+This is the staging ground for the **reasoning-graph** capability: migrating "reasoning" from something the model re-derives in prose every call into a **traversable, confidence-weighted graph** it can look up instead (the "dot-3 migration": model → Python). Nothing has been built against the plan yet — the repo currently holds **raw material and relic code**, not a running application. There is no build system, package manifest (no `pyproject.toml`/`requirements.txt`/`Makefile`), or CI.
+
+**Always read these two files first, in this order, before doing any work here:**
+1. `reasoning-graph-context-datapacket-2026-07-12.ngf.md` — the living state/why doc. §1 has an honest maturity table per folder ("on disk" ≠ "assessed" ≠ "working"), §2 has the throughline thesis, §4 has open decisions that are **not Claude's to make** (only the user, Eyal, resolves them), §5 is an append-only field-notes log.
+2. `implementation-plan-reasoning-graph-v2-2026-07-13.md` — the current plan draft (P0–P5 re-planned against the `systems/` + `kgs/` discoveries; awaiting Eyal's gate). `tomorrow-plan-reasoning-graph-2026-07-13.md` is the superseded v1, kept as history.
+
+**Framework track (2026-07-19):** this repo is now **instance 0** of the reasoning-graph FRAMEWORK at `/root/projects/reasoning_graph/` — its `Reasoning-Graph-source-of-truth-2026-07-19.ngf.md` is the build contract for the framework/PoC (locked decisions, gate harness, Opus phase plan). This repo stays the append-only lab: its DB/logs are written only through the framework's `migrate`/`loop freeze`/`loop retire` commands; `query.py`, `systems/nai/**` and the 8 top-level rule files are hash-frozen by the framework's gate G0.
+
+Both are living docs with an update protocol (see the datapacket's §6): append to §5 dated/newest-on-top, never delete a flag (strike it through instead), only resolve §4 open calls when the user explicitly declares them.
+
+## The P0–P5 pipeline (what the folders feed into)
+
+1. **P0** — `claude-code-tools/*.json` (10 structured tool-schema files: `tool_id`, `category`, `workflow_ids`, `prerequisites`, `use_cases`, `examples`) load directly as graph nodes + structural edges (`Category–contains→Tool–has_param→Param`). Already extracted; this step is "load JSON → nodes," not parsing.
+2. **P0.5** ("the meat") — `synthesis-rules/*.md` (8 rule files) + `synthesis-rules/insights/*.md` (15 meta/handbook files) are **pre-frozen reasoning edges**: each rule declares `id · category · confidence (a trust weight, e.g. 0.95) · statement · validation formula · Related Rules` (explicit typed edges to other rules/tools). These become the graph's reasoning layer.
+3. **P1** — a traversal resolver over the combined graph, using `networkx` (`shortest_path` = multi-hop composed rules, `pagerank` = importance, degree-role, `simple_cycles` = contradiction detection).
+4. **P2** — the query unit (typed queries like "which tools compose to fix a bug found via search?").
+5. **P3/P4/P5** (not yet started) — mint new edges the frozen layer doesn't cover, verify (pre-seeded by `COMPOSITION-VALIDATOR`'s rules + each rule's Validation Formula), freeze, and measure the *frontier-call rate* falling over time as the success metric. The loop's mechanics are now specified, not just sketched: `Distillation-workflow-formalization-2026-07-14.ngf.md` is the operating recipe (domain = reasoning chains — a frontier call is the unit, minting is recurrence-gated, matchers are signature/confirm/fix), and `frontier-call-log.ngf.md` is its Phase-A capture log. See the implementation plan's P3/P4/P5 section.
+
+## Folder map (roles, not just contents)
+
+- **`claude-code-tools/`** — P0 raw material. Flat JSON array per file, one tool per entry, schema as described above.
+- **`synthesis-rules/`** — P0.5 raw material. Rule files at the top level, each `## Rule: rule_id` block carries category/confidence/description/rationale/implementation (often with CORRECT vs ANTIPATTERN code snippets).
+  - **`synthesis-rules/insights/`** — the meta layer above the rules: generative-method notes, tool-creation meta-graph, persistence architecture, and three big `handbookN-*.txt` files (tools/capabilities/connections, workflows/patterns, emergent properties/best-practices).
+- **`python/`** — **19 relic scripts (~15.5K LOC).** These are standalone CLI tools carried over from a prior "Synthesis" system (labeled SET-3/4/5/6 toolkits in their docstrings), each independently runnable via `python3 python/<script>.py --help` (all have `argparse` + `if __name__ == "__main__"`). Candidates for reuse in P1/P2 rather than rebuilding from scratch:
+  - `tool_registry_builder.py` — tool definition/registry validation + caching-benefit analysis; closest fit for P0.
+  - `graph_embedder.py`, `tfidf_indexer.py`, `hybrid_predictor.py`, `markov_predictor.py` — the graph/retrieval substrate P1/P2 need (pure-Python networkx-based node embeddings, from-scratch TF-IDF search, first-order Markov next-node prediction, 4-level fallback prediction composing all three). **Verified working** against `kgs/unified-kg.db` (2,086 nodes / 7,163 edges) — `GraphEmbedder` connects and queries cleanly, and `hybrid_predictor.py`'s import of `markov_predictor` resolves now that both files sit in `python/`.
+    - Remaining rough edge: `graph_embedder.py` and `tfidf_indexer.py` still hardcode `DEFAULT_DB = Path(__file__).parent.parent / "flags" / "unified-kg.db"` (and `hybrid_predictor.py`/`markov_predictor.py` default `--db` to the same `flags/...` string) — that folder doesn't exist; the real DB lives in `kgs/`. Always pass `--db kgs/unified-kg.db` (or `kgs/unified-kg-optimized.db`) explicitly rather than relying on the default.
+  - The other 13 scripts (`agent_orchestrator.py`, `ast_generator.py`, `boilerplate_generator.py`, `code_review_generator.py`, `documentation_generator.py`, `embedding_generator_cli.py`, `parser_adapters.py`, `refactoring_analyzer.py`, `scaffold_generator.py`, `tdd_assistant.py`, `template_generator.py`, `universal_parser.py`) are general-purpose codegen/analysis relics not directly on the P0–P5 path; each documents which synthesis rules it applies in its module docstring.
+  - `test_agent_pattern_analyzer.py` is the only test file, for `agent_pattern_analyzer.py` — a hand-rolled runner (no pytest), see Commands below.
+- **`systems/`** — the two old architectures, copied in 2026-07-13 (after the v1 plan). **Each has its own CLAUDE.md + inventory.md — read those, not the source trees, first.**
+  - **`systems/nai/`** — Node AI REPL v2: a working, schema-agnostic KG query engine (IntentGraph 4-weight retrieval, 7 schema profiles, `python3 -m nai` from `systems/`, benchmark verified end-to-end in this checkout). The v2 plan's candidate P1 read side.
+  - **`systems/eco-system/`** — NLKE v2.0: offline-first knowledge ecosystem; its `EcoCorpusKG` + 11 NLKE query primitives are the v2 plan's candidate P2 query shape, and its `ingestors/` are the proven ingestion patterns for P0.5. Two non-integrated backends inside — check its CLAUDE.md before touching. Also contains `extra/node-ai/` — the predecessor system from which this repo's `python/` relics were verified to be byte-identical stripped copies.
+- **`kgs/`** — the real SQLite substrate the graph/retrieval relics above read from: `unified-kg.db` (3.5MB) and `unified-kg-optimized.db` (12.9MB), both with `nodes`/`edges`/`embeddings`/`interaction_log` tables. This is likely the actual P1 store, or close to it — reconcile with the plan's open call #3 (throwaway sqlite vs. the real store) before assuming it's final. Also here (probed 2026-07-13): `claude_kg_truth/claude-code-tools-kg.db` — a pre-existing tool KG (511 nodes/631 edges, reasoning-typed edges, **plus populated NLKE fact-loop tables**: `synthesis_facts`/`fact_validations`/`insights`/`evolution_log`) — and `handbooks-kg.db` (890 nodes, only 98 edges), plus several domain KGs (`gemini-kg/`, `web-components-kg.db`, `python_apps_kg.db`, `code_kg/`) used by nai's benchmark. See the v2 plan's deltas 1–2 and 5 before building anything P0/P0.5/P3-shaped.
+- **`indexes/`** — `by_complexity.md`, `by_domain.md`, `by_pattern.md`: prebuilt groupings. **Provenance/freshness unverified** — they reference file paths (e.g. `interfaces/...json`, `api-features/...json`) from a larger source repo that is not present here, so treat these as relic pointers, not a working index of this repo.
+- **`lowering-ladder/`** — copied-in theory/process docs for a **separate sibling project**, `claude_workload_optimizer` (lives at `/root/projects/claude_workload_optimizer`, not in this repo). This is the "why" for the whole effort: the Lowering Ladder (prose → code → data/declared → precomputed/graph, rung 0 is where this graph sits) and the 5-stage lowering pipeline (ingest → classify → lower → VERIFY → measure). Read `PRIMITIVE-ARCHITECTURE-formalization.ngf.md` (canonical theory) and `SKILL-LOWERING-PIPELINE-SoT.ngf.md` (process) if you need the deeper justification; `00-mental-model.md` through `04-the-estimate-honesty-boundary.md` document that *other* package's own CLI/tests and are not runnable from this repo.
+- **`Distillation-workflow-formalization-2026-07-14.ngf.md`** — a reusable two-phase methodology (Phase A field capture: log expert-judgment work under one stable schema, promote a pattern to a "recurring class" on its 2nd occurrence; Phase B distillation: turn each class into a MATCHER — signature/confirm/fix — grounded in ≥1 real logged instance). Adopted 2026-07-14 by Eyal as the operating recipe for P3–P5, domain = reasoning chains. Its own worked instance (§6) is a different domain (debug-harden NLKE repos → the `nlke-production-auditor` plugin) — read it for the mechanism, not as reasoning-graph-specific content.
+- **`frontier-call-log.ngf.md`** — the Phase-A field-capture log this project's P3 mint step appends to: one entry per frontier call (a P1/P2 traversal miss), stable schema, append-only. Currently empty — P1/P2 aren't wired to the combined store yet.
+- **`reasoning-graph-context-datapacket-2026-07-12.ngf.md`** / **`tomorrow-plan-reasoning-graph-2026-07-13.md`** — see "read these first" above.
+- **`inventory.md`** — a generated, per-file listing (one line per file across all subfolders, with a content-grounded summary). Use it instead of re-reading every file when you just need to know what a specific file contains.
+
+## Commands
+
+There is no repo-wide build/lint/test command — dependencies and entry points are per-script. What exists:
+
+- **Run a relic CLI tool:** `python3 python/<script>.py --help` to see its args (each script is self-contained argparse).
+- **Run the one test file:** `python3 python/test_agent_pattern_analyzer.py` — prints pass/fail per test and a summary line; it is a plain script (asserts + try/except), not pytest.
+- **External deps observed in imports** (no manifest declares them — install ad hoc if a script needs one): `networkx`, `numpy`, `yaml` (optional, guarded by `try/except ImportError` in `universal_parser.py`).
+
+## Working conventions specific to this repo
+
+- **Posture:** the user (Eyal) commands and approves; Claude infers/connects dots and presents points for his gate. Do not silently resolve an "open call" listed in the datapacket's §4 or the plan's "Open calls" section — surface it and wait.
+- Before citing any relic (`python/*.py`, `indexes/*.md`) as working or authoritative, verify it against what's actually in *this* repo — several relics reference files/paths from their original source repo that were not copied over.

@@ -1,0 +1,1829 @@
+=============================================================================
+HANDBOOK 1: CLAUDE CODE TOOLS, CAPABILITIES & THEIR CONNECTIONS
+=============================================================================
+
+A comprehensive guide to Claude Code CLI tools, how they map to Claude API
+capabilities, and the connections that enable powerful workflows.
+
+Version: 1.0
+Date: 2025-10-30
+Source: Real-world usage analysis from KGF and Claude API KG projects
+
+=============================================================================
+TABLE OF CONTENTS
+=============================================================================
+
+PART 1: CORE FILE OPERATION TOOLS
+  1.1 Read Tool
+  1.2 Write Tool
+  1.3 Edit Tool
+  1.4 Glob Tool
+  1.5 Grep Tool
+
+PART 2: EXECUTION & CONTROL TOOLS
+  2.1 Bash Tool
+  2.2 Task Tool (Agent Launcher)
+  2.3 BashOutput Tool
+  2.4 KillShell Tool
+
+PART 3: WEB & DATA TOOLS
+  3.1 WebFetch Tool
+  3.2 WebSearch Tool
+
+PART 4: WORKFLOW MANAGEMENT TOOLS
+  4.1 TodoWrite Tool
+  4.2 SlashCommand Tool
+  4.3 NotebookEdit Tool
+
+PART 5: TOOL → CAPABILITY MAPPING
+  5.1 Implementing RAG with Tools
+  5.2 Implementing Classification with Tools
+  5.3 Implementing Agent Patterns with Tools
+  5.4 Implementing Batch Processing with Tools
+  5.5 Implementing Evaluation with Tools
+
+PART 6: CAPABILITY → TOOL MAPPING
+  6.1 Which Tools Enable Each Capability
+  6.2 Which Tools Enhance Each Technique
+  6.3 Cross-Reference Matrix
+
+=============================================================================
+PART 1: CORE FILE OPERATION TOOLS
+=============================================================================
+
+-----------------------------------------------------------------------------
+1.1 READ TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Read tool loads file contents from the filesystem. It's the primary way
+to consume existing files, documents, and code for analysis or processing.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Read any file from filesystem (requires absolute path)
+- Handle text files, images, PDFs, Jupyter notebooks
+- Pagination support for large files (offset/limit)
+- Line numbers in output (cat -n format)
+- Automatic format detection and processing
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Absolute paths required (relative paths fail)
+✓ Images/PDFs processed natively (multimodal)
+✓ Jupyter notebooks return all cells with outputs
+✓ Lines >2000 chars get truncated
+✓ Must read before Edit/Write on existing files (enforced)
+✓ Returns empty warning if file exists but is empty
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Fast (<2s for normal files)
+Scale: Handles files up to context limits
+Optimal: Files <2000 lines without pagination
+Latency: +500ms for images/PDFs
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ RAG - Read documents to provide retrieval context
+✓ Summarization - Read source material for summarization
+✓ Classification - Read training examples
+✓ PDF Summarization - Direct PDF upload capability
+✓ Contextual Embeddings - Read documents for contextualization
+✓ Text-to-SQL - Read schema information
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Single File Read
+   Read(file_path="/absolute/path/to/file.txt")
+
+2. Paginated Large File Read
+   Read(file_path="/path/to/large.log", offset=1000, limit=500)
+
+3. Parallel Multiple File Read (CRITICAL OPTIMIZATION)
+   [Read multiple files in single message]
+   - 5 files in parallel vs sequential = 5x speedup
+   - Essential for efficient workflows
+
+4. Image/PDF Read
+   Read(file_path="/path/to/document.pdf")
+   - Returns visual + text content
+   - Enables document analysis
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Search → Read → Extract
+  Glob/Grep → locate files → Read → extract data → Write JSON
+  Example: Find notebooks → Read guides → Extract capabilities
+
+Pattern: Speculative Parallel Reads
+  Read multiple potentially useful files in parallel
+  Better to read and not need than to read sequentially
+  Example: Read all related config files at once
+
+Pattern: Validation Reading
+  After Write/Edit → Read to confirm changes
+  Critical for quality assurance
+
+Pattern: Structured Extraction
+  Read → parse structure → extract specific data → format output
+  Example: Read JSON → extract nodes → validate → process
+
+ANTI-PATTERNS
+-------------
+✗ Reading same file repeatedly (use context memory)
+✗ Reading without specific purpose (wastes tokens)
+✗ Reading entire large files without Grep first
+✗ Using relative paths (will fail)
+✗ Not using parallel reads when possible (slower)
+
+CONNECTS TO
+-----------
+Tools: Often paired with Grep (locate content) or Glob (find files)
+Capabilities: Foundation for RAG, Summarization, Classification
+Techniques: Enables Contextual Embeddings, Citations
+Workflows: First step in most analysis workflows
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Read 30+ files across capabilities, agents, skills, techniques
+- Read schema documents for understanding structure
+- Read database.py to understand API structure
+- Read READMEs for overview information
+- Used parallel reads extensively (5-10 files per message)
+Total: ~15 Read tool invocations, 30+ files processed
+
+-----------------------------------------------------------------------------
+1.2 WRITE TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Write tool creates new files or overwrites existing files. It's the
+primary output mechanism for generating code, documentation, data files,
+and any persistent results.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Create new files with any content
+- Overwrite existing files
+- Must Read before Write on existing files (enforced)
+- Returns confirmation with file path
+- Handles any string content (JSON, code, text, etc.)
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Overwrites existing files (destructive - be careful)
+✓ Read enforcement prevents accidental overwrites
+✓ Creates parent directories? (needs validation)
+✓ Immediate write (no streaming)
+✓ Content parameter accepts unlimited length (context permitting)
+✓ No built-in formatting (pass formatted strings)
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Fast (<1s regardless of size)
+Scale: Limited by context window for content parameter
+Optimal: Any size file that fits in context
+Latency: Minimal, near-instant response
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Skills - Create documents (conceptual xlsx/pptx/pdf creation)
+✓ Code Generation - Write complete source files
+✓ Batch Processing - Write results to output files
+✓ Building Evals - Create test scripts and eval files
+✓ JSON Mode - Write structured JSON output
+✓ Metaprompt - Write generated prompt templates
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Create Structured Data
+   Write JSON files from extracted/processed data
+   Example: Write(file_path="/path/data.json", content=json_string)
+
+2. Generate Documentation
+   Write comprehensive docs from analysis
+   Example: Write(file_path="/path/README.md", content=markdown)
+
+3. Create Executable Scripts
+   Write Python/Bash scripts for automation
+   Example: Write(file_path="/path/script.py", content=python_code)
+
+4. Progressive Assembly
+   Write partial results → continue analysis → Write more
+   Better than single massive file
+   Example: Write nodes → Write edges → Combine later
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Extract → Structure → Write
+  Analyze content → Structure as JSON/code → Write file
+  Essential for data processing workflows
+
+Pattern: Multiple Writes in Sequence
+  Write separate files → combine with tools later
+  Example: Write 5 node files → combine with jq → final graph
+
+Pattern: Write → Validate → Fix Loop
+  Write → Test with Bash → Fix issues → Write again
+  Quality assurance through iteration
+
+Pattern: Template + Data → Write
+  Generate content from template + data → Write output
+  Enables repeatable generation patterns
+
+ANTI-PATTERNS
+-------------
+✗ Writing without validation (test generated code first)
+✗ Writing huge files in one call (split if needed)
+✗ Overwriting without Read on existing files (loses data)
+✗ Not confirming write success (check response)
+✗ Writing without clear purpose (creates clutter)
+
+CONNECTS TO
+-----------
+Tools: Follows Read (for validation), paired with Bash (for testing)
+Capabilities: Output mechanism for all generation capabilities
+Techniques: Implements JSON Mode, enables Batch Processing results
+Workflows: Final step in extraction/generation workflows
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Wrote 5 separate node definition files (JSON)
+- Wrote relationships file (JSON)
+- Wrote migration script (Python, 350 lines)
+- Wrote documentation files (Markdown, comprehensive)
+- Wrote analysis documents for reference
+Total: ~15 Write operations creating ~100KB of content
+
+-----------------------------------------------------------------------------
+1.3 EDIT TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Edit tool performs exact string replacement in existing files. It's the
+surgical tool for targeted modifications without rewriting entire files.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Exact string replacement in files
+- Replace all occurrences with replace_all flag
+- Must Read file first (enforced by system)
+- Preserves file structure and formatting
+- Fails if old_string not unique (safety feature)
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Requires exact match (whitespace-sensitive)
+✓ Preserves indentation after line number prefix
+✓ Read enforcement prevents blind edits
+✓ Graceful failures with clear error messages
+✓ Can chain multiple edits in sequence
+✓ replace_all for variable renaming
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Fast (<1s for small changes)
+Scale: Efficient even for large files (only changes delta)
+Optimal: Small, targeted changes
+Latency: Minimal, near-instant
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Evaluator-Optimizer Pattern - Edit → validate → edit loop
+✓ Iterative Refinement - Repeated improvements
+✓ Code Refactoring - Systematic changes
+✓ Configuration Updates - Modify settings
+✓ Bug Fixing - Targeted corrections
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Configuration Update
+   Edit .env files to change settings
+   Example: Edit(file_path=".env",
+               old_string="DATABASE=old.db",
+               new_string="DATABASE=new.db")
+
+2. Targeted Function Fix
+   Edit specific function without touching rest of file
+   Example: Fix bug in single function definition
+
+3. Iterative Refinement Loop
+   Edit → Test → Edit → Test until correct
+   Example: Refine algorithm through iterations
+
+4. Batch Variable Rename
+   Use replace_all to rename throughout file
+   Example: Rename variable across all occurrences
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Read → Edit → Validate
+  Read file → Make changes → Test with Bash → Confirm
+  Essential for quality assurance
+
+Pattern: Multiple Sequential Edits
+  Edit section 1 → Edit section 2 → Edit section 3
+  Systematic refactoring approach
+
+Pattern: Edit → Read → Confirm
+  Edit → Read back changes → Verify correctness
+  Validation through re-reading
+
+Pattern: Evaluator-Optimizer Loop
+  Edit → Test → Evaluate → Edit based on feedback → Repeat
+  Implements evaluator-optimizer agent pattern
+
+ANTI-PATTERNS
+-------------
+✗ Editing without reading first (impossible, enforced)
+✗ Non-unique old_string (causes edit to fail)
+✗ Including line numbers in old_string (breaks matching)
+✗ Making changes without testing (risky)
+✗ Editing when Write would be clearer (use right tool)
+
+CONNECTS TO
+-----------
+Tools: Always preceded by Read, often followed by Bash (test)
+Capabilities: Core of Evaluator-Optimizer pattern
+Techniques: Enables Iterative Refinement workflows
+Workflows: Central to refactoring and improvement loops
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Edited backend/.env to point to new database
+- Changed DATABASE_PATH from gemini to claude db
+- Would use extensively in code refactoring projects
+Total: Minimal use in data extraction project (more for code work)
+
+-----------------------------------------------------------------------------
+1.4 GLOB TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Glob tool performs pattern-based file searches. It's the fastest way to
+discover and enumerate files matching specific patterns.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Fast pattern-based file search
+- Works with any codebase size
+- Standard glob patterns (**, *, ?, etc.)
+- Returns paths sorted by modification time
+- Optional path parameter to narrow search
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Extremely fast (<100ms typically)
+✓ Returns empty list if no matches (not error)
+✓ Can search within specific subdirectories
+✓ Scales well even with large codebases
+✓ Modification time sorting is default
+✓ Returns absolute paths
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Extremely fast (<100ms)
+Scale: Handles codebases of any size
+Optimal: Any pattern complexity
+Latency: Near-instant response
+Winner: Fastest tool available
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ RAG - Find relevant documents for retrieval
+✓ Code Analysis - Locate files for review
+✓ Batch Processing - Find all input files
+✓ Classification - Find example files
+✓ Summarization - Locate documents to summarize
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Find Files by Extension
+   Glob(pattern="**/*.ipynb")
+   Returns: All Jupyter notebooks recursively
+
+2. Find in Specific Directory
+   Glob(pattern="**/*.py", path="/project/src")
+   Returns: All Python files in src/
+
+3. Multiple Patterns in Parallel
+   [Glob for .py, Glob for .md, Glob for .json]
+   Parallel discovery of different file types
+
+4. Discovery Phase
+   Start project by finding all relevant files
+   Example: Glob notebooks → Glob configs → Glob docs
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Glob → Read Pipeline
+  Glob finds files → Read each file → Process content
+  Foundation of file processing workflows
+
+Pattern: Structure Discovery
+  Use Glob patterns to understand codebase organization
+  Example: Glob("**/test_*.py") reveals test structure
+
+Pattern: Parallel Discovery
+  Multiple Glob calls in one message for different file types
+  Faster than sequential discovery
+
+Pattern: Verification Before Operations
+  Glob to check if files exist before complex operations
+  Example: Glob → confirm files present → proceed
+
+ANTI-PATTERNS
+-------------
+✗ Using when exact path known (just use Read)
+✗ Too broad patterns returning thousands of files
+✗ Using Glob when Grep is needed (wrong tool)
+✗ Sequential Glob when parallel possible (slower)
+
+CONNECTS TO
+-----------
+Tools: Always followed by Read (or Grep for further filtering)
+Capabilities: Enables RAG document discovery, Batch Processing
+Techniques: Foundation for systematic file processing
+Workflows: First step in discovery and enumeration workflows
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Found all .ipynb files in misc/ folder (13 files)
+- Located .md files in capabilities/ (5 READMEs)
+- Found Python scripts in backend/ (3 files)
+- Discovered migration scripts (none found, informed approach)
+Total: ~5 Glob operations finding ~50 files across project
+
+-----------------------------------------------------------------------------
+1.5 GREP TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Grep tool performs content search using regex patterns. It's built on
+ripgrep (not grep) for high-performance text search across files.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Full regex syntax support
+- Three output modes: content, files_with_matches, count
+- Filter by file type or glob pattern
+- Context lines available (-A, -B, -C)
+- Multiline mode for cross-line patterns
+- Case-insensitive search option
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Uses ripgrep (faster than grep)
+✓ Respects .gitignore by default
+✓ Output limited to prevent overwhelming responses
+✓ Can show line numbers with -n flag
+✓ head_limit controls output truncation
+✓ Pattern syntax is ripgrep (literal braces need escaping)
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Very fast (typically <1s)
+Scale: Handles large codebases efficiently
+Optimal: Specific patterns in large file sets
+Latency: Minimal even on large searches
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ RAG - Semantic search within documents
+✓ Code Analysis - Find patterns and definitions
+✓ Classification - Locate examples matching criteria
+✓ Citations - Find specific text for sourcing
+✓ Text-to-SQL - Find schema definitions
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Find Files Containing Pattern
+   Grep(pattern="def.*function_name", output_mode="files_with_matches")
+   Returns: Files containing function definitions
+
+2. Show Matching Lines
+   Grep(pattern="TODO", output_mode="content", -n=True)
+   Returns: Lines with TODO comments and line numbers
+
+3. Count Occurrences
+   Grep(pattern="import.*pandas", output_mode="count")
+   Returns: How many times pandas is imported
+
+4. Search with Context
+   Grep(pattern="error", output_mode="content", -C=3)
+   Returns: Error lines with 3 lines before/after
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Grep → Read
+  Grep finds files → Read specific files for details
+  Faster than reading all files first
+
+Pattern: Pattern Discovery
+  Grep for patterns to understand codebase conventions
+  Example: Grep("class.*:") finds all class definitions
+
+Pattern: Validation Grep
+  Grep to verify expected content exists
+  Example: Grep for function to confirm implementation
+
+Pattern: Multi-Stage Filtering
+  Grep broad pattern → Grep narrower pattern in results
+  Progressive refinement of search
+
+ANTI-PATTERNS
+-------------
+✗ Grepping when Glob sufficient (wrong tool)
+✗ Not using type/glob parameters (searches too much)
+✗ Overly complex regex when simple string works
+✗ Using Bash grep instead of Grep tool (slower, less integrated)
+
+CONNECTS TO
+-----------
+Tools: Works with Glob (narrow files first), feeds into Read
+Capabilities: Enables RAG retrieval, Citation sourcing
+Techniques: Foundation for systematic code analysis
+Workflows: Search and locate step in processing pipelines
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Searched for "migrate" in backend/ (found none)
+- Searched for "import" scripts (found none, informed migration approach)
+- Would use extensively in code analysis projects
+- Validated absence of existing migration infrastructure
+Total: Minimal use in this project (mainly Glob-based discovery)
+
+=============================================================================
+PART 2: EXECUTION & CONTROL TOOLS
+=============================================================================
+
+-----------------------------------------------------------------------------
+2.1 BASH TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Bash tool executes shell commands in a persistent session. It's the
+bridge to the system, enabling command execution, testing, git operations,
+and data processing.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Execute shell commands in persistent session
+- Default 2-minute timeout (configurable to 10 min)
+- Background execution with run_in_background flag
+- State maintained across calls (cd, env vars persist)
+- Git operations with safety protocols
+- Output truncated at 30,000 chars
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Persistent shell session (state maintained)
+✓ Proper quoting essential for paths with spaces
+✓ Can chain commands with && (sequential) or ; (independent)
+✓ Background mode for long operations
+✓ Git has special safety protocols (no --force by default)
+✓ Can monitor background with BashOutput tool
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Varies by command (instant to minutes)
+Scale: Can handle large data processing
+Optimal: Short commands or background long ones
+Timeout: Default 2 min, max 10 min
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Batch Processing - Run scripts on multiple inputs
+✓ Agent Patterns - Execute worker tasks
+✓ Building Evals - Run test suites
+✓ Text-to-SQL - Execute sqlite3 commands
+✓ Skills - Run data processing pipelines
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Command Chaining
+   Bash(command="mkdir output && cp file.txt output/")
+   Sequential operations with failure propagation
+
+2. Parallel Execution
+   [Bash(cmd1), Bash(cmd2), Bash(cmd3)] in one message
+   Independent commands run in parallel
+
+3. Background Long Operations
+   Bash(command="python train.py", run_in_background=True)
+   Continue working while command runs
+
+4. Data Processing with jq
+   Bash(command="jq '.nodes[] | select(.type==\"tool\")' data.json")
+   JSON processing directly in shell
+
+5. Git Workflows
+   Bash(command="git add . && git commit -m 'message' && git push")
+   Chained git operations (special safety features)
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Write → Bash Test → Edit Loop
+  Write code → Test with Bash → Fix with Edit → Repeat
+  Quality assurance through testing
+
+Pattern: Data Pipeline Processing
+  Bash with pipes: command1 | command2 | command3
+  Stream processing for efficient data transformation
+
+Pattern: Validation Bash
+  After Write/Edit → Bash to test → Confirm working
+  Example: Bash("python -m pytest test_file.py")
+
+Pattern: Background + Monitor + Continue
+  Bash background → BashOutput to check → Continue work
+  True parallelism enabling complex workflows
+
+ANTI-PATTERNS
+-------------
+✗ Using Bash for file operations (use Read/Write/Edit)
+✗ Using Bash echo for communication (output text directly)
+✗ Interactive commands with -i flag (not supported)
+✗ Forgetting quotes on paths with spaces (fails)
+✗ Not using && for sequential deps (; continues on error)
+
+CONNECTS TO
+-----------
+Tools: Follows Write (test code), uses BashOutput (monitor)
+Capabilities: Executes all agent patterns, runs eval suites
+Techniques: Implements Batch Processing, SQL Queries
+Workflows: Testing, validation, data processing hub
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Combined JSON files with jq (data merging)
+- Created SQLite database with migration script
+- Ran migration script: python3 migrate_claude_api_kg.py
+- Tested backend API with curl commands
+- Started/stopped backend server processes
+- Validated database with sqlite3 queries
+Total: ~15 Bash operations for data processing and testing
+
+-----------------------------------------------------------------------------
+2.2 TASK TOOL (AGENT LAUNCHER)
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The Task tool launches specialized sub-agents for complex, multi-step work.
+It's the implementation of the Orchestrator-Workers agent pattern.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Launch general-purpose or specialized agents
+- Stateless (each invocation independent)
+- Returns single final message (no back-and-forth)
+- Can run multiple agents in parallel
+- Agents have access to all tools
+- Requires detailed autonomous instructions
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Each agent invocation is completely stateless
+✓ Must provide comprehensive instructions (no clarification possible)
+✓ Can launch multiple agents in one message (parallel work)
+✓ Agent types: general-purpose, statusline-setup, output-style-setup
+✓ Returns when agent completes (no streaming)
+✓ Higher latency due to agent initialization
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Slower (agent startup overhead)
+Scale: Best for complex multi-step tasks
+Optimal: Autonomous work requiring multiple tools
+Latency: Higher but enables parallel work
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Orchestrator-Workers - Direct pattern implementation
+✓ Parallelization - Multiple agents at once
+✓ Agent-based Workflows - Complex autonomous tasks
+✓ Routing - Specialized agents for different domains
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Complex Research Task
+   Task(subagent_type="general-purpose",
+        prompt="Research and analyze all files about X, create summary")
+   Autonomous multi-step work
+
+2. Parallel Research Agents
+   [Task for topic A, Task for topic B, Task for topic C]
+   Parallel independent research
+
+3. Background Analysis
+   Task in background → Continue working → Retrieve results later
+   Asynchronous complex work
+
+4. Specialized Task Delegation
+   Task(subagent_type="specialized-agent",
+        prompt="Configure specific subsystem")
+   Domain-specific work
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Orchestrator Delegates to Workers
+  Analyze task → Break into subtasks → Launch Task agents → Synthesize
+  Direct implementation of orchestrator-workers pattern
+
+Pattern: Parallel Independent Research
+  Multiple Task agents researching different areas in parallel
+  Speeds up multi-faceted research
+
+Pattern: Continue While Agent Works
+  Launch Task → Continue with other work → Retrieve results when done
+  True parallelism for productivity
+
+Pattern: Agent for Complex File Operations
+  Task agent handles complex multi-file analysis
+  Offload heavy lifting to specialized agent
+
+ANTI-PATTERNS
+-------------
+✗ Using for simple file reads (overkill)
+✗ Using when you need back-and-forth (stateless limitation)
+✗ Not providing comprehensive instructions (agent can't ask)
+✗ Using for trivial tasks (overhead not justified)
+✗ Forgetting agents are stateless (can't maintain conversation)
+
+CONNECTS TO
+-----------
+Tools: Agents use all tools (Read, Write, Bash, etc.)
+Capabilities: Direct implementation of agent patterns
+Techniques: Enables complex workflows and parallelization
+Workflows: Foundation for orchestrator-based approaches
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Not used in data extraction project (direct approach faster)
+- Would use for complex analysis or parallel research
+- Ideal for: Multi-domain research, parallel extraction, autonomous analysis
+Total: 0 usage (project didn't require agent-level complexity)
+
+-----------------------------------------------------------------------------
+2.3 BASHOUTPUT TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The BashOutput tool retrieves output from background bash shells. It enables
+monitoring of long-running commands without blocking.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Retrieve output from running/completed shells
+- Always returns only new output since last check
+- Returns stdout and stderr with shell status
+- Supports optional regex filtering
+- Shell IDs from Bash tool with run_in_background
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Only new output returned (streaming-style)
+✓ Can monitor multiple shells independently
+✓ Filter parameter for targeted monitoring
+✓ Returns status: running, killed, completed
+✓ Use with background Bash for true parallelism
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Fast (just retrieves buffered output)
+Scale: Handles large output streams
+Optimal: Monitoring long-running commands
+Latency: Minimal for output retrieval
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Batch Processing - Monitor batch job progress
+✓ Agent Patterns - Monitor worker task execution
+✓ Parallel Workflows - Check multiple background tasks
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Monitor Background Process
+   Bash(cmd, run_in_background=True) → get shell_id
+   BashOutput(bash_id=shell_id) → check progress
+
+2. Filter Specific Output
+   BashOutput(bash_id=shell_id, filter="ERROR|WARNING")
+   Only see error/warning lines
+
+3. Polling Loop Pattern
+   Check BashOutput periodically while doing other work
+   True asynchronous monitoring
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Background + Monitor + Continue
+  Start background Bash → Monitor with BashOutput → Continue work
+  Enables true parallelism
+
+Pattern: Multi-Task Monitoring
+  Multiple background Bash → Check each with BashOutput
+  Coordinate multiple parallel operations
+
+ANTI-PATTERNS
+-------------
+✗ Monitoring short commands (use synchronous Bash)
+✗ Not checking output until completion (loses monitoring benefit)
+
+CONNECTS TO
+-----------
+Tools: Always used with Bash (run_in_background mode)
+Capabilities: Enables parallel agent pattern execution
+Workflows: Foundation for asynchronous operations
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Monitored backend server startup
+- Checked running processes
+- Would use more for long data processing
+Total: Minimal use (most operations were fast enough for sync)
+
+-----------------------------------------------------------------------------
+2.4 KILLSHELL TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The KillShell tool terminates running background bash shells. It's the
+cleanup mechanism for background operations.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Kill background shells by ID
+- Returns success/failure status
+- Use when background task no longer needed
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Clean termination of background processes
+✓ Returns error if shell not running
+✓ Necessary for cleanup of long-running tasks
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Instant
+Scale: N/A (single shell termination)
+Optimal: Any background shell cleanup
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Resource Management for parallel workflows
+✓ Cleanup for agent pattern implementations
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Kill Completed Background Task
+   KillShell(shell_id=shell_id)
+   Clean up after task finishes
+
+2. Cancel Long-Running Operation
+   KillShell(shell_id=shell_id)
+   Stop task no longer needed
+
+ANTI-PATTERNS
+-------------
+✗ Killing shells that aren't long-running (use sync Bash)
+
+CONNECTS TO
+-----------
+Tools: Used with Bash (background mode) and BashOutput
+Capabilities: Resource management for parallel patterns
+Workflows: Cleanup step in async workflows
+
+=============================================================================
+PART 3: WEB & DATA TOOLS
+=============================================================================
+
+-----------------------------------------------------------------------------
+3.1 WEBFETCH TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The WebFetch tool fetches web content and processes it with AI. It converts
+HTML to markdown and extracts information based on your prompt.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Fetch content from URLs
+- Convert HTML to markdown
+- Process with AI model based on prompt
+- 15-minute cache for repeated access
+- Handles redirects (returns redirect info)
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Requires prompt describing what to extract
+✓ Cache speeds up repeated access (15 min TTL)
+✓ Redirect detection (tells you when redirected)
+✓ HTTP auto-upgraded to HTTPS
+✓ Markdown conversion automatic
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Moderate (fetch + process)
+Scale: Single URL per call
+Optimal: Documentation and reference pages
+Latency: Network + processing time, cache helps
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Web Scraping - Implementation of technique
+✓ RAG with Web Sources - Web content retrieval
+✓ Research Workflows - External knowledge access
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Fetch Documentation
+   WebFetch(url="https://docs.example.com",
+           prompt="Extract API endpoints and parameters")
+
+2. Research Reference Material
+   WebFetch(url="https://paper.com",
+           prompt="Summarize methodology section")
+
+3. Cached Repeated Access
+   Same URL within 15 min uses cache (faster)
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: External Documentation Research
+  WebFetch docs → Extract patterns → Apply locally
+  Supplement local knowledge with external sources
+
+Pattern: Validation Against Published Info
+  WebFetch authoritative source → Compare with local understanding
+  Verify assumptions against published material
+
+ANTI-PATTERNS
+-------------
+✗ Fetching when local docs exist (use Read)
+✗ Vague prompts (extract unclear what to extract)
+✗ Not leveraging cache (fetch same URL repeatedly)
+
+CONNECTS TO
+-----------
+Tools: Alternative to Read for web-based content
+Capabilities: Enables RAG with web sources, Web Scraping technique
+Workflows: Research and external knowledge workflows
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Not used (local documentation was sufficient)
+- Would use for: External API docs, reference papers, validation
+Total: 0 usage (project had complete local sources)
+
+-----------------------------------------------------------------------------
+3.2 WEBSEARCH TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The WebSearch tool searches the web and returns formatted search results.
+It enables access to current information beyond training data.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Search the web with queries
+- Returns search result blocks
+- Domain filtering (allowed/blocked)
+- US-only availability
+- Considers "Today's date" in environment
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Searches performed within single API call
+✓ Results formatted as structured blocks
+✓ Can filter by domains
+✓ Date-aware (uses current date from environment)
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Moderate (search + processing)
+Scale: Multiple results per query
+Optimal: Current information needs
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Research with Current Information
+✓ Validation Against Latest Sources
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Current Information Search
+   WebSearch(query="latest Python 3.12 features")
+
+2. Domain-Filtered Search
+   WebSearch(query="API docs",
+            allowed_domains=["docs.python.org"])
+
+ANTI-PATTERNS
+-------------
+✗ Searching for information in local docs
+✗ Not being specific in queries
+
+CONNECTS TO
+-----------
+Tools: Complements WebFetch for research
+Capabilities: Enables current information access
+Workflows: Research and validation workflows
+
+=============================================================================
+PART 4: WORKFLOW MANAGEMENT TOOLS
+=============================================================================
+
+-----------------------------------------------------------------------------
+4.1 TODOWRITE TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The TodoWrite tool manages task lists for tracking progress through complex
+multi-step workflows. Essential for maintaining focus and communicating
+progress.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Track tasks with status (pending, in_progress, completed)
+- Requires content and activeForm for each task
+- Updates visible in UI to user
+- System reminds when not used recently
+- Helps maintain context across sessions
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Visual progress indicator for user
+✓ Exactly ONE task should be in_progress at a time
+✓ Mark completed immediately after finishing (not batched)
+✓ activeForm is present continuous (e.g., "Extracting data")
+✓ System prompts if not used on multi-step projects
+✓ Essential for projects >3 steps
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Instant (negligible overhead)
+Scale: Handles dozens of tasks comfortably
+Optimal: 5-15 tasks for complex projects
+Impact: Improves workflow clarity significantly
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Workflow Management - Track multi-step processes
+✓ Evaluator-Optimizer - Track iteration progress
+✓ Agent Patterns - Orchestrator tracking subtasks
+✓ Project Execution - Milestone tracking
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Phase Tracking
+   Mark major project phases (Phase 1, Phase 2, etc.)
+   Update as each phase completes
+
+2. Milestone Communication
+   Show user progress through long operations
+   Builds confidence in ongoing work
+
+3. Context Preservation
+   Resume work after interruptions
+   Clear status of what's done vs pending
+
+4. Complex Project Organization
+   Break down large project into trackable steps
+   Maintain focus through systematic execution
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Create at Project Start
+  Define all major steps upfront → Track through completion
+  Example: 10 phases for KG extraction project
+
+Pattern: Update Immediately
+  Complete task → Mark complete → Update next in_progress
+  Real-time progress tracking
+
+Pattern: One In-Progress Rule
+  Only one task in_progress at a time
+  Maintains focus and clarity
+
+Pattern: Session Continuity
+  Todo list survives session boundaries
+  Resume work seamlessly
+
+ANTI-PATTERNS
+-------------
+✗ Using for trivial 1-2 step tasks (overhead not justified)
+✗ Not updating status (loses tracking value)
+✗ Too granular tasks (overwhelming, loses big picture)
+✗ Batching completions (reduces real-time value)
+✗ Multiple in_progress tasks (confusing)
+
+CONNECTS TO
+-----------
+Tools: Meta-tool that organizes use of other tools
+Capabilities: Enables all multi-step workflows
+Techniques: Essential for complex pattern implementation
+Workflows: Foundation for project execution
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Tracked 10 phases from schema to visualization
+- Updated after each phase completion
+- Maintained focus across 4-hour project
+- Essential for showing progress to user
+- One in_progress task at a time (strict adherence)
+Total: ~15 updates across project lifecycle
+
+-----------------------------------------------------------------------------
+4.2 SLASHCOMMAND TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The SlashCommand tool executes custom commands defined in .claude/commands/.
+It enables project-specific workflow shortcuts.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Execute commands from .claude/commands/ directory
+- Expands to full prompt defined in command file
+- Sequential execution for multiple commands
+- Don't invoke if command already running
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Commands defined as markdown files
+✓ Can include variables and templates
+✓ Project-specific workflow automation
+✓ Executes once per invocation
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Depends on command implementation
+Scale: Any complexity command
+Optimal: Repeated project-specific workflows
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Workflow Automation - Custom shortcuts
+✓ Project Patterns - Repeated operations
+✓ Domain-Specific Commands - Specialized workflows
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Project Workflow Shortcuts
+   /build → runs complete build process
+   /test → runs test suite
+   /deploy → deployment workflow
+
+2. Code Generation Commands
+   /generate-model → creates boilerplate
+   /scaffold-api → API endpoint generation
+
+3. Analysis Commands
+   /analyze-deps → dependency analysis
+   /check-coverage → test coverage report
+
+EMERGENT WORKFLOW PATTERNS
+--------------------------
+Pattern: Repeated Operations as Commands
+  Identify repeated workflow → Create slash command → Reuse
+  Example: /migrate-kg for KG migration workflow
+
+Pattern: Project Onboarding
+  New project member → use slash commands → productive quickly
+  Captures institutional knowledge
+
+ANTI-PATTERNS
+-------------
+✗ Creating commands for one-off operations
+✗ Not documenting command behavior
+✗ Overly complex commands (should decompose)
+
+CONNECTS TO
+-----------
+Tools: Can invoke any tool in command implementation
+Capabilities: Enables workflow automation
+Workflows: Shortcuts for repeated patterns
+
+REAL-WORLD USAGE (FROM KGF PROJECT)
+-----------------------------------
+- Not used (no custom commands defined in this project)
+- Would use for: Repeated KG operations, common workflows
+- Example potential: /extract-kg, /migrate-db, /validate-graph
+Total: 0 usage (could add for future KG projects)
+
+-----------------------------------------------------------------------------
+4.3 NOTEBOOKEDIT TOOL
+-----------------------------------------------------------------------------
+
+OVERVIEW
+--------
+The NotebookEdit tool edits Jupyter notebook cells (.ipynb files). It
+enables programmatic modification of interactive notebooks.
+
+OFFICIAL CAPABILITIES
+---------------------
+- Edit specific cells in Jupyter notebooks
+- Three modes: replace, insert, delete
+- Specify cell by cell_id or index
+- Can change cell type (code/markdown)
+- Handles both source and metadata
+
+DISCOVERED PROPERTIES
+---------------------
+✓ Notebooks are JSON with cell structure
+✓ Cell IDs persistent across edits
+✓ Insert mode places after specified cell
+✓ Delete mode removes entire cell
+✓ Replace mode updates cell content
+
+PERFORMANCE CHARACTERISTICS
+---------------------------
+Speed: Fast (JSON manipulation)
+Scale: Any notebook size
+Optimal: Targeted cell modifications
+
+ENABLES CLAUDE API CAPABILITIES
+-------------------------------
+✓ Notebook-based Workflows
+✓ Documentation Generation in notebooks
+✓ Code Example Creation
+
+TYPICAL USAGE PATTERNS
+----------------------
+1. Update Code Cell
+   NotebookEdit(notebook_path="/path/nb.ipynb",
+               cell_id="cell-5",
+               new_source="updated code")
+
+2. Insert New Cell
+   NotebookEdit(notebook_path="/path/nb.ipynb",
+               cell_id="after-this",
+               edit_mode="insert",
+               cell_type="markdown",
+               new_source="# New Section")
+
+3. Delete Cell
+   NotebookEdit(notebook_path="/path/nb.ipynb",
+               cell_id="cell-to-remove",
+               edit_mode="delete")
+
+ANTI-PATTERNS
+-------------
+✗ Editing when creating new notebook is clearer
+✗ Complex multi-cell operations (use Write for new notebooks)
+
+CONNECTS TO
+-----------
+Tools: Specialized version of Edit for notebooks
+Capabilities: Enables notebook-based documentation
+Workflows: Notebook creation and maintenance
+
+=============================================================================
+PART 5: TOOL → CAPABILITY MAPPING
+=============================================================================
+
+This section maps Claude Code tools to Claude API capabilities, showing how
+tools implement or enable API features.
+
+-----------------------------------------------------------------------------
+5.1 IMPLEMENTING RAG WITH TOOLS
+-----------------------------------------------------------------------------
+
+RAG (Retrieval Augmented Generation) enables Claude to leverage documents
+as context. Here's how Claude Code tools implement RAG:
+
+CORE RAG WORKFLOW
+-----------------
+1. Find Relevant Documents
+   Tools: Glob (discover files), Grep (search content)
+   Pattern: Glob("**/*.md") → Grep("keyword") → identify relevant
+
+2. Read Document Contents
+   Tool: Read
+   Pattern: Read multiple relevant files in parallel
+
+3. Assemble Context
+   Tool: (manual in Claude Code - provide context in prompt)
+   Pattern: Organize read content as context for generation
+
+4. Generate with Context
+   Tool: (Claude's generation with assembled context)
+   Result: Context-aware response using retrieved documents
+
+5. Write Results
+   Tool: Write
+   Pattern: Write(results_with_citations.json)
+
+EMERGENT RAG PATTERNS WITH TOOLS
+--------------------------------
+Pattern: Glob → Grep → Read → Generate
+  Discover → Search → Retrieve → Use
+  Complete RAG pipeline using tools
+
+Pattern: Parallel Document Reading
+  Read multiple docs in parallel for efficiency
+  Speeds up context assembly significantly
+
+Pattern: Incremental Context Building
+  Read document 1 → Generate partial → Read document 2 → Refine
+  Iterative RAG for large document sets
+
+ENABLES CLAUDE API TECHNIQUES
+-----------------------------
+✓ Prompt Caching - Cache frequently used documents with Read
+✓ Citations - Read provides source for citation
+✓ Contextual Embeddings - Read + context generation pattern
+
+REAL-WORLD EXAMPLE (FROM KGF)
+-----------------------------
+- Glob("**/*.ipynb") → Found all notebook guides
+- Read 5 notebooks in parallel → Got capability descriptions
+- Assembled context → Extracted structured data
+- Write JSON nodes → Persistent results
+Complete RAG workflow for knowledge extraction
+
+-----------------------------------------------------------------------------
+5.2 IMPLEMENTING CLASSIFICATION WITH TOOLS
+-----------------------------------------------------------------------------
+
+Classification categorizes content using Claude. Tools enable systematic
+classification workflows.
+
+CORE CLASSIFICATION WORKFLOW
+----------------------------
+1. Load Training Examples
+   Tool: Read
+   Pattern: Read(examples.json) → Get labeled examples
+
+2. Load Items to Classify
+   Tool: Read or Glob → Read
+   Pattern: Find items → Read each → Classify
+
+3. Classify with Few-Shot Examples
+   Tool: (Claude classification with examples)
+   Pattern: Provide examples + item → Get category
+
+4. Store Classification Results
+   Tool: Write
+   Pattern: Write(classifications.json)
+
+5. Evaluate Classifications (Optional)
+   Tool: Bash
+   Pattern: Bash("python evaluate.py classifications.json")
+
+EMERGENT CLASSIFICATION PATTERNS
+--------------------------------
+Pattern: Batch Classification
+  Read all items → Classify each → Write results
+  Systematic classification of entire datasets
+
+Pattern: Classification with Validation
+  Classify → Bash(test) → Review low-confidence → Re-classify
+  Quality assurance through validation
+
+Pattern: Iterative Refinement
+  Classify → Evaluate → Add examples → Re-classify
+  Evaluator-optimizer pattern for classification
+
+ENABLES CLAUDE API TECHNIQUES
+-----------------------------
+✓ Building Evals - Bash to run classification evaluation
+✓ Few-Shot Learning - Read provides training examples
+✓ JSON Mode - Write structured classification output
+
+REAL-WORLD EXAMPLE
+------------------
+- Read capability READMEs → Classify by complexity
+- Read technique descriptions → Classify by category
+- Write structured nodes with classifications
+Tool-enabled systematic classification
+
+-----------------------------------------------------------------------------
+5.3 IMPLEMENTING AGENT PATTERNS WITH TOOLS
+-----------------------------------------------------------------------------
+
+Agent patterns (orchestrator-workers, evaluator-optimizer) implemented
+using Claude Code tools.
+
+ORCHESTRATOR-WORKERS PATTERN
+----------------------------
+Direct Implementation: Task tool
+  Task launches worker agents
+  Each worker has specific subtask
+  Orchestrator (you) coordinates
+
+Alternative Implementation: Bash + Parallel
+  Bash scripts for workers
+  Parallel Bash calls for concurrent execution
+  Results aggregation with Read + processing
+
+EVALUATOR-OPTIMIZER PATTERN
+---------------------------
+Implementation: Edit + Bash Loop
+  1. Write/Edit code
+  2. Bash(run tests)
+  3. Evaluate results
+  4. Edit based on feedback
+  5. Repeat until passing
+
+Tools Workflow:
+  Write → Bash(test) → Edit → Bash(test) → Edit → Done
+  Iterative refinement through tool loop
+
+PROMPT CHAINING PATTERN
+-----------------------
+Implementation: Sequential Tool Calls
+  Tool 1 → process → Tool 2 → process → Tool 3
+  Each step builds on previous
+  Example: Glob → Read → Extract → Write
+
+PARALLELIZATION PATTERN
+-----------------------
+Implementation: Parallel Tool Calls
+  [Tool1, Tool2, Tool3] in single message
+  Independent operations execute concurrently
+  Example: Read 5 files in parallel
+
+ROUTING PATTERN
+---------------
+Implementation: Conditional Tool Use
+  Analyze → Choose path → Execute appropriate tools
+  Example: If type A → Glob pattern 1, If type B → Glob pattern 2
+
+ENABLES CLAUDE API PATTERNS
+---------------------------
+✓ All agent patterns implementable with tools
+✓ Task tool = direct orchestrator-workers
+✓ Edit loops = evaluator-optimizer
+✓ Parallel calls = parallelization
+✓ Sequential tools = prompt chaining
+
+REAL-WORLD EXAMPLE (FROM KGF)
+-----------------------------
+Prompt Chaining Pattern:
+  Phase 1: Glob → Read READMEs (understand structure)
+  Phase 2: Read guides (extract details)
+  Phase 3: Write nodes (structured output)
+  Phase 4: Bash jq (combine files)
+  Phase 5: Bash python (migrate to DB)
+Complete multi-phase orchestrated workflow
+
+-----------------------------------------------------------------------------
+5.4 IMPLEMENTING BATCH PROCESSING WITH TOOLS
+-----------------------------------------------------------------------------
+
+Batch processing handles large volumes of operations efficiently.
+
+CORE BATCH WORKFLOW
+-------------------
+1. Discover All Inputs
+   Tool: Glob
+   Pattern: Glob("inputs/**/*.json")
+
+2. Process in Batches
+   Tool: Bash (scripts) or parallel Reads
+   Pattern: Bash("python process_batch.py inputs/")
+   Alternative: Read files in parallel batches
+
+3. Write Results
+   Tool: Write
+   Pattern: Write batch results to output files
+
+4. Validate Results
+   Tool: Bash
+   Pattern: Bash("python validate.py outputs/")
+
+EMERGENT BATCH PATTERNS
+-----------------------
+Pattern: Parallel Batch Processing
+  Split inputs → Process batches in parallel → Combine results
+  Example: Process 100 files in 10 batches of 10
+
+Pattern: Background Batch Jobs
+  Bash(script, background=True) → Monitor with BashOutput
+  Continue working while batch processes
+
+Pattern: Incremental Batch Processing
+  Process batch 1 → Write → Process batch 2 → Write
+  Handle large datasets incrementally
+
+ENABLES CLAUDE API TECHNIQUES
+-----------------------------
+✓ Batch Processing API - Bash implements batch scripts
+✓ Parallel Execution - Multiple tool calls
+✓ Background Processing - run_in_background mode
+
+REAL-WORLD EXAMPLE (FROM KGF)
+-----------------------------
+- Glob found 47 documents
+- Read notebooks in batches of 5 (parallel)
+- Extracted data from each batch
+- Wrote 5 separate node files
+- Combined with Bash + jq
+Batch processing 30 nodes from 47 source documents
+
+-----------------------------------------------------------------------------
+5.5 IMPLEMENTING EVALUATION WITH TOOLS
+-----------------------------------------------------------------------------
+
+Building evaluation suites to test and validate Claude's outputs.
+
+CORE EVALUATION WORKFLOW
+------------------------
+1. Create Test Cases
+   Tool: Write
+   Pattern: Write(test_cases.json) with inputs and expected outputs
+
+2. Generate Outputs to Test
+   Tool: Read (test cases) → Generate → Write (outputs)
+   Pattern: Systematic generation for evaluation
+
+3. Run Evaluation Script
+   Tool: Bash
+   Pattern: Bash("python evaluate.py test_cases.json outputs.json")
+
+4. Analyze Results
+   Tool: Read
+   Pattern: Read(evaluation_results.json) → Review failures
+
+5. Iterate on Failures
+   Tool: Edit (fix issues) → Re-run (Bash)
+   Pattern: Evaluator-optimizer loop for improvement
+
+EMERGENT EVALUATION PATTERNS
+----------------------------
+Pattern: Test-Driven Development
+  Write tests first → Generate → Evaluate → Fix
+  Quality assurance through testing
+
+Pattern: Regression Testing
+  Write tests → Edit code → Bash(test) → Confirm no regression
+  Systematic validation of changes
+
+Pattern: Evaluation Suite Growth
+  Start small → Add tests as issues found → Comprehensive suite
+  Organic test suite development
+
+ENABLES CLAUDE API TECHNIQUES
+-----------------------------
+✓ Building Evals - Complete implementation with tools
+✓ Test Case Generation - Write creates test files
+✓ Automated Grading - Bash runs grading scripts
+
+REAL-WORLD EXAMPLE (FROM KGF)
+-----------------------------
+Validation workflow:
+- Bash("sqlite3 db 'SELECT COUNT(*) FROM nodes'") → Verify node count
+- Bash("curl localhost:8000/api/stats") → Test API
+- Read migration log → Verify success
+Complete validation through tool-based testing
+
+=============================================================================
+PART 6: CAPABILITY → TOOL MAPPING
+=============================================================================
+
+This section maps Claude API capabilities to the tools needed to implement
+them, providing a quick reference for capability implementation.
+
+-----------------------------------------------------------------------------
+6.1 WHICH TOOLS ENABLE EACH CAPABILITY
+-----------------------------------------------------------------------------
+
+CLASSIFICATION CAPABILITY
+Tools: Read (examples), Bash (eval), Write (results)
+Pattern: Read examples → Classify → Write results → Bash validate
+
+RAG CAPABILITY
+Tools: Glob (discover), Grep (search), Read (retrieve), Write (results)
+Pattern: Glob → Grep → Read → Generate → Write
+
+CONTEXTUAL EMBEDDINGS CAPABILITY
+Tools: Read (documents), Bash (processing), Write (embeddings)
+Pattern: Read docs → Generate context → Bash process → Write embeddings
+
+SUMMARIZATION CAPABILITY
+Tools: Read (documents), Write (summaries), Bash (evaluate)
+Pattern: Read → Summarize → Write → Bash(eval)
+
+TEXT-TO-SQL CAPABILITY
+Tools: Read (schema), Bash (sqlite3), Write (queries)
+Pattern: Read schema → Generate SQL → Bash execute → Write results
+
+PROMPT CHAINING PATTERN
+Tools: Sequential tool calls (any tools)
+Pattern: Tool1 → Tool2 → Tool3 in sequence
+
+ROUTING PATTERN
+Tools: Conditional tool selection
+Pattern: Analyze → Choose tools → Execute path
+
+PARALLELIZATION PATTERN
+Tools: Parallel tool calls in one message
+Pattern: [Tool1, Tool2, Tool3] concurrent
+
+ORCHESTRATOR-WORKERS PATTERN
+Tools: Task (direct) or Bash + parallel
+Pattern: Task(worker1), Task(worker2) or Bash scripts in parallel
+
+EVALUATOR-OPTIMIZER PATTERN
+Tools: Edit, Bash, validation loop
+Pattern: Write → Bash(test) → Edit → Bash(test) until pass
+
+XLSX/PPTX/PDF/DOCX SKILLS
+Tools: Write (create files), Bash (process/convert)
+Pattern: Generate content → Write file → Bash validate
+
+PROMPT CACHING TECHNIQUE
+Tools: Read (for cacheable content)
+Pattern: Read frequently used docs → Cache in context
+
+BATCH PROCESSING TECHNIQUE
+Tools: Bash (scripts), Glob (inputs), Write (outputs)
+Pattern: Glob inputs → Bash process → Write outputs
+
+BUILDING EVALS TECHNIQUE
+Tools: Write (tests), Bash (run), Read (results)
+Pattern: Write tests → Bash evaluate → Read results
+
+CITATIONS TECHNIQUE
+Tools: Read (source documents), Write (with citations)
+Pattern: Read docs → Generate with citations → Write
+
+JSON MODE TECHNIQUE
+Tools: Write (JSON output), Bash jq (processing)
+Pattern: Generate JSON → Write file → Bash validate
+
+METAPROMPT TECHNIQUE
+Tools: Read (examples), Write (generated prompts)
+Pattern: Read examples → Generate prompt → Write template
+
+-----------------------------------------------------------------------------
+6.2 WHICH TOOLS ENHANCE EACH TECHNIQUE
+-----------------------------------------------------------------------------
+
+PROMPT CACHING TECHNIQUE
+Enhanced by: Read (load cached content efficiently)
+Pattern: Read same docs repeatedly → Benefit from caching
+
+BATCH PROCESSING TECHNIQUE
+Enhanced by: Bash (background mode), BashOutput (monitoring)
+Pattern: Bash background batches → Monitor progress
+
+BUILDING EVALS TECHNIQUE
+Enhanced by: TodoWrite (track eval progress), Bash (automation)
+Pattern: TodoWrite phases → Bash run tests → Track completion
+
+CITATIONS TECHNIQUE
+Enhanced by: Grep (find sources), Read (load sources)
+Pattern: Grep locate → Read source → Cite accurately
+
+JSON MODE TECHNIQUE
+Enhanced by: Bash jq (validation), Write (structured output)
+Pattern: Generate JSON → Write → Bash jq validate
+
+WEB SCRAPING TECHNIQUE
+Enhanced by: WebFetch (direct implementation)
+Pattern: WebFetch URL → Extract data → Process
+
+PDF SUMMARIZATION TECHNIQUE
+Enhanced by: Read (native PDF support)
+Pattern: Read PDF directly → Summarize
+
+SQL QUERIES TECHNIQUE
+Enhanced by: Bash sqlite3 (direct execution)
+Pattern: Generate SQL → Bash sqlite3 → Process results
+
+-----------------------------------------------------------------------------
+6.3 CROSS-REFERENCE MATRIX
+-----------------------------------------------------------------------------
+
+CAPABILITY/TECHNIQUE → PRIMARY TOOLS → SUPPORTING TOOLS
+
+RAG
+  Primary: Read, Grep, Glob
+  Supporting: Write (results), TodoWrite (track)
+  Pattern: Glob → Grep → Read → Generate → Write
+
+Classification
+  Primary: Read, Write
+  Supporting: Bash (eval), TodoWrite (track)
+  Pattern: Read → Classify → Write → Bash validate
+
+Contextual Embeddings
+  Primary: Read, Bash
+  Supporting: Write (output), Glob (discover)
+  Pattern: Glob → Read → Process → Write
+
+Summarization
+  Primary: Read, Write
+  Supporting: Bash (eval), Grep (locate)
+  Pattern: Read → Summarize → Write
+
+Text-to-SQL
+  Primary: Read, Bash
+  Supporting: Write (queries), Edit (refine)
+  Pattern: Read schema → Generate → Bash test
+
+Orchestrator-Workers
+  Primary: Task
+  Supporting: TodoWrite (track), BashOutput (monitor)
+  Pattern: Task workers → TodoWrite progress
+
+Evaluator-Optimizer
+  Primary: Edit, Bash
+  Supporting: Read (validation), Write (results)
+  Pattern: Write → Bash → Edit loop
+
+Parallelization
+  Primary: Multiple tool calls
+  Supporting: BashOutput (monitor), TodoWrite (track)
+  Pattern: [Tool1, Tool2, ...] parallel
+
+Batch Processing
+  Primary: Bash, Glob
+  Supporting: Write (output), BashOutput (monitor)
+  Pattern: Glob → Bash batch → Write
+
+Building Evals
+  Primary: Write, Bash
+  Supporting: Read (results), TodoWrite (track)
+  Pattern: Write tests → Bash run → Read results
+
+Prompt Caching
+  Primary: Read
+  Supporting: Grep (locate), Glob (discover)
+  Pattern: Read cached docs efficiently
+
+Citations
+  Primary: Read, Grep
+  Supporting: Write (with citations)
+  Pattern: Grep locate → Read source → Cite
+
+JSON Mode
+  Primary: Write, Bash
+  Supporting: Read (validate)
+  Pattern: Generate → Write JSON → Bash jq validate
+
+=============================================================================
+HANDBOOK 1 SUMMARY
+=============================================================================
+
+This handbook documented 14 Claude Code tools and mapped them to Claude API
+capabilities and techniques. Key insights:
+
+TOOL CATEGORIES
+---------------
+✓ File Operations (5): Read, Write, Edit, Glob, Grep
+✓ Execution & Control (4): Bash, Task, BashOutput, KillShell
+✓ Web & Data (2): WebFetch, WebSearch
+✓ Workflow Management (3): TodoWrite, SlashCommand, NotebookEdit
+
+CRITICAL PATTERNS
+----------------
+✓ Parallel tool calls = 5x speedup (most important optimization)
+✓ Read before Edit/Write (enforced safety)
+✓ Glob → Grep → Read pipeline (efficient discovery)
+✓ Write → Bash test → Edit loop (quality assurance)
+✓ TodoWrite for projects >3 steps (essential tracking)
+
+TOOL → CAPABILITY CONNECTIONS
+-----------------------------
+✓ Read + Grep + Glob → RAG
+✓ Task → Orchestrator-Workers
+✓ Edit + Bash loop → Evaluator-Optimizer
+✓ Parallel calls → Parallelization pattern
+✓ Sequential tools → Prompt Chaining
+
+PERFORMANCE HIERARCHY
+---------------------
+1. Glob (fastest, <100ms)
+2. Grep (very fast, <1s)
+3. Read/Write/Edit (fast, <2s)
+4. Bash (varies, 1s to minutes)
+5. Task (slower, agent startup)
+6. WebFetch (moderate, network dependent)
+
+Use this handbook to:
+- Choose the right tool for each task
+- Understand tool → capability mappings
+- Implement Claude API patterns with tools
+- Optimize workflows for performance
+- Build complete end-to-end solutions
+
+Next: Handbook 2 covers complete workflows and patterns for implementing
+complex capabilities using tool combinations.

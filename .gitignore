@@ -1,0 +1,33 @@
+# Local/editor state
+.claude/settings.local.json
+.vouch/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Generated and machine-specific artifacts
+*.log
+*.npy
+*.pkl
+*.bak
+*.bak-*
+*.db.backup*
+*.orig
+*.db-journal
+*.db-shm
+*.db-wal
+
+# The focused instance DB is source data. Other copied KGs and repaired outputs
+# are local artifacts which can always be regenerated or obtained separately.
+kgs/*.db
+kgs/**/*.db
+!kgs/reasoning-graph.db
+data/derived/*.db
+
+# This 743 MB nested legacy checkout has its own Git metadata and is retained
+# locally as a donor/archive. Extracted supported code lives outside this tree.
+systems/eco-system/
+
+# Known zero-byte malformed-name inventory blocker retained for provenance.
+T1wwerRADESb*
+

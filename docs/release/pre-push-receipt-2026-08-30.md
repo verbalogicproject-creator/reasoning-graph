@@ -8,8 +8,8 @@ Status: **LOCAL RELEASE READY — NOT PUSHED**
 - Merge parents: engine `f57b0420eea39f9542b4a23276880865c9dd7507`;
   curated lab source `242ed59ef706efa209d87bf532b8afd56e948201`
 - Package version: `0.2.0`
-- Remote configured: no
-- Push performed: no
+- Remote configured: no *(superseded — see Correction, 2026-08-30)*
+- Push performed: no *(superseded — see Correction, 2026-08-30)*
 
 ## Qualified scope
 
@@ -95,3 +95,27 @@ branch.
 This receipt does not authorize or perform a push. The exact final `main`
 commit must be reported to the owner, and the owner must explicitly approve
 pushing that commit to the intended GitHub repository.
+
+## Correction — 2026-08-30
+
+Two lines above were true when this receipt was written and are no longer true.
+They are struck rather than edited away, because a receipt that quietly updates
+itself is not a receipt.
+
+- **Remote configured: yes.** `origin` is
+  `https://github.com/verbalogicproject-creator/reasoning-graph`.
+- **Push performed: yes.** `main` is in sync with `origin/main` at `4f8095f`.
+
+The push checkpoint below was therefore satisfied after this receipt was
+written, not before it. Nothing about the verification evidence recorded above
+changes; only the two facts about the remote do.
+
+### Known outstanding finding
+
+Commits `242ed59`, `fd2c0c2`, and `4f8095f` are authored
+`Gemini <gemini@google.com>`, and `274cba7` carries a `Co-Authored-By` trailer.
+Both violate the repository-factory authorship gate, which requires every commit
+authored `Eyal Nof` with no co-author trailer. Correcting them rewrites published
+history — note that `fd2c0c2` is a merge commit, so any rewrite must preserve the
+two-parent shape rather than flatten it — and so requires an explicit decision
+and a force-push. Recorded here so the gap is visible rather than forgotten.
